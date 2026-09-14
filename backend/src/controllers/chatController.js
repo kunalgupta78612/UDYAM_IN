@@ -124,7 +124,8 @@ export const sendMessage = async (req, res, next) => {
             $push: { messages: { $each: [userMsgObj, botMsgObj] } },
             selectedSchemeId: processResult.selectedSchemeId,
             candidateSchemeIds: processResult.candidateSchemeIds,
-            status: processResult.conversationStatus
+            status: processResult.conversationStatus,
+            nextQueryField: processResult.nextQueryField || null
           },
           { upsert: true }
         );
@@ -137,14 +138,16 @@ export const sendMessage = async (req, res, next) => {
       } catch (err) {
         memoryConversations.set(conversationId, {
           messages: [...(conversation.messages || []), userMsgObj, botMsgObj],
-          status: processResult.conversationStatus
+          status: processResult.conversationStatus,
+          nextQueryField: processResult.nextQueryField || null
         });
         memoryProfiles.set(conversationId, processResult.profile);
       }
     } else {
       memoryConversations.set(conversationId, {
         messages: [...(conversation.messages || []), userMsgObj, botMsgObj],
-        status: processResult.conversationStatus
+        status: processResult.conversationStatus,
+        nextQueryField: processResult.nextQueryField || null
       });
       memoryProfiles.set(conversationId, processResult.profile);
     }

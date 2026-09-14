@@ -90,9 +90,10 @@ export const selectNextFieldToQuery = (candidateSchemes = [], profile = {}) => {
  * @param {Object} params - { message, conversation, profile }
  * @returns {Promise<Object>} Updated state and bot response
  */
-export const processUserMessage = async ({ message, conversation, profile }) => {
-  // 1. Extract NLU slots from user message
-  const nluResult = await extractProfileSlots(message, profile);
+export const processUserMessage = async ({ message, conversation = {}, profile = {} }) => {
+  // 1. Extract NLU slots from user message with expectedField context
+  const expectedField = conversation.nextQueryField || conversation.currentQueryField || null;
+  const nluResult = await extractProfileSlots(message, profile, expectedField);
   const updatedProfile = {
     ...profile,
     ...nluResult.extractedFields

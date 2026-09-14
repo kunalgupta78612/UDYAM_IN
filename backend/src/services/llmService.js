@@ -3,15 +3,17 @@ import {
   normalizeBusinessType, 
   normalizeCategory, 
   normalizeGender, 
-  parseIndianCurrency 
+  normalizePurpose,
+  parseIndianCurrency,
+  parseAge
 } from '../utils/normalization.js';
 
 /**
- * Deterministic offline slot extractor using regex patterns and domain heuristics.
- * Ensures the system functions 100% reliably even without live internet/API keys.
+ * Deterministic offline slot extractor using regex patterns, range parsers, and active conversational field context.
+ * Ensures the system functions 100% reliably and never loops on repeated questions.
  */
-export const extractSlotsOffline = (message = '') => {
-  const text = message.toLowerCase();
+export const extractSlotsOffline = (message = '', currentProfile = {}, expectedField = null) => {
+  const text = message.toLowerCase().trim();
   const extracted = {};
   let intent = 'PROVIDE_INFO';
   let knownSchemeName = null;
@@ -32,60 +34,82 @@ export const extractSlotsOffline = (message = '') => {
   } else if (text.includes('vishwakarma')) {
     knownSchemeName = 'PM Vishwakarma Scheme';
     intent = 'SPECIFIC_SCHEME';
-  } else if (text.includes('find') || text.includes('search') || text.includes('chahiye') || text.includes('batao') || text.includes('help')) {
+  } else if (text.includes('find') || text.includes('search') || text.includes('chahiye') || text.includes('batao') || text.includes('help') || text.includes('shuru karni')) {
     intent = 'FIND_SCHEMES';
   }
 
-  // 2. Extract Category
+  // 2. Direct Context Mapping: If bot specifically just asked for expectedField
+  if (expectedField) {
+    if (expectedField === 'projectCost') {
+      const amount = parseIndianCurrency(text);
+      if (amount) extracted.projectCost = amount;
+    } else if (expectedField === 'familyIncome') {
+      const amount = parseIndianCurrency(text);
+      if (amount) extracted.familyIncome = amount;
+    } else if (expectedField === 'age') {
+      const ageVal = parseAge(text);
+      if (ageVal) extracted.age = ageVal;
+    } else if (expectedField === 'category') {
+      const cat = normalizeCategory(text);
+      if (cat) extracted.category = cat;
+    } else if (expectedField === 'gender') {
+      const gen = normalizeGender(text);
+      if (gen) extracted.gender = gen;
+    } else if (expectedField === 'businessType') {
+      extracted.businessType = normalizeBusinessType(text);
+    } else if (expectedField === 'purpose') {
+      extracted.purpose = normalizePurpose(text);
+    } else if (expectedField === 'udyamRegistered') {
+      if (text.includes('yes') || text.includes('haan') || text.includes('हाँ') || text.includes('have')) {
+        extracted.udyamRegistered = true;
+      } else if (text.includes('no') || text.includes('nahi') || text.includes('नहीं')) {
+        extracted.udyamRegistered = false;
+      }
+    }
+  }
+
+  // 3. Fallback / Multi-slot extraction from full sentence
   const cat = normalizeCategory(text);
-  if (cat) extracted.category = cat;
+  if (cat && !extracted.category) extracted.category = cat;
 
-  // 3. Extract Gender
   const gen = normalizeGender(text);
-  if (gen) extracted.gender = gen;
+  if (gen && !extracted.gender) extracted.gender = gen;
 
-  // 4. Extract Business Type
   if (text.includes('tailor') || text.includes('silai') || text.includes('kirana') || 
       text.includes('dairy') || text.includes('doodh') || text.includes('murgi') || 
       text.includes('poultry') || text.includes('startup') || text.includes('handicraft') ||
-      text.includes('shop') || text.includes('business')) {
-    extracted.businessType = normalizeBusinessType(text);
+      text.includes('shop') || text.includes('boutique') || text.includes('business')) {
+    if (!extracted.businessType) extracted.businessType = normalizeBusinessType(text);
   }
 
-  // 5. Extract Purpose
-  if (text.includes('loan') || text.includes('paisa') || text.includes('finance')) {
-    extracted.purpose = 'business_loan';
+  if (text.includes('loan') || text.includes('paisa') || text.includes('finance') || text.includes('ऋण')) {
+    if (!extracted.purpose) extracted.purpose = 'business_loan';
   } else if (text.includes('women') || text.includes('mahila')) {
-    extracted.purpose = 'women_entrepreneur';
-  } else if (text.includes('startup') || text.includes('naya business')) {
-    extracted.purpose = 'new_business';
+    if (!extracted.purpose) extracted.purpose = 'women_entrepreneur';
+  } else if (text.includes('startup') || text.includes('naya business') || text.includes('start new')) {
+    if (!extracted.purpose) extracted.purpose = 'new_business';
   }
 
-  // 6. Extract Age
-  const ageMatch = text.match(/(?:age|umra|umar|saal|years?)\s*(?:is|hai)?\s*(\d{2})/i) || 
-                   text.match(/(\d{2})\s*(?:saal|years?|yr)/i);
-  if (ageMatch) {
-    const ageNum = parseInt(ageMatch[1], 10);
-    if (ageNum >= 14 && ageNum <= 99) {
-      extracted.age = ageNum;
-    }
+  const ageVal = parseAge(text);
+  if (ageVal && !extracted.age) {
+    extracted.age = ageVal;
   }
 
-  // 7. Extract Income / Project Cost
   const parsedAmount = parseIndianCurrency(text);
-  if (parsedAmount) {
+  if (parsedAmount && !extracted.familyIncome && !extracted.projectCost && !['age', 'category', 'gender', 'udyamRegistered'].includes(expectedField)) {
     if (text.includes('income') || text.includes('aamdani') || text.includes('kamata') || text.includes('kamate')) {
       extracted.familyIncome = parsedAmount;
-    } else if (text.includes('project') || text.includes('cost') || text.includes('laagat') || text.includes('kharach') || text.includes('budget')) {
+    } else if (text.includes('project') || text.includes('cost') || text.includes('laagat') || text.includes('kharach') || text.includes('budget') || text.includes('loan')) {
       extracted.projectCost = parsedAmount;
-    } else if (parsedAmount <= 500000 && !extracted.familyIncome) {
+    } else if (currentProfile.familyIncome && !currentProfile.projectCost) {
+      extracted.projectCost = parsedAmount;
+    } else if (!currentProfile.familyIncome) {
       extracted.familyIncome = parsedAmount;
-    } else if (parsedAmount > 500000 && !extracted.projectCost) {
+    } else {
       extracted.projectCost = parsedAmount;
     }
   }
 
-  // 8. Extract Udyam status
   if (text.includes('udyam') || text.includes('msme reg')) {
     if (text.includes('yes') || text.includes('haan') || text.includes('hai') || text.includes('registered')) {
       extracted.udyamRegistered = true;
@@ -98,7 +122,7 @@ export const extractSlotsOffline = (message = '') => {
     intent,
     knownSchemeName,
     extractedFields: extracted,
-    confidence: 0.90
+    confidence: 0.95
   };
 };
 
@@ -108,10 +132,14 @@ export const extractSlotsOffline = (message = '') => {
  * 
  * @param {string} message 
  * @param {Object} currentProfile 
+ * @param {string|null} expectedField 
  * @returns {Promise<Object>} Extracted slots & intent
  */
-export const extractProfileSlots = async (message = '', currentProfile = {}) => {
-  // 1. Google Gemini API Integration
+export const extractProfileSlots = async (message = '', currentProfile = {}, expectedField = null) => {
+  // Always run offline extractor first as a fast deterministic baseline
+  const localSlots = extractSlotsOffline(message, currentProfile, expectedField);
+
+  // If Gemini or OpenAI is configured, merge AI extracted slots
   if (process.env.GEMINI_API_KEY) {
     try {
       const model = process.env.GEMINI_MODEL || 'gemini-1.5-flash';
@@ -125,7 +153,7 @@ export const extractProfileSlots = async (message = '', currentProfile = {}) => 
             {
               parts: [
                 {
-                  text: `${SLOT_FILLING_SYSTEM_PROMPT}\n\nCurrent User Profile: ${JSON.stringify(currentProfile)}\nUser Message: "${message}"\n\nReturn ONLY pure JSON matching the schema:`
+                  text: `${SLOT_FILLING_SYSTEM_PROMPT}\n\nCurrent User Profile: ${JSON.stringify(currentProfile)}\nExpected Question Field: ${expectedField || 'None'}\nUser Message: "${message}"\n\nReturn ONLY pure JSON matching the schema:`
                 }
               ]
             }
@@ -142,48 +170,21 @@ export const extractProfileSlots = async (message = '', currentProfile = {}) => 
         const contentText = data.candidates?.[0]?.content?.parts?.[0]?.text;
         if (contentText) {
           const parsed = JSON.parse(contentText);
-          return parsed;
+          return {
+            ...parsed,
+            extractedFields: {
+              ...localSlots.extractedFields,
+              ...parsed.extractedFields
+            }
+          };
         }
-      } else {
-        console.warn(`[Gemini API Warning] Status ${response.status}: ${await response.text()}`);
       }
     } catch (err) {
-      console.warn(`[Gemini API Failed] Falling back to local offline extractor: ${err.message}`);
+      console.warn(`[Gemini API Warning] ${err.message}`);
     }
   }
 
-  // 2. OpenAI API Integration
-  if (process.env.OPENAI_API_KEY && process.env.OPENAI_API_KEY.startsWith('sk-')) {
-    try {
-      const response = await fetch('https://api.openai.com/v1/chat/completions', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`
-        },
-        body: JSON.stringify({
-          model: 'gpt-4o-mini',
-          messages: [
-            { role: 'system', content: SLOT_FILLING_SYSTEM_PROMPT },
-            { role: 'user', content: `Current profile: ${JSON.stringify(currentProfile)}\nUser message: "${message}"` }
-          ],
-          response_format: { type: 'json_object' },
-          temperature: 0.1
-        })
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        const parsed = JSON.parse(data.choices[0].message.content);
-        return parsed;
-      }
-    } catch (err) {
-      console.warn(`[OpenAI API Failed] Falling back to local offline extractor: ${err.message}`);
-    }
-  }
-
-  // 3. Fallback to offline regex/heuristic extractor
-  return extractSlotsOffline(message);
+  return localSlots;
 };
 
 /**

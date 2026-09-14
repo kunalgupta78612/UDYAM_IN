@@ -12,6 +12,7 @@ const ConversationSchema = new mongoose.Schema({
   conversationId: { type: String, required: true, unique: true, index: true },
   messages: [MessageSchema],
   currentIntent: { type: String, default: null },
+  nextQueryField: { type: String, default: null },
   selectedSchemeId: { type: String, default: null },
   candidateSchemeIds: [{ type: String }],
   status: { 
