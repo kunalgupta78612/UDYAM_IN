@@ -1,3 +1,5 @@
+import dotenv from 'dotenv';
+dotenv.config();
 import { SLOT_FILLING_SYSTEM_PROMPT, EXPLANATION_SYSTEM_PROMPT } from '../prompts/index.js';
 import { 
   normalizeBusinessType, 
@@ -9,8 +11,20 @@ import {
 } from '../utils/normalization.js';
 
 /**
+ * Strips markdown code block wrappers (```json ... ```) from LLM output.
+ */
+export const cleanJsonResponse = (text = '') => {
+  let cleaned = text.trim();
+  if (cleaned.startsWith('```json')) {
+    cleaned = cleaned.replace(/^```json\s*/i, '').replace(/\s*```$/, '');
+  } else if (cleaned.startsWith('```')) {
+    cleaned = cleaned.replace(/^```\s*/, '').replace(/\s*```$/, '');
+  }
+  return cleaned.trim();
+};
+
+/**
  * Deterministic offline slot extractor using regex patterns, range parsers, and active conversational field context.
- * Ensures the system functions 100% reliably and never loops on repeated questions.
  */
 export const extractSlotsOffline = (message = '', currentProfile = {}, expectedField = null) => {
   const text = message.toLowerCase().trim();
@@ -127,22 +141,14 @@ export const extractSlotsOffline = (message = '', currentProfile = {}, expectedF
 };
 
 /**
- * Main NLU Slot Extraction Service.
- * Attempts Gemini API or OpenAI API if configured, otherwise uses offline deterministic extractor.
- * 
- * @param {string} message 
- * @param {Object} currentProfile 
- * @param {string|null} expectedField 
- * @returns {Promise<Object>} Extracted slots & intent
+ * Main NLU Slot Extraction Service using Gemini LLM.
  */
 export const extractProfileSlots = async (message = '', currentProfile = {}, expectedField = null) => {
-  // Always run offline extractor first as a fast deterministic baseline
   const localSlots = extractSlotsOffline(message, currentProfile, expectedField);
 
-  // If Gemini or OpenAI is configured, merge AI extracted slots
   if (process.env.GEMINI_API_KEY) {
     try {
-      const model = process.env.GEMINI_MODEL || 'gemini-1.5-flash';
+      const model = process.env.GEMINI_MODEL || 'gemini-3.6-flash';
       const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${process.env.GEMINI_API_KEY}`;
 
       const response = await fetch(url, {
@@ -153,13 +159,12 @@ export const extractProfileSlots = async (message = '', currentProfile = {}, exp
             {
               parts: [
                 {
-                  text: `${SLOT_FILLING_SYSTEM_PROMPT}\n\nCurrent User Profile: ${JSON.stringify(currentProfile)}\nExpected Question Field: ${expectedField || 'None'}\nUser Message: "${message}"\n\nReturn ONLY pure JSON matching the schema:`
+                  text: `${SLOT_FILLING_SYSTEM_PROMPT}\n\nCurrent User Profile: ${JSON.stringify(currentProfile)}\nExpected Question Field: ${expectedField || 'None'}\nUser Message: "${message}"\n\nReturn ONLY pure JSON matching the schema.`
                 }
               ]
             }
           ],
           generationConfig: {
-            responseMimeType: 'application/json',
             temperature: 0.1
           }
         })
@@ -169,18 +174,32 @@ export const extractProfileSlots = async (message = '', currentProfile = {}, exp
         const data = await response.json();
         const contentText = data.candidates?.[0]?.content?.parts?.[0]?.text;
         if (contentText) {
-          const parsed = JSON.parse(contentText);
+          const cleaned = cleanJsonResponse(contentText);
+          const parsed = JSON.parse(cleaned);
+          
+          // Clean up null/undefined fields
+          const cleanExtracted = {};
+          if (parsed.extractedFields) {
+            for (const [k, v] of Object.entries(parsed.extractedFields)) {
+              if (v !== null && v !== undefined && v !== '') {
+                cleanExtracted[k] = v;
+              }
+            }
+          }
+
           return {
-            ...parsed,
+            intent: parsed.intent || localSlots.intent,
+            knownSchemeName: parsed.knownSchemeName || localSlots.knownSchemeName,
             extractedFields: {
               ...localSlots.extractedFields,
-              ...parsed.extractedFields
-            }
+              ...cleanExtracted
+            },
+            confidence: parsed.confidence || 0.95
           };
         }
       }
     } catch (err) {
-      console.warn(`[Gemini API Warning] ${err.message}`);
+      console.warn(`[Gemini Slot Extraction Warning] ${err.message}`);
     }
   }
 
@@ -188,11 +207,122 @@ export const extractProfileSlots = async (message = '', currentProfile = {}, exp
 };
 
 /**
- * Generates bilingual explanations for evaluation traces.
+ * Generates natural conversational response using Gemini LLM.
+ */
+export const generateConversationalReply = async ({ userMessage, profile, nextField, isConfirmation, defaultEn, defaultHi }) => {
+  if (process.env.GEMINI_API_KEY) {
+    try {
+      const model = process.env.GEMINI_MODEL || 'gemini-3.6-flash';
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${process.env.GEMINI_API_KEY}`;
+
+      const prompt = `You are SchemeSaathi AI, a warm, polite, and encouraging assistant helping Indian micro-entrepreneurs and artisans discover government schemes.
+User message: "${userMessage}"
+Current user profile recorded so far: ${JSON.stringify(profile)}
+Next field needed: ${nextField || 'None - Profile is complete'}
+Is Confirmation step: ${isConfirmation ? 'YES' : 'NO'}
+
+Default fallback question in English: "${defaultEn}"
+Default fallback question in Hindi: "${defaultHi}"
+
+Generate a short, friendly response (1-2 sentences) in both English and Hindi:
+- Acknowledge what the user just stated in an encouraging way.
+- Ask the next required question clearly.
+- If confirming profile, invite them to review their details.
+
+Return ONLY valid JSON matching this schema:
+{
+  "contentEn": "...",
+  "contentHi": "..."
+}`;
+
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents: [{ parts: [{ text: prompt }] }],
+          generationConfig: {
+            temperature: 0.3
+          }
+        })
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
+        if (text) {
+          const cleaned = cleanJsonResponse(text);
+          const parsed = JSON.parse(cleaned);
+          if (parsed.contentEn && parsed.contentHi) {
+            return parsed;
+          }
+        }
+      }
+    } catch (err) {
+      console.warn(`[Gemini Reply Generation Warning] ${err.message}`);
+    }
+  }
+
+  return {
+    contentEn: defaultEn,
+    contentHi: defaultHi
+  };
+};
+
+/**
+ * Generates bilingual explanations for evaluation traces using Gemini LLM.
  */
 export const generateExplanation = async (fullTrace = {}) => {
-  const { schemeName, status, gapReport, nextAction } = fullTrace;
+  const { schemeName, status, gapReport, nextAction, traceItems = [] } = fullTrace;
 
+  if (process.env.GEMINI_API_KEY) {
+    try {
+      const model = process.env.GEMINI_MODEL || 'gemini-3.6-flash';
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${process.env.GEMINI_API_KEY}`;
+
+      const prompt = `${EXPLANATION_SYSTEM_PROMPT}
+
+Scheme Name: ${schemeName}
+Status: ${status}
+Conditions Evaluated: ${JSON.stringify(traceItems)}
+Gap Report: ${JSON.stringify(gapReport)}
+Next Action / Route: ${JSON.stringify(nextAction)}
+
+Generate a personalized, clear explanation in both English and Hindi. Return ONLY valid JSON matching the schema.`;
+
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents: [{ parts: [{ text: prompt }] }],
+          generationConfig: {
+            temperature: 0.2
+          }
+        })
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
+        if (text) {
+          const cleaned = cleanJsonResponse(text);
+          const parsed = JSON.parse(cleaned);
+          if (parsed.explanationEnglish && parsed.explanationHindi) {
+            return {
+              status,
+              explanationEnglish: parsed.explanationEnglish,
+              explanationHindi: parsed.explanationHindi,
+              actionableAdvice: parsed.actionableAdvice || `Apply via ${nextAction?.routeName || 'Official Portal'}`,
+              keyHighlight: parsed.keyHighlight || (status === 'ELIGIBLE' ? 'Eligible for benefits' : 'Review criteria')
+            };
+          }
+        }
+      }
+    } catch (err) {
+      console.warn(`[Gemini Explanation Warning] ${err.message}`);
+    }
+  }
+
+  // Deterministic Fallback if API is offline
   if (status === 'ELIGIBLE') {
     return {
       status: 'ELIGIBLE',

@@ -125,7 +125,7 @@ export const normalizeCategory = (rawCategory) => {
       return standardCat;
     }
   }
-  return rawCategory.toUpperCase().trim();
+  return null;
 };
 
 /**

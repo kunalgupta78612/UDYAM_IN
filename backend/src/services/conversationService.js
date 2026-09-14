@@ -1,4 +1,4 @@
-import { extractProfileSlots } from './llmService.js';
+import { extractProfileSlots, generateConversationalReply } from './llmService.js';
 import { findCandidateSchemes } from '../retrieval/schemeRetriever.js';
 import { evaluateMultipleSchemes } from '../rules/ruleEngine.js';
 import { isValueMissing } from '../rules/conditionEvaluator.js';
@@ -50,10 +50,6 @@ const QUESTION_TEMPLATES = {
 /**
  * Computes the optimal next question to ask using an Elimination/Frequency Heuristic.
  * Prioritizes the missing field that will resolve or eliminate the largest number of candidate schemes.
- * 
- * @param {Array<Object>} candidateSchemes 
- * @param {Object} profile 
- * @returns {string|null} Field name of the next question, or null if complete
  */
 export const selectNextFieldToQuery = (candidateSchemes = [], profile = {}) => {
   const missingFieldFrequency = {};
@@ -86,9 +82,6 @@ export const selectNextFieldToQuery = (candidateSchemes = [], profile = {}) => {
 
 /**
  * Processes incoming user message, updates conversation state, and generates next bot action.
- * 
- * @param {Object} params - { message, conversation, profile }
- * @returns {Promise<Object>} Updated state and bot response
  */
 export const processUserMessage = async ({ message, conversation = {}, profile = {} }) => {
   // 1. Extract NLU slots from user message with expectedField context
@@ -102,7 +95,6 @@ export const processUserMessage = async ({ message, conversation = {}, profile =
   // 2. Journey A Detection (User asked for a specific scheme)
   let selectedSchemeId = conversation.selectedSchemeId || null;
   if (nluResult.knownSchemeName) {
-    // Look up scheme by name
     const directCandidates = await findCandidateSchemes({}, { specificSchemeId: null });
     const matched = directCandidates.find(s => 
       s.name.toLowerCase().includes(nluResult.knownSchemeName.toLowerCase())
@@ -123,6 +115,18 @@ export const processUserMessage = async ({ message, conversation = {}, profile =
 
   // If all fields are ready -> Transition to Profile Confirmation
   if (!nextField) {
+    const defaultEn = 'Thank you! I have recorded your details. Please review and confirm your profile before we run the official eligibility evaluation.';
+    const defaultHi = 'धन्यवाद! मैंने आपका विवरण दर्ज कर लिया है। आधिकारिक पात्रता मूल्यांकन चलाने से पहले कृपया अपनी प्रोफ़ाइल की पुष्टि करें।';
+
+    const reply = await generateConversationalReply({
+      userMessage: message,
+      profile: updatedProfile,
+      nextField: null,
+      isConfirmation: true,
+      defaultEn,
+      defaultHi
+    });
+
     return {
       conversationStatus: 'CONFIRMATION',
       selectedSchemeId,
@@ -130,8 +134,8 @@ export const processUserMessage = async ({ message, conversation = {}, profile =
       profile: updatedProfile,
       botMessage: {
         role: 'assistant',
-        contentEn: 'Thank you! I have recorded your details. Please review and confirm your profile before we run the official eligibility evaluation.',
-        contentHi: 'धन्यवाद! मैंने आपका विवरण दर्ज कर लिया है। आधिकारिक पात्रता मूल्यांकन चलाने से पहले कृपया अपनी प्रोफ़ाइल की पुष्टि करें।',
+        contentEn: reply.contentEn,
+        contentHi: reply.contentHi,
         quickReplies: ['Confirm & Check Eligibility (पुष्टि करें)', 'Edit Details (संशोधित करें)'],
         showProfileConfirmation: true
       }
@@ -145,6 +149,16 @@ export const processUserMessage = async ({ message, conversation = {}, profile =
     quickReplies: []
   };
 
+  // Generate dynamic conversational reply from Gemini
+  const reply = await generateConversationalReply({
+    userMessage: message,
+    profile: updatedProfile,
+    nextField,
+    isConfirmation: false,
+    defaultEn: questionConfig.questionEn,
+    defaultHi: questionConfig.questionHi
+  });
+
   return {
     conversationStatus: 'WAITING_INFO',
     selectedSchemeId,
@@ -153,8 +167,8 @@ export const processUserMessage = async ({ message, conversation = {}, profile =
     nextQueryField: nextField,
     botMessage: {
       role: 'assistant',
-      contentEn: questionConfig.questionEn,
-      contentHi: questionConfig.questionHi,
+      contentEn: reply.contentEn,
+      contentHi: reply.contentHi,
       quickReplies: questionConfig.quickReplies,
       showProfileConfirmation: false
     }
