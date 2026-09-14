@@ -1,15 +1,16 @@
 import React from 'react';
 import { ChatWindow } from '../components/chat/ChatWindow.jsx';
+import { DemoPersonas } from '../components/chat/DemoPersonas.jsx';
 import { useChatContext } from '../context/ChatContext.jsx';
 import { Sparkles, HelpCircle } from 'lucide-react';
 
 export const Chat = () => {
-  const { language, candidateCount } = useChatContext();
+  const { language, candidateCount, sendUserMessage, isLoading } = useChatContext();
 
   return (
-    <div className="py-6 px-4 sm:px-6 max-w-7xl mx-auto">
+    <div className="py-6 px-4 sm:px-6 max-w-7xl mx-auto space-y-4">
       {/* Top Banner */}
-      <div className="max-w-4xl mx-auto mb-4 flex items-center justify-between">
+      <div className="max-w-4xl mx-auto flex items-center justify-between">
         <div>
           <h2 className="text-xl font-black text-slate-900 flex items-center space-x-2">
             <span>{language === 'hi' ? 'स्कीमसाथी एआई सलाहकार' : 'SchemeSaathi AI Advisor'}</span>
@@ -26,6 +27,9 @@ export const Chat = () => {
           </div>
         )}
       </div>
+
+      {/* Jury Quick Demo Personas */}
+      <DemoPersonas onSelectPersona={sendUserMessage} disabled={isLoading} />
 
       <ChatWindow />
     </div>

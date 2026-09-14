@@ -7,6 +7,7 @@ import { evaluateScheme } from '../rules/ruleEngine.js';
 import { generateEligibilityTrace } from '../rules/traceGenerator.js';
 import { generateExplanation } from '../services/llmService.js';
 import { findCandidateSchemes } from '../retrieval/schemeRetriever.js';
+import { generateFundingStacks } from '../services/fundingStackService.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -98,19 +99,23 @@ export const matchSchemes = async (req, res, next) => {
     const needInfo = detailedResults.filter(r => r.status === 'NEED_INFO');
     const notEligible = detailedResults.filter(r => r.status === 'NOT_ELIGIBLE');
 
+    const fundingStacks = generateFundingStacks(eligible, userProfile);
+
     return res.json({
       success: true,
       summary: {
         totalEvaluated: detailedResults.length,
         eligibleCount: eligible.length,
         needInfoCount: needInfo.length,
-        notEligibleCount: notEligible.length
+        notEligibleCount: notEligible.length,
+        stackCount: fundingStacks.length
       },
       results: {
         eligible,
         needInfo,
         notEligible
       },
+      fundingStacks,
       profile: userProfile
     });
   } catch (error) {

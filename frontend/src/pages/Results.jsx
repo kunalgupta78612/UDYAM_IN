@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useChatContext } from '../context/ChatContext.jsx';
 import { SchemeCard } from '../components/results/SchemeCard.jsx';
+import { FundingStack } from '../components/results/FundingStack.jsx';
 import { Link } from 'react-router-dom';
 import { CheckCircle2, AlertCircle, XCircle, ArrowLeft, RefreshCw, FileText } from 'lucide-react';
 
@@ -124,6 +125,11 @@ export const Results = () => {
           <div className="text-3xl font-black text-rose-950 mt-2">{summary.notEligibleCount}</div>
         </button>
       </div>
+
+      {/* Recommended Funding Stacks (Scheme Convergence) */}
+      {matchResults.fundingStacks && matchResults.fundingStacks.length > 0 && (
+        <FundingStack fundingStacks={matchResults.fundingStacks} />
+      )}
 
       {/* Schemes List for Active Tab */}
       <div className="space-y-4">
