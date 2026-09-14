@@ -68,17 +68,15 @@ export const matchSchemes = async (req, res, next) => {
     }
 
     // Run deterministic evaluation across all schemes
-    const detailedResults = [];
-
-    for (const scheme of targetSchemes) {
+    const traces = targetSchemes.map(scheme => {
       const evalResult = evaluateScheme(scheme, userProfile);
       const fullTrace = generateEligibilityTrace(evalResult, scheme);
-      const explanation = await generateExplanation(fullTrace);
+      return { scheme, evalResult, fullTrace };
+    });
 
-      detailedResults.push({
-        ...fullTrace,
-        explanation
-      });
+    // Generate explanations concurrently (fast)
+    const detailedResults = await Promise.all(traces.map(async ({ scheme, evalResult, fullTrace }) => {
+      const explanation = await generateExplanation(fullTrace);
 
       // Log match result in background if DB is active
       if (conversationId && isDbConnected) {
@@ -93,7 +91,12 @@ export const matchSchemes = async (req, res, next) => {
           ruleVersion: scheme.version || 1
         }).catch(err => console.warn(`[MatchLog Warning] ${err.message}`));
       }
-    }
+
+      return {
+        ...fullTrace,
+        explanation
+      };
+    }));
 
     const eligible = detailedResults.filter(r => r.status === 'ELIGIBLE');
     const needInfo = detailedResults.filter(r => r.status === 'NEED_INFO');

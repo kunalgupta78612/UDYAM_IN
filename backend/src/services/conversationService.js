@@ -5,6 +5,18 @@ import { isValueMissing } from '../rules/conditionEvaluator.js';
 
 // Question templates with contextual quick-reply chips
 const QUESTION_TEMPLATES = {
+  specificScheme: {
+    questionEn: 'Which government scheme would you like to evaluate?',
+    questionHi: 'आप किस सरकारी योजना के लिए अपनी पात्रता जांचना चाहते हैं?',
+    quickReplies: [
+      'Stand-Up India Scheme',
+      'PMEGP Loan & Subsidy',
+      'PM MUDRA Yojana',
+      'New Swarnima (Women)',
+      'PM Vishwakarma Scheme',
+      'NSFDC Term Loan'
+    ]
+  },
   purpose: {
     questionEn: 'What kind of support are you looking for?',
     questionHi: 'आप किस प्रकार की सहायता या योजना खोज रहे हैं?',
@@ -84,36 +96,81 @@ export const selectNextFieldToQuery = (candidateSchemes = [], profile = {}) => {
  * Processes incoming user message, updates conversation state, and generates next bot action.
  */
 export const processUserMessage = async ({ message, conversation = {}, profile = {} }) => {
-  // 1. Extract NLU slots from user message with expectedField context
   const expectedField = conversation.nextQueryField || conversation.currentQueryField || null;
+  const isJourneyAIntent = conversation.journey === 'SPECIFIC_SCHEME';
+
+  // 1. Extract NLU slots from user message with expectedField context
   const nluResult = await extractProfileSlots(message, profile, expectedField);
   const updatedProfile = {
     ...profile,
     ...nluResult.extractedFields
   };
 
-  // 2. Journey A Detection (User asked for a specific scheme)
   let selectedSchemeId = conversation.selectedSchemeId || null;
-  if (nluResult.knownSchemeName) {
+  let journey = conversation.journey || (nluResult.intent === 'SPECIFIC_SCHEME' ? 'SPECIFIC_SCHEME' : (nluResult.intent === 'FIND_SCHEMES' ? 'FIND_SCHEMES' : null));
+
+  // 2. Resolve Scheme Name if mentioned or if answering specificScheme question
+  const schemeSearchTerm = nluResult.knownSchemeName || (expectedField === 'specificScheme' ? message : null);
+  if (schemeSearchTerm) {
     const directCandidates = await findCandidateSchemes({}, { specificSchemeId: null });
+    const normalizedTerm = schemeSearchTerm.toLowerCase().trim();
     const matched = directCandidates.find(s => 
-      s.name.toLowerCase().includes(nluResult.knownSchemeName.toLowerCase())
+      s.name.toLowerCase().includes(normalizedTerm) ||
+      (normalizedTerm.includes('stand') && s.name.toLowerCase().includes('stand-up')) ||
+      (normalizedTerm.includes('pmegp') && s.name.toLowerCase().includes('pmegp')) ||
+      (normalizedTerm.includes('mudra') && s.name.toLowerCase().includes('mudra')) ||
+      (normalizedTerm.includes('swarnima') && s.name.toLowerCase().includes('swarnima')) ||
+      (normalizedTerm.includes('vishwakarma') && s.name.toLowerCase().includes('vishwakarma')) ||
+      (normalizedTerm.includes('term loan') && s.name.toLowerCase().includes('term loan')) ||
+      (normalizedTerm.includes('nsfdc') && s.name.toLowerCase().includes('nsfdc'))
     );
     if (matched) {
       selectedSchemeId = matched.schemeId;
+      journey = 'SPECIFIC_SCHEME';
     }
   }
 
-  // 3. Retrieve/Refresh Candidate Schemes
+  // 3. Journey A Branch: User wants a specific scheme, but hasn't picked one yet
+  if ((journey === 'SPECIFIC_SCHEME' || nluResult.intent === 'SPECIFIC_SCHEME') && !selectedSchemeId) {
+    const questionConfig = QUESTION_TEMPLATES.specificScheme;
+
+    const reply = await generateConversationalReply({
+      userMessage: message,
+      profile: updatedProfile,
+      nextField: 'specificScheme',
+      isConfirmation: false,
+      contextPrompt: 'The user wants to check a specific scheme they know. Politely ask them to name the scheme or select from the options.',
+      defaultEn: questionConfig.questionEn,
+      defaultHi: questionConfig.questionHi
+    });
+
+    return {
+      conversationStatus: 'WAITING_INFO',
+      journey: 'SPECIFIC_SCHEME',
+      selectedSchemeId: null,
+      candidateSchemeIds: [],
+      profile: updatedProfile,
+      nextQueryField: 'specificScheme',
+      botMessage: {
+        role: 'assistant',
+        contentEn: reply.contentEn,
+        contentHi: reply.contentHi,
+        quickReplies: questionConfig.quickReplies,
+        showProfileConfirmation: false
+      }
+    };
+  }
+
+  // 4. Retrieve Candidate Schemes (filtered by selectedSchemeId if in Journey A)
   const candidateSchemes = await findCandidateSchemes(updatedProfile, { 
     specificSchemeId: selectedSchemeId,
     limit: 15 
   });
 
-  // 4. Determine Next Action or Question
+  // 5. Determine Next Action or Question using elimination heuristic
   const nextField = selectNextFieldToQuery(candidateSchemes, updatedProfile);
 
-  // If all fields are ready -> Transition to Profile Confirmation
+  // If all required fields are filled -> Transition to Profile Confirmation
   if (!nextField) {
     const defaultEn = 'Thank you! I have recorded your details. Please review and confirm your profile before we run the official eligibility evaluation.';
     const defaultHi = 'धन्यवाद! मैंने आपका विवरण दर्ज कर लिया है। आधिकारिक पात्रता मूल्यांकन चलाने से पहले कृपया अपनी प्रोफ़ाइल की पुष्टि करें।';
@@ -123,12 +180,14 @@ export const processUserMessage = async ({ message, conversation = {}, profile =
       profile: updatedProfile,
       nextField: null,
       isConfirmation: true,
+      contextPrompt: 'All necessary information has been collected. Warmly invite the user to review and confirm their profile to see their official eligibility.',
       defaultEn,
       defaultHi
     });
 
     return {
       conversationStatus: 'CONFIRMATION',
+      journey,
       selectedSchemeId,
       candidateSchemeIds: candidateSchemes.map(s => s.schemeId),
       profile: updatedProfile,
@@ -142,7 +201,7 @@ export const processUserMessage = async ({ message, conversation = {}, profile =
     };
   }
 
-  // Otherwise, ask for the next missing field
+  // 6. Otherwise, ask for the next missing field
   const questionConfig = QUESTION_TEMPLATES[nextField] || {
     questionEn: `Please provide your ${nextField}.`,
     questionHi: `कृपया अपना ${nextField} बताएं।`,
@@ -150,17 +209,22 @@ export const processUserMessage = async ({ message, conversation = {}, profile =
   };
 
   // Generate dynamic conversational reply from Gemini
+  const selectedSchemeObj = candidateSchemes.find(s => s.schemeId === selectedSchemeId);
+  const schemeContext = selectedSchemeObj ? `Evaluating specific scheme: "${selectedSchemeObj.name}".` : 'Finding best matching government schemes.';
+
   const reply = await generateConversationalReply({
     userMessage: message,
     profile: updatedProfile,
     nextField,
     isConfirmation: false,
+    contextPrompt: `${schemeContext} Acknowledge the user's latest input empathetically and naturally ask for their ${nextField}.`,
     defaultEn: questionConfig.questionEn,
     defaultHi: questionConfig.questionHi
   });
 
   return {
     conversationStatus: 'WAITING_INFO',
+    journey,
     selectedSchemeId,
     candidateSchemeIds: candidateSchemes.map(s => s.schemeId),
     profile: updatedProfile,

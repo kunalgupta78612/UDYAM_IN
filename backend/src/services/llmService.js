@@ -24,6 +24,55 @@ export const cleanJsonResponse = (text = '') => {
 };
 
 /**
+ * Executes a Gemini API call with automatic multi-model fallback.
+ */
+async function callGeminiApi(prompt, temperature = 0.2) {
+  if (!process.env.GEMINI_API_KEY) return null;
+
+  const candidateModels = [
+    process.env.GEMINI_MODEL || 'gemini-flash-latest',
+    'gemini-flash-latest',
+    'gemini-3.5-flash',
+    'gemini-flash-lite-latest'
+  ];
+
+  // Deduplicate model list
+  const models = [...new Set(candidateModels)];
+
+  for (const model of models) {
+    try {
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${process.env.GEMINI_API_KEY}`;
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents: [{ parts: [{ text: prompt }] }],
+          generationConfig: {
+            temperature
+          }
+        })
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        const contentText = data.candidates?.[0]?.content?.parts?.[0]?.text;
+        if (contentText) {
+          return contentText;
+        }
+      } else if (response.status === 429 || response.status === 503 || response.status === 404) {
+        // Continue to fallback model
+        continue;
+      }
+    } catch (err) {
+      // Continue to next model on network glitch
+      continue;
+    }
+  }
+
+  return null;
+}
+
+/**
  * Deterministic offline slot extractor using regex patterns, range parsers, and active conversational field context.
  */
 export const extractSlotsOffline = (message = '', currentProfile = {}, expectedField = null) => {
@@ -48,13 +97,20 @@ export const extractSlotsOffline = (message = '', currentProfile = {}, expectedF
   } else if (text.includes('vishwakarma')) {
     knownSchemeName = 'PM Vishwakarma Scheme';
     intent = 'SPECIFIC_SCHEME';
+  } else if (text.includes('nsfdc') || text.includes('term loan')) {
+    knownSchemeName = 'NSFDC Term Loan Scheme';
+    intent = 'SPECIFIC_SCHEME';
+  } else if (text.includes('i know') || text.includes('know my scheme') || text.includes('i kn scheme') || text.includes('know scheme') || text.includes('naam pata hai') || text.includes('specific scheme')) {
+    intent = 'SPECIFIC_SCHEME';
   } else if (text.includes('find') || text.includes('search') || text.includes('chahiye') || text.includes('batao') || text.includes('help') || text.includes('shuru karni')) {
     intent = 'FIND_SCHEMES';
   }
 
   // 2. Direct Context Mapping: If bot specifically just asked for expectedField
   if (expectedField) {
-    if (expectedField === 'projectCost') {
+    if (expectedField === 'specificScheme' && knownSchemeName) {
+      intent = 'SPECIFIC_SCHEME';
+    } else if (expectedField === 'projectCost') {
       const amount = parseIndianCurrency(text);
       if (amount) extracted.projectCost = amount;
     } else if (expectedField === 'familyIncome') {
@@ -110,7 +166,7 @@ export const extractSlotsOffline = (message = '', currentProfile = {}, expectedF
   }
 
   const parsedAmount = parseIndianCurrency(text);
-  if (parsedAmount && !extracted.familyIncome && !extracted.projectCost && !['age', 'category', 'gender', 'udyamRegistered'].includes(expectedField)) {
+  if (parsedAmount && !extracted.familyIncome && !extracted.projectCost && !['age', 'category', 'gender', 'udyamRegistered', 'specificScheme'].includes(expectedField)) {
     if (text.includes('income') || text.includes('aamdani') || text.includes('kamata') || text.includes('kamate')) {
       extracted.familyIncome = parsedAmount;
     } else if (text.includes('project') || text.includes('cost') || text.includes('laagat') || text.includes('kharach') || text.includes('budget') || text.includes('loan')) {
@@ -148,55 +204,47 @@ export const extractProfileSlots = async (message = '', currentProfile = {}, exp
 
   if (process.env.GEMINI_API_KEY) {
     try {
-      const model = process.env.GEMINI_MODEL || 'gemini-3.6-flash';
-      const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${process.env.GEMINI_API_KEY}`;
+      const prompt = `${SLOT_FILLING_SYSTEM_PROMPT}
 
-      const response = await fetch(url, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          contents: [
-            {
-              parts: [
-                {
-                  text: `${SLOT_FILLING_SYSTEM_PROMPT}\n\nCurrent User Profile: ${JSON.stringify(currentProfile)}\nExpected Question Field: ${expectedField || 'None'}\nUser Message: "${message}"\n\nReturn ONLY pure JSON matching the schema.`
-                }
-              ]
-            }
-          ],
-          generationConfig: {
-            temperature: 0.1
-          }
-        })
-      });
+Current User Profile: ${JSON.stringify(currentProfile)}
+Expected Question Field: ${expectedField || 'None'}
+User Message: "${message}"
 
-      if (response.ok) {
-        const data = await response.json();
-        const contentText = data.candidates?.[0]?.content?.parts?.[0]?.text;
-        if (contentText) {
-          const cleaned = cleanJsonResponse(contentText);
-          const parsed = JSON.parse(cleaned);
-          
-          // Clean up null/undefined fields
-          const cleanExtracted = {};
-          if (parsed.extractedFields) {
-            for (const [k, v] of Object.entries(parsed.extractedFields)) {
-              if (v !== null && v !== undefined && v !== '') {
+Return ONLY pure JSON matching the schema.`;
+
+      const contentText = await callGeminiApi(prompt, 0.1);
+      if (contentText) {
+        const cleaned = cleanJsonResponse(contentText);
+        const parsed = JSON.parse(cleaned);
+
+        const cleanExtracted = {};
+        if (parsed.extractedFields) {
+          for (const [k, v] of Object.entries(parsed.extractedFields)) {
+            if (v !== null && v !== undefined && v !== '') {
+              if (k === 'businessType' && typeof v === 'string') {
+                cleanExtracted[k] = normalizeBusinessType(v) || v;
+              } else if (k === 'category' && typeof v === 'string') {
+                cleanExtracted[k] = normalizeCategory(v) || v;
+              } else if (k === 'gender' && typeof v === 'string') {
+                cleanExtracted[k] = normalizeGender(v) || v;
+              } else if (k === 'purpose' && typeof v === 'string') {
+                cleanExtracted[k] = normalizePurpose(v) || v;
+              } else {
                 cleanExtracted[k] = v;
               }
             }
           }
-
-          return {
-            intent: parsed.intent || localSlots.intent,
-            knownSchemeName: parsed.knownSchemeName || localSlots.knownSchemeName,
-            extractedFields: {
-              ...localSlots.extractedFields,
-              ...cleanExtracted
-            },
-            confidence: parsed.confidence || 0.95
-          };
         }
+
+        return {
+          intent: parsed.intent || localSlots.intent,
+          knownSchemeName: parsed.knownSchemeName || localSlots.knownSchemeName,
+          extractedFields: {
+            ...localSlots.extractedFields,
+            ...cleanExtracted
+          },
+          confidence: parsed.confidence || 0.95
+        };
       }
     } catch (err) {
       console.warn(`[Gemini Slot Extraction Warning] ${err.message}`);
@@ -207,54 +255,48 @@ export const extractProfileSlots = async (message = '', currentProfile = {}, exp
 };
 
 /**
- * Generates natural conversational response using Gemini LLM.
+ * Generates natural, dynamic conversational responses using Gemini LLM.
  */
-export const generateConversationalReply = async ({ userMessage, profile, nextField, isConfirmation, defaultEn, defaultHi }) => {
+export const generateConversationalReply = async ({ 
+  userMessage, 
+  profile = {}, 
+  nextField = null, 
+  isConfirmation = false, 
+  contextPrompt = '',
+  defaultEn = '', 
+  defaultHi = '' 
+}) => {
   if (process.env.GEMINI_API_KEY) {
     try {
-      const model = process.env.GEMINI_MODEL || 'gemini-3.6-flash';
-      const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${process.env.GEMINI_API_KEY}`;
+      const prompt = `You are SchemeSaathi AI, a warm, polite, and encouraging assistant helping Indian micro-entrepreneurs, artisans, and women founders discover government schemes.
 
-      const prompt = `You are SchemeSaathi AI, a warm, polite, and encouraging assistant helping Indian micro-entrepreneurs and artisans discover government schemes.
-User message: "${userMessage}"
-Current user profile recorded so far: ${JSON.stringify(profile)}
-Next field needed: ${nextField || 'None - Profile is complete'}
-Is Confirmation step: ${isConfirmation ? 'YES' : 'NO'}
+CONTEXT:
+- User Message: "${userMessage}"
+- Current Profile Data: ${JSON.stringify(profile)}
+- Target Field / Next Action: ${nextField || (isConfirmation ? 'Confirm Profile' : 'General')}
+- Specific Instruction: ${contextPrompt || 'Acknowledge the user naturally and ask the next question clearly.'}
+- English Fallback: "${defaultEn}"
+- Hindi Fallback: "${defaultHi}"
 
-Default fallback question in English: "${defaultEn}"
-Default fallback question in Hindi: "${defaultHi}"
+TASK:
+Generate a short, friendly, and natural conversational response (1-2 sentences) in both English and Hindi.
+- Acknowledge what the user said with empathy and enthusiasm.
+- Smoothly transition into the required next question or next step.
+- Do NOT be repetitive or robotic.
+- Provide a clean Hindi (or natural Hinglish) version.
 
-Generate a short, friendly response (1-2 sentences) in both English and Hindi:
-- Acknowledge what the user just stated in an encouraging way.
-- Ask the next required question clearly.
-- If confirming profile, invite them to review their details.
-
-Return ONLY valid JSON matching this schema:
+Return ONLY a valid JSON object matching this schema:
 {
   "contentEn": "...",
   "contentHi": "..."
 }`;
 
-      const response = await fetch(url, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          contents: [{ parts: [{ text: prompt }] }],
-          generationConfig: {
-            temperature: 0.3
-          }
-        })
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
-        if (text) {
-          const cleaned = cleanJsonResponse(text);
-          const parsed = JSON.parse(cleaned);
-          if (parsed.contentEn && parsed.contentHi) {
-            return parsed;
-          }
+      const contentText = await callGeminiApi(prompt, 0.3);
+      if (contentText) {
+        const cleaned = cleanJsonResponse(contentText);
+        const parsed = JSON.parse(cleaned);
+        if (parsed.contentEn && parsed.contentHi) {
+          return parsed;
         }
       }
     } catch (err) {
@@ -276,9 +318,6 @@ export const generateExplanation = async (fullTrace = {}) => {
 
   if (process.env.GEMINI_API_KEY) {
     try {
-      const model = process.env.GEMINI_MODEL || 'gemini-3.6-flash';
-      const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${process.env.GEMINI_API_KEY}`;
-
       const prompt = `${EXPLANATION_SYSTEM_PROMPT}
 
 Scheme Name: ${schemeName}
@@ -289,32 +328,18 @@ Next Action / Route: ${JSON.stringify(nextAction)}
 
 Generate a personalized, clear explanation in both English and Hindi. Return ONLY valid JSON matching the schema.`;
 
-      const response = await fetch(url, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          contents: [{ parts: [{ text: prompt }] }],
-          generationConfig: {
-            temperature: 0.2
-          }
-        })
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
-        if (text) {
-          const cleaned = cleanJsonResponse(text);
-          const parsed = JSON.parse(cleaned);
-          if (parsed.explanationEnglish && parsed.explanationHindi) {
-            return {
-              status,
-              explanationEnglish: parsed.explanationEnglish,
-              explanationHindi: parsed.explanationHindi,
-              actionableAdvice: parsed.actionableAdvice || `Apply via ${nextAction?.routeName || 'Official Portal'}`,
-              keyHighlight: parsed.keyHighlight || (status === 'ELIGIBLE' ? 'Eligible for benefits' : 'Review criteria')
-            };
-          }
+      const contentText = await callGeminiApi(prompt, 0.2);
+      if (contentText) {
+        const cleaned = cleanJsonResponse(contentText);
+        const parsed = JSON.parse(cleaned);
+        if (parsed.explanationEnglish && parsed.explanationHindi) {
+          return {
+            status,
+            explanationEnglish: parsed.explanationEnglish,
+            explanationHindi: parsed.explanationHindi,
+            actionableAdvice: parsed.actionableAdvice || `Apply via ${nextAction?.routeName || 'Official Portal'}`,
+            keyHighlight: parsed.keyHighlight || (status === 'ELIGIBLE' ? 'Eligible for benefits' : 'Review criteria')
+          };
         }
       }
     } catch (err) {
