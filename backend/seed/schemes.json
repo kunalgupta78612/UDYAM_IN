@@ -1,0 +1,1548 @@
+[
+  {
+    "schemeId": "nsfdc_tls_001",
+    "name": "NSFDC Term Loan Scheme (TLS)",
+    "shortDescription": "Term loan assistance for viable income-generating business ventures for Scheduled Caste individuals.",
+    "organization": {
+      "name": "National Scheduled Castes Finance and Development Corporation",
+      "ministry": "Ministry of Social Justice and Empowerment"
+    },
+    "version": 1,
+    "status": "ACTIVE",
+    "purpose": ["business_loan", "new_business", "expansion", "manufacturing", "service_business"],
+    "targetBeneficiaries": ["SC"],
+    "applicableGender": ["female", "male", "transgender", "all"],
+    "applicableCategories": ["SC"],
+    "states": ["ALL"],
+    "businessTypes": ["tailoring", "retail", "transport", "manufacturing", "service", "agriculture_allied"],
+    "requiredFields": ["category", "familyIncome", "age", "projectCost"],
+    "conditions": [
+      {
+        "conditionId": "tls_cond_cat",
+        "field": "category",
+        "operator": "IN",
+        "value": ["SC"],
+        "unit": null,
+        "description": "Applicant must belong to the Scheduled Caste (SC) community.",
+        "clause": "Section 2.1 - Target Group",
+        "sourceId": "src_nsfdc_tls",
+        "required": true
+      },
+      {
+        "conditionId": "tls_cond_income",
+        "field": "familyIncome",
+        "operator": "<=",
+        "value": 300000,
+        "unit": "INR",
+        "description": "Annual family income must not exceed ₹3,00,000 for rural and urban areas.",
+        "clause": "Section 2.2 - Income Criteria",
+        "sourceId": "src_nsfdc_tls",
+        "required": true
+      },
+      {
+        "conditionId": "tls_cond_age",
+        "field": "age",
+        "operator": ">=",
+        "value": 18,
+        "unit": "YEARS",
+        "description": "Applicant must be at least 18 years of age.",
+        "clause": "Section 2.3 - Age Criteria",
+        "sourceId": "src_nsfdc_tls",
+        "required": true
+      },
+      {
+        "conditionId": "tls_cond_cost",
+        "field": "projectCost",
+        "operator": "<=",
+        "value": 5000000,
+        "unit": "INR",
+        "description": "Project unit cost must not exceed ₹50,00,000.",
+        "clause": "Section 3.1 - Unit Cost & Funding Pattern",
+        "sourceId": "src_nsfdc_tls",
+        "required": true
+      }
+    ],
+    "financialBenefits": {
+      "minimumLoan": 50000,
+      "maximumLoan": 5000000,
+      "subsidy": "Up to ₹10,000 or 10% of project cost (as applicable via SCAs)",
+      "marginMoney": "Up to 90% of project cost funded by NSFDC",
+      "interestRate": "6% to 9% p.a. depending on loan slab",
+      "repaymentPeriod": "Up to 5 to 10 years including moratorium"
+    },
+    "applicationRoute": {
+      "type": "SCA",
+      "name": "State Channelizing Agency (SCA) / RRB",
+      "url": "https://nsfdc.nic.in/en/term-loan-scheme",
+      "description": "Submit application through your State Scheduled Castes Development Corporation (SCA) or designated RRB branch."
+    },
+    "documents": ["Caste Certificate", "Income Certificate", "Aadhaar Card", "Project Profile / Business Plan", "Bank Passbook"],
+    "sources": [
+      {
+        "sourceId": "src_nsfdc_tls",
+        "title": "NSFDC Lending Guidelines - Term Loan Scheme",
+        "organization": "National Scheduled Castes Finance and Development Corporation",
+        "url": "https://nsfdc.nic.in/en/term-loan-scheme",
+        "documentType": "official_guideline",
+        "clause": "Section 2 & 3",
+        "page": 1,
+        "verifiedOn": "2026-09-01"
+      }
+    ],
+    "verifiedOn": "2026-09-01"
+  },
+  {
+    "schemeId": "nsfdc_mcy_002",
+    "name": "NSFDC Micro Credit Yojana (MCY)",
+    "shortDescription": "Micro-finance loan facility for small direct business activities for SC entrepreneurs and SHGs.",
+    "organization": {
+      "name": "National Scheduled Castes Finance and Development Corporation",
+      "ministry": "Ministry of Social Justice and Empowerment"
+    },
+    "version": 1,
+    "status": "ACTIVE",
+    "purpose": ["business_loan", "working_capital", "self_employment"],
+    "targetBeneficiaries": ["SC"],
+    "applicableGender": ["female", "male", "transgender", "all"],
+    "applicableCategories": ["SC"],
+    "states": ["ALL"],
+    "businessTypes": ["tailoring", "kirana", "street_vendor", "artisan", "small_repair", "poultry", "dairy"],
+    "requiredFields": ["category", "familyIncome", "age", "projectCost"],
+    "conditions": [
+      {
+        "conditionId": "mcy_cond_cat",
+        "field": "category",
+        "operator": "IN",
+        "value": ["SC"],
+        "unit": null,
+        "description": "Applicant must belong to Scheduled Caste community.",
+        "clause": "Section 1.2 - Eligibility",
+        "sourceId": "src_nsfdc_mcy",
+        "required": true
+      },
+      {
+        "conditionId": "mcy_cond_income",
+        "field": "familyIncome",
+        "operator": "<=",
+        "value": 300000,
+        "unit": "INR",
+        "description": "Annual family income must be within ₹3,00,000.",
+        "clause": "Section 1.3 - Income Norms",
+        "sourceId": "src_nsfdc_mcy",
+        "required": true
+      },
+      {
+        "conditionId": "mcy_cond_age",
+        "field": "age",
+        "operator": ">=",
+        "value": 18,
+        "unit": "YEARS",
+        "description": "Minimum age is 18 years.",
+        "clause": "Section 1.4 - Age Limit",
+        "sourceId": "src_nsfdc_mcy",
+        "required": true
+      },
+      {
+        "conditionId": "mcy_cond_cost",
+        "field": "projectCost",
+        "operator": "<=",
+        "value": 140000,
+        "unit": "INR",
+        "description": "Project cost per individual beneficiary must not exceed ₹1,40,000.",
+        "clause": "Section 2.1 - Quantum of Assistance",
+        "sourceId": "src_nsfdc_mcy",
+        "required": true
+      }
+    ],
+    "financialBenefits": {
+      "minimumLoan": 10000,
+      "maximumLoan": 140000,
+      "subsidy": null,
+      "marginMoney": "Up to 100% project cost financed",
+      "interestRate": "5% p.a. chargeable to beneficiary",
+      "repaymentPeriod": "3 years including 3 months moratorium"
+    },
+    "applicationRoute": {
+      "type": "SCA",
+      "name": "State Channelizing Agency / Micro Finance NGO",
+      "url": "https://nsfdc.nic.in/en/micro-credit-finance",
+      "description": "Apply through designated SCA, District SC/ST welfare office, or partnered Micro-finance intermediary."
+    },
+    "documents": ["Caste Certificate", "Income Certificate", "Aadhaar Card", "Bank Account Details"],
+    "sources": [
+      {
+        "sourceId": "src_nsfdc_mcy",
+        "title": "Micro Credit Scheme Document",
+        "organization": "National Scheduled Castes Finance and Development Corporation",
+        "url": "https://nsfdc.nic.in/en/micro-credit-finance",
+        "documentType": "official_guideline",
+        "clause": "Operational Norms 2024",
+        "page": 2,
+        "verifiedOn": "2026-09-01"
+      }
+    ],
+    "verifiedOn": "2026-09-01"
+  },
+  {
+    "schemeId": "nsfdc_msy_003",
+    "name": "NSFDC Mahila Samriddhi Yojana (MSY)",
+    "shortDescription": "Exclusive micro-credit scheme providing concessional credit to Scheduled Caste women entrepreneurs.",
+    "organization": {
+      "name": "National Scheduled Castes Finance and Development Corporation",
+      "ministry": "Ministry of Social Justice and Empowerment"
+    },
+    "version": 1,
+    "status": "ACTIVE",
+    "purpose": ["women_entrepreneur", "business_loan", "self_employment", "working_capital"],
+    "targetBeneficiaries": ["SC", "women"],
+    "applicableGender": ["female"],
+    "applicableCategories": ["SC"],
+    "states": ["ALL"],
+    "businessTypes": ["tailoring", "beauty_parlor", "handicraft", "dairy", "retail_shop", "food_processing"],
+    "requiredFields": ["category", "gender", "familyIncome", "age", "projectCost"],
+    "conditions": [
+      {
+        "conditionId": "nsfdc_msy_gender",
+        "field": "gender",
+        "operator": "==",
+        "value": "female",
+        "unit": null,
+        "description": "Applicant must be a woman.",
+        "clause": "Eligibility 1.1",
+        "sourceId": "src_nsfdc_msy",
+        "required": true
+      },
+      {
+        "conditionId": "nsfdc_msy_cat",
+        "field": "category",
+        "operator": "IN",
+        "value": ["SC"],
+        "unit": null,
+        "description": "Applicant must belong to Scheduled Caste.",
+        "clause": "Eligibility 1.2",
+        "sourceId": "src_nsfdc_msy",
+        "required": true
+      },
+      {
+        "conditionId": "nsfdc_msy_income",
+        "field": "familyIncome",
+        "operator": "<=",
+        "value": 300000,
+        "unit": "INR",
+        "description": "Annual family income must not exceed ₹3,00,000.",
+        "clause": "Eligibility 1.3",
+        "sourceId": "src_nsfdc_msy",
+        "required": true
+      },
+      {
+        "conditionId": "nsfdc_msy_age",
+        "field": "age",
+        "operator": ">=",
+        "value": 18,
+        "unit": "YEARS",
+        "description": "Minimum age is 18 years.",
+        "clause": "Eligibility 1.4",
+        "sourceId": "src_nsfdc_msy",
+        "required": true
+      },
+      {
+        "conditionId": "nsfdc_msy_cost",
+        "field": "projectCost",
+        "operator": "<=",
+        "value": 140000,
+        "unit": "INR",
+        "description": "Unit project cost up to ₹1,40,000.",
+        "clause": "Loan Norms 2.1",
+        "sourceId": "src_nsfdc_msy",
+        "required": true
+      }
+    ],
+    "financialBenefits": {
+      "minimumLoan": 10000,
+      "maximumLoan": 140000,
+      "subsidy": null,
+      "marginMoney": "Up to 100% assistance",
+      "interestRate": "4% p.a. concessional rate for women",
+      "repaymentPeriod": "3 to 4 years"
+    },
+    "applicationRoute": {
+      "type": "SCA",
+      "name": "State Channelizing Agency",
+      "url": "https://nsfdc.nic.in/en/mahila-samriddhi-yojana",
+      "description": "Apply through your State Scheduled Castes Development Corporation (SCA) district office."
+    },
+    "documents": ["Caste Certificate", "Income Certificate", "Aadhaar Card", "Bank Account Details"],
+    "sources": [
+      {
+        "sourceId": "src_nsfdc_msy",
+        "title": "NSFDC Mahila Samriddhi Guidelines",
+        "organization": "National Scheduled Castes Finance and Development Corporation",
+        "url": "https://nsfdc.nic.in/en/mahila-samriddhi-yojana",
+        "documentType": "official_guideline",
+        "clause": "Policy Circular 2024",
+        "page": 1,
+        "verifiedOn": "2026-09-01"
+      }
+    ],
+    "verifiedOn": "2026-09-01"
+  },
+  {
+    "schemeId": "nsfdc_uny_004",
+    "name": "NSFDC Udyam Nidhi Yojana",
+    "shortDescription": "Financial assistance for young SC educated entrepreneurs to set up innovative service/commercial ventures.",
+    "organization": {
+      "name": "National Scheduled Castes Finance and Development Corporation",
+      "ministry": "Ministry of Social Justice and Empowerment"
+    },
+    "version": 1,
+    "status": "ACTIVE",
+    "purpose": ["startup", "new_business", "service_business", "manufacturing"],
+    "targetBeneficiaries": ["SC", "youth"],
+    "applicableGender": ["female", "male", "transgender", "all"],
+    "applicableCategories": ["SC"],
+    "states": ["ALL"],
+    "businessTypes": ["it_services", "diagnostics", "engineering_consulting", "logistics", "service", "manufacturing"],
+    "requiredFields": ["category", "familyIncome", "age", "projectCost"],
+    "conditions": [
+      {
+        "conditionId": "uny_cond_cat",
+        "field": "category",
+        "operator": "IN",
+        "value": ["SC"],
+        "unit": null,
+        "description": "Applicant must belong to Scheduled Caste.",
+        "clause": "Section 1",
+        "sourceId": "src_nsfdc_uny",
+        "required": true
+      },
+      {
+        "conditionId": "uny_cond_income",
+        "field": "familyIncome",
+        "operator": "<=",
+        "value": 300000,
+        "unit": "INR",
+        "description": "Family income not exceeding ₹3,00,000 per annum.",
+        "clause": "Section 2",
+        "sourceId": "src_nsfdc_uny",
+        "required": true
+      },
+      {
+        "conditionId": "uny_cond_age",
+        "field": "age",
+        "operator": ">=",
+        "value": 18,
+        "unit": "YEARS",
+        "description": "Age between 18 and 50 years.",
+        "clause": "Section 3",
+        "sourceId": "src_nsfdc_uny",
+        "required": true
+      },
+      {
+        "conditionId": "uny_cond_cost",
+        "field": "projectCost",
+        "operator": "<=",
+        "value": 1000000,
+        "unit": "INR",
+        "description": "Project cost up to ₹10,00,000.",
+        "clause": "Section 4",
+        "sourceId": "src_nsfdc_uny",
+        "required": true
+      }
+    ],
+    "financialBenefits": {
+      "minimumLoan": 100000,
+      "maximumLoan": 1000000,
+      "subsidy": null,
+      "marginMoney": "Up to 90% financed",
+      "interestRate": "6% to 8% p.a.",
+      "repaymentPeriod": "5 years"
+    },
+    "applicationRoute": {
+      "type": "SCA",
+      "name": "State Channelizing Agency / Public Sector Banks",
+      "url": "https://nsfdc.nic.in",
+      "description": "Apply through State SCA along with vocational/professional qualification proof."
+    },
+    "documents": ["Caste Certificate", "Income Certificate", "Educational/Technical Qualification Proof", "Project Report", "Aadhaar Card"],
+    "sources": [
+      {
+        "sourceId": "src_nsfdc_uny",
+        "title": "Udyam Nidhi Scheme Guidelines",
+        "organization": "National Scheduled Castes Finance and Development Corporation",
+        "url": "https://nsfdc.nic.in",
+        "documentType": "official_guideline",
+        "clause": "Guidelines 2024",
+        "page": 1,
+        "verifiedOn": "2026-09-01"
+      }
+    ],
+    "verifiedOn": "2026-09-01"
+  },
+  {
+    "schemeId": "nbcfdc_swarnima_005",
+    "name": "NBCFDC New Swarnima Scheme for Women",
+    "shortDescription": "Term loan scheme aimed at infusing self-reliance and entrepreneurship among women belonging to Backward Classes.",
+    "organization": {
+      "name": "National Backward Classes Finance & Development Corporation",
+      "ministry": "Ministry of Social Justice and Empowerment"
+    },
+    "version": 1,
+    "status": "ACTIVE",
+    "purpose": ["women_entrepreneur", "business_loan", "self_employment", "new_business"],
+    "targetBeneficiaries": ["OBC", "women"],
+    "applicableGender": ["female"],
+    "applicableCategories": ["OBC"],
+    "states": ["ALL"],
+    "businessTypes": ["tailoring", "embroidery", "beauty_parlor", "food_catering", "dairy", "retail_shop"],
+    "requiredFields": ["category", "gender", "familyIncome", "age", "projectCost"],
+    "conditions": [
+      {
+        "conditionId": "swarnima_gender",
+        "field": "gender",
+        "operator": "==",
+        "value": "female",
+        "unit": null,
+        "description": "Scheme is strictly for female entrepreneurs.",
+        "clause": "Section 1 - Target Group",
+        "sourceId": "src_nbcfdc_swarnima",
+        "required": true
+      },
+      {
+        "conditionId": "swarnima_cat",
+        "field": "category",
+        "operator": "IN",
+        "value": ["OBC"],
+        "unit": null,
+        "description": "Applicant must belong to Other Backward Classes (OBC).",
+        "clause": "Section 2 - Social Category",
+        "sourceId": "src_nbcfdc_swarnima",
+        "required": true
+      },
+      {
+        "conditionId": "swarnima_income",
+        "field": "familyIncome",
+        "operator": "<=",
+        "value": 300000,
+        "unit": "INR",
+        "description": "Total family income must not exceed ₹3,00,000 per annum.",
+        "clause": "Section 3 - Income Limit",
+        "sourceId": "src_nbcfdc_swarnima",
+        "required": true
+      },
+      {
+        "conditionId": "swarnima_age",
+        "field": "age",
+        "operator": ">=",
+        "value": 18,
+        "unit": "YEARS",
+        "description": "Applicant must be between 18 and 55 years of age.",
+        "clause": "Section 4 - Age Criteria",
+        "sourceId": "src_nbcfdc_swarnima",
+        "required": true
+      },
+      {
+        "conditionId": "swarnima_cost",
+        "field": "projectCost",
+        "operator": "<=",
+        "value": 200000,
+        "unit": "INR",
+        "description": "Maximum project cost allowed is ₹2,00,000.",
+        "clause": "Section 5 - Quantum of Assistance",
+        "sourceId": "src_nbcfdc_swarnima",
+        "required": true
+      }
+    ],
+    "financialBenefits": {
+      "minimumLoan": 20000,
+      "maximumLoan": 200000,
+      "subsidy": null,
+      "marginMoney": "Up to 95% financed (5% beneficiary contribution)",
+      "interestRate": "5% p.a. concessional rate",
+      "repaymentPeriod": "8 years including 6 months moratorium"
+    },
+    "applicationRoute": {
+      "type": "SCA",
+      "name": "State Channelizing Agency (OBC Corporation) / RRB",
+      "url": "https://nbcfdc.gov.in/en/new-swarnima-scheme",
+      "description": "Apply through State Backward Classes Development Corporation / nominated Channel Partners."
+    },
+    "documents": ["OBC Caste Certificate", "Income Certificate", "Aadhaar Card", "Passport Photo", "Bank Account Passbook"],
+    "sources": [
+      {
+        "sourceId": "src_nbcfdc_swarnima",
+        "title": "NBCFDC New Swarnima Scheme Guidelines",
+        "organization": "National Backward Classes Finance & Development Corporation",
+        "url": "https://nbcfdc.gov.in/en/new-swarnima-scheme",
+        "documentType": "official_guideline",
+        "clause": "Guidelines 2024",
+        "page": 1,
+        "verifiedOn": "2026-09-01"
+      }
+    ],
+    "verifiedOn": "2026-09-01"
+  },
+  {
+    "schemeId": "nbcfdc_saksham_006",
+    "name": "NBCFDC Saksham Scheme",
+    "shortDescription": "Concessional term loan for OBC young professionals with technical/professional degrees or vocational training.",
+    "organization": {
+      "name": "National Backward Classes Finance & Development Corporation",
+      "ministry": "Ministry of Social Justice and Empowerment"
+    },
+    "version": 1,
+    "status": "ACTIVE",
+    "purpose": ["business_loan", "startup", "service_business", "self_employment"],
+    "targetBeneficiaries": ["OBC", "youth"],
+    "applicableGender": ["female", "male", "transgender", "all"],
+    "applicableCategories": ["OBC"],
+    "states": ["ALL"],
+    "businessTypes": ["engineering_consulting", "software", "pharmacy", "automobile_service", "service"],
+    "requiredFields": ["category", "familyIncome", "age", "projectCost"],
+    "conditions": [
+      {
+        "conditionId": "saksham_cat",
+        "field": "category",
+        "operator": "IN",
+        "value": ["OBC"],
+        "unit": null,
+        "description": "Applicant must belong to OBC category.",
+        "clause": "Eligibility A",
+        "sourceId": "src_nbcfdc_saksham",
+        "required": true
+      },
+      {
+        "conditionId": "saksham_income",
+        "field": "familyIncome",
+        "operator": "<=",
+        "value": 300000,
+        "unit": "INR",
+        "description": "Annual family income not exceeding ₹3,00,000.",
+        "clause": "Eligibility B",
+        "sourceId": "src_nbcfdc_saksham",
+        "required": true
+      },
+      {
+        "conditionId": "saksham_age",
+        "field": "age",
+        "operator": ">=",
+        "value": 18,
+        "unit": "YEARS",
+        "description": "Applicant must be at least 18 years old.",
+        "clause": "Eligibility C",
+        "sourceId": "src_nbcfdc_saksham",
+        "required": true
+      },
+      {
+        "conditionId": "saksham_cost",
+        "field": "projectCost",
+        "operator": "<=",
+        "value": 1500000,
+        "unit": "INR",
+        "description": "Project cost up to ₹15,00,000.",
+        "clause": "Funding Pattern",
+        "sourceId": "src_nbcfdc_saksham",
+        "required": true
+      }
+    ],
+    "financialBenefits": {
+      "minimumLoan": 100000,
+      "maximumLoan": 1500000,
+      "subsidy": null,
+      "marginMoney": "Up to 90% financed by NBCFDC",
+      "interestRate": "8% p.a. (discounted to 6% for timely repayment)",
+      "repaymentPeriod": "5 to 8 years"
+    },
+    "applicationRoute": {
+      "type": "SCA",
+      "name": "State Channelizing Agency / Partnered Public Banks",
+      "url": "https://nbcfdc.gov.in/en/saksham-scheme",
+      "description": "Apply through State Channelizing Agency with degree/diploma proof."
+    },
+    "documents": ["OBC Caste Certificate", "Income Certificate", "Professional Qualification Certificate", "Project Report", "Aadhaar Card"],
+    "sources": [
+      {
+        "sourceId": "src_nbcfdc_saksham",
+        "title": "NBCFDC Saksham Scheme Document",
+        "organization": "National Backward Classes Finance & Development Corporation",
+        "url": "https://nbcfdc.gov.in/en/saksham-scheme",
+        "documentType": "official_guideline",
+        "clause": "Guidelines Section 3",
+        "page": 2,
+        "verifiedOn": "2026-09-01"
+      }
+    ],
+    "verifiedOn": "2026-09-01"
+  },
+  {
+    "schemeId": "nbcfdc_shilp_007",
+    "name": "NBCFDC Shilp Sampada",
+    "shortDescription": "Financial assistance to OBC artisans and craftspersons for upgrading tools, establishing workshops, and working capital.",
+    "organization": {
+      "name": "National Backward Classes Finance & Development Corporation",
+      "ministry": "Ministry of Social Justice and Empowerment"
+    },
+    "version": 1,
+    "status": "ACTIVE",
+    "purpose": ["business_loan", "working_capital", "self_employment"],
+    "targetBeneficiaries": ["OBC", "artisan"],
+    "applicableGender": ["female", "male", "transgender", "all"],
+    "applicableCategories": ["OBC"],
+    "states": ["ALL"],
+    "businessTypes": ["handicraft", "pottery", "weaving", "woodwork", "metal_craft", "tailoring"],
+    "requiredFields": ["category", "familyIncome", "age", "projectCost"],
+    "conditions": [
+      {
+        "conditionId": "shilp_cat",
+        "field": "category",
+        "operator": "IN",
+        "value": ["OBC"],
+        "unit": null,
+        "description": "Applicant must belong to OBC category.",
+        "clause": "Section 1",
+        "sourceId": "src_nbcfdc_shilp",
+        "required": true
+      },
+      {
+        "conditionId": "shilp_income",
+        "field": "familyIncome",
+        "operator": "<=",
+        "value": 300000,
+        "unit": "INR",
+        "description": "Annual family income not exceeding ₹3,00,000.",
+        "clause": "Section 2",
+        "sourceId": "src_nbcfdc_shilp",
+        "required": true
+      },
+      {
+        "conditionId": "shilp_age",
+        "field": "age",
+        "operator": ">=",
+        "value": 18,
+        "unit": "YEARS",
+        "description": "Applicant must be 18 years or older.",
+        "clause": "Section 3",
+        "sourceId": "src_nbcfdc_shilp",
+        "required": true
+      },
+      {
+        "conditionId": "shilp_cost",
+        "field": "projectCost",
+        "operator": "<=",
+        "value": 1000000,
+        "unit": "INR",
+        "description": "Project cost up to ₹10,00,000.",
+        "clause": "Section 4",
+        "sourceId": "src_nbcfdc_shilp",
+        "required": true
+      }
+    ],
+    "financialBenefits": {
+      "minimumLoan": 50000,
+      "maximumLoan": 1000000,
+      "subsidy": null,
+      "marginMoney": "Up to 90% project cost covered",
+      "interestRate": "6% p.a.",
+      "repaymentPeriod": "5 years"
+    },
+    "applicationRoute": {
+      "type": "SCA",
+      "name": "State Channelizing Agency",
+      "url": "https://nbcfdc.gov.in/en/shilp-sampada",
+      "description": "Submit application to State SCA with artisan/craftsman identity card or proof of traditional skill."
+    },
+    "documents": ["OBC Certificate", "Income Certificate", "Pehchan / Artisan ID Card", "Aadhaar Card", "Bank Account Details"],
+    "sources": [
+      {
+        "sourceId": "src_nbcfdc_shilp",
+        "title": "NBCFDC Shilp Sampada Guidelines",
+        "organization": "National Backward Classes Finance & Development Corporation",
+        "url": "https://nbcfdc.gov.in/en/shilp-sampada",
+        "documentType": "official_guideline",
+        "clause": "Policy 2024",
+        "page": 1,
+        "verifiedOn": "2026-09-01"
+      }
+    ],
+    "verifiedOn": "2026-09-01"
+  },
+  {
+    "schemeId": "nbcfdc_krishi_008",
+    "name": "NBCFDC Krishi Sampada",
+    "shortDescription": "Concessional finance for small farmers and vegetable/fruit growers of Backward Classes.",
+    "organization": {
+      "name": "National Backward Classes Finance & Development Corporation",
+      "ministry": "Ministry of Social Justice and Empowerment"
+    },
+    "version": 1,
+    "status": "ACTIVE",
+    "purpose": ["agriculture", "working_capital", "business_loan"],
+    "targetBeneficiaries": ["OBC", "farmers"],
+    "applicableGender": ["female", "male", "transgender", "all"],
+    "applicableCategories": ["OBC"],
+    "states": ["ALL"],
+    "businessTypes": ["organic_farming", "vegetable_cultivation", "dairy", "poultry", "horticulture"],
+    "requiredFields": ["category", "familyIncome", "age", "projectCost"],
+    "conditions": [
+      {
+        "conditionId": "krishi_cat",
+        "field": "category",
+        "operator": "IN",
+        "value": ["OBC"],
+        "unit": null,
+        "description": "Applicant must belong to OBC category.",
+        "clause": "Eligibility 1",
+        "sourceId": "src_nbcfdc_krishi",
+        "required": true
+      },
+      {
+        "conditionId": "krishi_income",
+        "field": "familyIncome",
+        "operator": "<=",
+        "value": 300000,
+        "unit": "INR",
+        "description": "Family income not exceeding ₹3,00,000 per annum.",
+        "clause": "Eligibility 2",
+        "sourceId": "src_nbcfdc_krishi",
+        "required": true
+      },
+      {
+        "conditionId": "krishi_age",
+        "field": "age",
+        "operator": ">=",
+        "value": 18,
+        "unit": "YEARS",
+        "description": "Minimum age is 18 years.",
+        "clause": "Eligibility 3",
+        "sourceId": "src_nbcfdc_krishi",
+        "required": true
+      },
+      {
+        "conditionId": "krishi_cost",
+        "field": "projectCost",
+        "operator": "<=",
+        "value": 100000,
+        "unit": "INR",
+        "description": "Quantum of loan up to ₹1,00,000.",
+        "clause": "Loan Norms",
+        "sourceId": "src_nbcfdc_krishi",
+        "required": true
+      }
+    ],
+    "financialBenefits": {
+      "minimumLoan": 20000,
+      "maximumLoan": 100000,
+      "subsidy": null,
+      "marginMoney": "Up to 95% financed",
+      "interestRate": "4% p.a.",
+      "repaymentPeriod": "2 years"
+    },
+    "applicationRoute": {
+      "type": "SCA",
+      "name": "State Channelizing Agency / Rural Banks",
+      "url": "https://nbcfdc.gov.in/en/krishi-sampada",
+      "description": "Apply through your State Backward Classes Finance Corporation."
+    },
+    "documents": ["OBC Certificate", "Income Certificate", "Land/Khasra Records or Tenancy Agreement", "Aadhaar Card"],
+    "sources": [
+      {
+        "sourceId": "src_nbcfdc_krishi",
+        "title": "NBCFDC Krishi Sampada Guidelines",
+        "organization": "National Backward Classes Finance & Development Corporation",
+        "url": "https://nbcfdc.gov.in/en/krishi-sampada",
+        "documentType": "official_guideline",
+        "clause": "Guidelines 2024",
+        "page": 1,
+        "verifiedOn": "2026-09-01"
+      }
+    ],
+    "verifiedOn": "2026-09-01"
+  },
+  {
+    "schemeId": "nskfdc_gtl_009",
+    "name": "NSKFDC General Term Loan (GTL)",
+    "shortDescription": "Term loan for Safai Karamcharis, Manual Scavengers, and their dependents for income generating ventures.",
+    "organization": {
+      "name": "National Safai Karamcharis Finance & Development Corporation",
+      "ministry": "Ministry of Social Justice and Empowerment"
+    },
+    "version": 1,
+    "status": "ACTIVE",
+    "purpose": ["business_loan", "new_business", "self_employment"],
+    "targetBeneficiaries": ["safai_karamchari", "manual_scavenger", "SC", "OBC"],
+    "applicableGender": ["female", "male", "transgender", "all"],
+    "applicableCategories": ["SC", "OBC", "GENERAL", "ST", "ALL"],
+    "states": ["ALL"],
+    "businessTypes": ["transport", "sanitation_business", "retail", "tailoring", "general_trade"],
+    "requiredFields": ["age", "projectCost"],
+    "conditions": [
+      {
+        "conditionId": "nskfdc_gtl_age",
+        "field": "age",
+        "operator": ">=",
+        "value": 18,
+        "unit": "YEARS",
+        "description": "Applicant must be at least 18 years of age.",
+        "clause": "Section 2.1",
+        "sourceId": "src_nskfdc_gtl",
+        "required": true
+      },
+      {
+        "conditionId": "nskfdc_gtl_cost",
+        "field": "projectCost",
+        "operator": "<=",
+        "value": 1500000,
+        "unit": "INR",
+        "description": "Maximum project cost allowed is ₹15,00,000.",
+        "clause": "Section 2.2",
+        "sourceId": "src_nskfdc_gtl",
+        "required": true
+      }
+    ],
+    "financialBenefits": {
+      "minimumLoan": 50000,
+      "maximumLoan": 1500000,
+      "subsidy": null,
+      "marginMoney": "Up to 90% financed by NSKFDC",
+      "interestRate": "6% p.a.",
+      "repaymentPeriod": "Up to 6 years including moratorium"
+    },
+    "applicationRoute": {
+      "type": "SCA",
+      "name": "State Channelizing Agency / Regional Rural Banks",
+      "url": "https://nskfdc.nic.in",
+      "description": "Apply through State Channelizing Agency with Safai Karamchari / Dependent certificate issued by local municipal body."
+    },
+    "documents": ["Safai Karamchari/Manual Scavenger Identification Certificate", "Aadhaar Card", "Project Report", "Bank Passbook"],
+    "sources": [
+      {
+        "sourceId": "src_nskfdc_gtl",
+        "title": "NSKFDC General Term Loan Guidelines",
+        "organization": "National Safai Karamcharis Finance & Development Corporation",
+        "url": "https://nskfdc.nic.in",
+        "documentType": "official_guideline",
+        "clause": "Scheme Document 2024",
+        "page": 1,
+        "verifiedOn": "2026-09-01"
+      }
+    ],
+    "verifiedOn": "2026-09-01"
+  },
+  {
+    "schemeId": "nskfdc_suy_010",
+    "name": "NSKFDC Swachhta Udyami Yojana (SUY)",
+    "shortDescription": "Financial assistance for procurement and operation of mechanized cleaning machinery & sanitation equipment.",
+    "organization": {
+      "name": "National Safai Karamcharis Finance & Development Corporation",
+      "ministry": "Ministry of Social Justice and Empowerment"
+    },
+    "version": 1,
+    "status": "ACTIVE",
+    "purpose": ["business_loan", "self_employment", "sanitation"],
+    "targetBeneficiaries": ["safai_karamchari", "manual_scavenger"],
+    "applicableGender": ["female", "male", "transgender", "all"],
+    "applicableCategories": ["ALL", "SC", "OBC", "GENERAL"],
+    "states": ["ALL"],
+    "businessTypes": ["mechanized_cleaning", "suction_machine", "sanitation_services"],
+    "requiredFields": ["age", "projectCost"],
+    "conditions": [
+      {
+        "conditionId": "suy_cond_age",
+        "field": "age",
+        "operator": ">=",
+        "value": 18,
+        "unit": "YEARS",
+        "description": "Applicant must be minimum 18 years old.",
+        "clause": "Clause 3",
+        "sourceId": "src_nskfdc_suy",
+        "required": true
+      },
+      {
+        "conditionId": "suy_cond_cost",
+        "field": "projectCost",
+        "operator": "<=",
+        "value": 5000000,
+        "unit": "INR",
+        "description": "Unit project cost up to ₹50 Lakh for sanitation vehicles/equipment.",
+        "clause": "Clause 4",
+        "sourceId": "src_nskfdc_suy",
+        "required": true
+      }
+    ],
+    "financialBenefits": {
+      "minimumLoan": 500000,
+      "maximumLoan": 5000000,
+      "subsidy": "Capital subsidy available under NAMASTE / MS Act convergence",
+      "marginMoney": "Up to 90% financed",
+      "interestRate": "4% p.a. for sanitation equipment",
+      "repaymentPeriod": "7 years"
+    },
+    "applicationRoute": {
+      "type": "SCA",
+      "name": "State Channelizing Agency / Public Banks",
+      "url": "https://nskfdc.nic.in",
+      "description": "Apply through State SCA with municipality recommendation/work contract."
+    },
+    "documents": ["Safai Karamchari ID Proof", "Quotation for Mechanized Equipment", "Aadhaar Card", "Bank Account Details"],
+    "sources": [
+      {
+        "sourceId": "src_nskfdc_suy",
+        "title": "Swachhta Udyami Yojana Scheme Document",
+        "organization": "National Safai Karamcharis Finance & Development Corporation",
+        "url": "https://nskfdc.nic.in",
+        "documentType": "official_guideline",
+        "clause": "SUY Policy 2024",
+        "page": 1,
+        "verifiedOn": "2026-09-01"
+      }
+    ],
+    "verifiedOn": "2026-09-01"
+  },
+  {
+    "schemeId": "standup_india_011",
+    "name": "Stand-Up India Scheme",
+    "shortDescription": "Bank loans between ₹10 Lakh and ₹1 Crore to at least one SC/ST and one woman borrower per bank branch for greenfield enterprises.",
+    "organization": {
+      "name": "Small Industries Development Bank of India (SIDBI)",
+      "ministry": "Ministry of Finance"
+    },
+    "version": 1,
+    "status": "ACTIVE",
+    "purpose": ["business_loan", "new_business", "manufacturing", "service_business", "women_entrepreneur"],
+    "targetBeneficiaries": ["SC", "ST", "women"],
+    "applicableGender": ["female", "male", "transgender", "all"],
+    "applicableCategories": ["SC", "ST", "OBC", "GENERAL", "ALL"],
+    "states": ["ALL"],
+    "businessTypes": ["manufacturing", "services", "agri_allied", "trading", "tailoring", "food_processing"],
+    "requiredFields": ["category", "gender", "age", "projectCost"],
+    "conditions": [
+      {
+        "conditionId": "standup_beneficiary",
+        "field": "category",
+        "operator": "IN",
+        "value": ["SC", "ST", "ALL_IF_WOMEN"],
+        "unit": null,
+        "description": "Borrower must be SC/ST OR a Woman of any category.",
+        "clause": "Section 1 - Eligibility Criteria",
+        "sourceId": "src_standup_india",
+        "required": true
+      },
+      {
+        "conditionId": "standup_age",
+        "field": "age",
+        "operator": ">=",
+        "value": 18,
+        "unit": "YEARS",
+        "description": "Applicant must be above 18 years of age.",
+        "clause": "Section 1.2 - Age",
+        "sourceId": "src_standup_india",
+        "required": true
+      },
+      {
+        "conditionId": "standup_min_cost",
+        "field": "projectCost",
+        "operator": ">=",
+        "value": 1000000,
+        "unit": "INR",
+        "description": "Minimum project loan is ₹10 Lakh.",
+        "clause": "Section 2.1 - Quantum of Loan",
+        "sourceId": "src_standup_india",
+        "required": true
+      },
+      {
+        "conditionId": "standup_max_cost",
+        "field": "projectCost",
+        "operator": "<=",
+        "value": 10000000,
+        "unit": "INR",
+        "description": "Maximum project loan is ₹1 Crore.",
+        "clause": "Section 2.2 - Quantum of Loan",
+        "sourceId": "src_standup_india",
+        "required": true
+      }
+    ],
+    "financialBenefits": {
+      "minimumLoan": 1000000,
+      "maximumLoan": 10000000,
+      "subsidy": "Convergence with Central/State subsidy schemes eligible for margin money",
+      "marginMoney": "Up to 85% of project cost funded as composite loan",
+      "interestRate": "Base rate (MCLR) + 3% + tenor premium",
+      "repaymentPeriod": "7 years with up to 18 months moratorium"
+    },
+    "applicationRoute": {
+      "type": "ONLINE_PORTAL",
+      "name": "Stand-Up Mitra Portal / Any Scheduled Commercial Bank",
+      "url": "https://www.standupmitra.in",
+      "description": "Apply online at standupmitra.in portal or visit nearest branch of any Scheduled Commercial Bank."
+    },
+    "documents": ["Identity Proof (Aadhaar/PAN)", "Caste Certificate (if SC/ST)", "Project Report with Financial Projections", "Bank Statements", "Proof of Business Address"],
+    "sources": [
+      {
+        "sourceId": "src_standup_india",
+        "title": "Stand-Up India Official Scheme Guidelines",
+        "organization": "Department of Financial Services, Ministry of Finance",
+        "url": "https://www.standupmitra.in",
+        "documentType": "official_guideline",
+        "clause": "Operational Guidelines 2024",
+        "page": 3,
+        "verifiedOn": "2026-09-01"
+      }
+    ],
+    "verifiedOn": "2026-09-01"
+  },
+  {
+    "schemeId": "asiim_vcf_012",
+    "name": "Ambedkar Social Innovation and Incubation Mission (ASIIM)",
+    "shortDescription": "Equity/grant funding up to ₹30 Lakh over 3 years to SC youth tech startups supported by TBIs/incubators.",
+    "organization": {
+      "name": "IFCI Venture Capital Funds Ltd",
+      "ministry": "Ministry of Social Justice and Empowerment"
+    },
+    "version": 1,
+    "status": "ACTIVE",
+    "purpose": ["startup", "new_business", "manufacturing", "service_business"],
+    "targetBeneficiaries": ["SC", "youth", "startup"],
+    "applicableGender": ["female", "male", "transgender", "all"],
+    "applicableCategories": ["SC"],
+    "states": ["ALL"],
+    "businessTypes": ["tech_startup", "biotech", "software", "agritech", "clean_energy", "hardware"],
+    "requiredFields": ["category", "age", "projectCost"],
+    "conditions": [
+      {
+        "conditionId": "asiim_cat",
+        "field": "category",
+        "operator": "IN",
+        "value": ["SC"],
+        "unit": null,
+        "description": "SC youth promoter must own at least 51% equity in the startup entity.",
+        "clause": "Section 2.1 - Eligibility",
+        "sourceId": "src_asiim",
+        "required": true
+      },
+      {
+        "conditionId": "asiim_age",
+        "field": "age",
+        "operator": ">=",
+        "value": 18,
+        "unit": "YEARS",
+        "description": "Promoter must be minimum 18 years of age.",
+        "clause": "Section 2.2 - Age",
+        "sourceId": "src_asiim",
+        "required": true
+      },
+      {
+        "conditionId": "asiim_cost",
+        "field": "projectCost",
+        "operator": "<=",
+        "value": 3000000,
+        "unit": "INR",
+        "description": "Equity funding up to ₹30,00,000 in tranches.",
+        "clause": "Section 3.1 - Funding Tranches",
+        "sourceId": "src_asiim",
+        "required": true
+      }
+    ],
+    "financialBenefits": {
+      "minimumLoan": 500000,
+      "maximumLoan": 3000000,
+      "subsidy": "Concessional equity infusion / grant support",
+      "marginMoney": "100% equity support across 3 years",
+      "interestRate": "N/A (Equity investment)",
+      "repaymentPeriod": "Equity buy-back / exit after incubation"
+    },
+    "applicationRoute": {
+      "type": "INCUBATOR",
+      "name": "Technology Business Incubators (TBIs) / ASIIM Portal",
+      "url": "https://vcfsc.in",
+      "description": "Apply through any DST/MoE approved Technology Business Incubator (TBI) or official VCFSC portal."
+    },
+    "documents": ["SC Caste Certificate of Promoter", "Company Incorporation Certificate (DPIIT)", "Incubation Recommendation Letter", "Pitch Deck / Business Proposal"],
+    "sources": [
+      {
+        "sourceId": "src_asiim",
+        "title": "ASIIM Operational Guidelines",
+        "organization": "IFCI Venture / Ministry of Social Justice and Empowerment",
+        "url": "https://vcfsc.in",
+        "documentType": "official_guideline",
+        "clause": "Policy Document 2024",
+        "page": 2,
+        "verifiedOn": "2026-09-01"
+      }
+    ],
+    "verifiedOn": "2026-09-01"
+  },
+  {
+    "schemeId": "vcf_sc_013",
+    "name": "Venture Capital Fund for Scheduled Castes (VCF-SC)",
+    "shortDescription": "Concessional equity and debt funding for commercially viable MSMEs and startups promoted by SC entrepreneurs.",
+    "organization": {
+      "name": "IFCI Venture Capital Funds Ltd",
+      "ministry": "Ministry of Social Justice and Empowerment"
+    },
+    "version": 1,
+    "status": "ACTIVE",
+    "purpose": ["startup", "expansion", "manufacturing", "business_loan"],
+    "targetBeneficiaries": ["SC"],
+    "applicableGender": ["female", "male", "transgender", "all"],
+    "applicableCategories": ["SC"],
+    "states": ["ALL"],
+    "businessTypes": ["manufacturing", "technology", "pharma", "logistics", "heavy_service"],
+    "requiredFields": ["category", "age", "projectCost"],
+    "conditions": [
+      {
+        "conditionId": "vcf_cat",
+        "field": "category",
+        "operator": "IN",
+        "value": ["SC"],
+        "unit": null,
+        "description": "Promoter must be SC with at least 51% stake for over 12 months.",
+        "clause": "Eligibility Norms",
+        "sourceId": "src_vcf_sc",
+        "required": true
+      },
+      {
+        "conditionId": "vcf_age",
+        "field": "age",
+        "operator": ">=",
+        "value": 18,
+        "unit": "YEARS",
+        "description": "Promoter must be 18 years or older.",
+        "clause": "Age Norms",
+        "sourceId": "src_vcf_sc",
+        "required": true
+      },
+      {
+        "conditionId": "vcf_cost",
+        "field": "projectCost",
+        "operator": ">=",
+        "value": 2000000,
+        "unit": "INR",
+        "description": "Financial assistance from ₹20 Lakh to ₹15 Crore.",
+        "clause": "Investment Slab",
+        "sourceId": "src_vcf_sc",
+        "required": true
+      }
+    ],
+    "financialBenefits": {
+      "minimumLoan": 2000000,
+      "maximumLoan": 150000000,
+      "subsidy": null,
+      "marginMoney": "Up to 75% project financial assistance",
+      "interestRate": "4% p.a. (for women/disabled promoters) or 8% p.a.",
+      "repaymentPeriod": "Up to 8 years"
+    },
+    "applicationRoute": {
+      "type": "ONLINE_PORTAL",
+      "name": "IFCI Venture Capital Fund Portal",
+      "url": "https://vcfsc.in",
+      "description": "Apply online with detailed Project Appraisal Report to IFCI Venture."
+    },
+    "documents": ["Caste Certificate", "Company Incorporation Proof (51% SC)", "Audited Financials / CA Net Worth Certificate", "Detailed Project Report"],
+    "sources": [
+      {
+        "sourceId": "src_vcf_sc",
+        "title": "VCF-SC Scheme Framework",
+        "organization": "IFCI Venture",
+        "url": "https://vcfsc.in",
+        "documentType": "official_guideline",
+        "clause": "Framework 2024",
+        "page": 1,
+        "verifiedOn": "2026-09-01"
+      }
+    ],
+    "verifiedOn": "2026-09-01"
+  },
+  {
+    "schemeId": "pmegp_014",
+    "name": "Prime Minister's Employment Generation Programme (PMEGP)",
+    "shortDescription": "Credit-linked subsidy programme providing 15% to 35% capital subsidy for setting up micro-enterprises.",
+    "organization": {
+      "name": "Khadi and Village Industries Commission (KVIC)",
+      "ministry": "Ministry of Micro, Small and Medium Enterprises"
+    },
+    "version": 1,
+    "status": "ACTIVE",
+    "purpose": ["new_business", "manufacturing", "service_business", "business_loan"],
+    "targetBeneficiaries": ["ALL", "SC", "ST", "OBC", "women", "minority"],
+    "applicableGender": ["female", "male", "transgender", "all"],
+    "applicableCategories": ["SC", "ST", "OBC", "GENERAL", "ALL"],
+    "states": ["ALL"],
+    "businessTypes": ["manufacturing", "service", "tailoring", "bakery", "agro_processing", "furniture", "printing"],
+    "requiredFields": ["age", "projectCost"],
+    "conditions": [
+      {
+        "conditionId": "pmegp_age",
+        "field": "age",
+        "operator": ">=",
+        "value": 18,
+        "unit": "YEARS",
+        "description": "Applicant must be minimum 18 years of age.",
+        "clause": "Eligibility Criteria 1",
+        "sourceId": "src_pmegp",
+        "required": true
+      },
+      {
+        "conditionId": "pmegp_cost",
+        "field": "projectCost",
+        "operator": "<=",
+        "value": 5000000,
+        "unit": "INR",
+        "description": "Project cost up to ₹50 Lakh for Manufacturing and ₹20 Lakh for Services.",
+        "clause": "Quantum of Assistance",
+        "sourceId": "src_pmegp",
+        "required": true
+      }
+    ],
+    "financialBenefits": {
+      "minimumLoan": 50000,
+      "maximumLoan": 5000000,
+      "subsidy": "15% to 25% (General) or 25% to 35% (Special categories including SC/ST/OBC/Women)",
+      "marginMoney": "5% to 10% own contribution",
+      "interestRate": "Normal banking commercial interest rates",
+      "repaymentPeriod": "3 to 7 years after moratorium"
+    },
+    "applicationRoute": {
+      "type": "ONLINE_PORTAL",
+      "name": "KVIC PMEGP e-Portal",
+      "url": "https://www.kviconline.gov.in/pmegpeportal",
+      "description": "Submit application online on the official PMEGP e-portal and choose preferred financing bank."
+    },
+    "documents": ["Aadhaar Card", "Caste Certificate (for subsidy)", "Special Category Certificate", "Project Report", "Educational Qualification (if >₹10L Mfg or >₹5L Svc)"],
+    "sources": [
+      {
+        "sourceId": "src_pmegp",
+        "title": "PMEGP Scheme Guidelines 2024",
+        "organization": "KVIC / Ministry of MSME",
+        "url": "https://www.kviconline.gov.in/pmegpeportal",
+        "documentType": "official_guideline",
+        "clause": "PMEGP Operational Guidelines",
+        "page": 4,
+        "verifiedOn": "2026-09-01"
+      }
+    ],
+    "verifiedOn": "2026-09-01"
+  },
+  {
+    "schemeId": "mudra_shishu_015",
+    "name": "Pradhan Mantri MUDRA Yojana (PMMY) - Shishu",
+    "shortDescription": "Collateral-free micro loans up to ₹50,000 for tiny startup enterprises and small businesses.",
+    "organization": {
+      "name": "MUDRA / Department of Financial Services",
+      "ministry": "Ministry of Finance"
+    },
+    "version": 1,
+    "status": "ACTIVE",
+    "purpose": ["business_loan", "working_capital", "self_employment"],
+    "targetBeneficiaries": ["ALL", "SC", "ST", "OBC", "women"],
+    "applicableGender": ["female", "male", "transgender", "all"],
+    "applicableCategories": ["SC", "ST", "OBC", "GENERAL", "ALL"],
+    "states": ["ALL"],
+    "businessTypes": ["tailoring", "street_vendor", "kirana", "artisan", "dairy", "repair_shop"],
+    "requiredFields": ["age", "projectCost"],
+    "conditions": [
+      {
+        "conditionId": "mudra_s_age",
+        "field": "age",
+        "operator": ">=",
+        "value": 18,
+        "unit": "YEARS",
+        "description": "Applicant must be at least 18 years old.",
+        "clause": "Clause 1 - General Eligibility",
+        "sourceId": "src_pmmy",
+        "required": true
+      },
+      {
+        "conditionId": "mudra_s_cost",
+        "field": "projectCost",
+        "operator": "<=",
+        "value": 50000,
+        "unit": "INR",
+        "description": "Loan amount covering project requirement up to ₹50,000.",
+        "clause": "Clause 2.1 - Shishu Category",
+        "sourceId": "src_pmmy",
+        "required": true
+      }
+    ],
+    "financialBenefits": {
+      "minimumLoan": 5000,
+      "maximumLoan": 50000,
+      "subsidy": null,
+      "marginMoney": "Nil (100% funded)",
+      "interestRate": "Competitive commercial bank rates (approx 8.5% to 11% p.a.)",
+      "repaymentPeriod": "Up to 5 years"
+    },
+    "applicationRoute": {
+      "type": "BANK",
+      "name": "Any Commercial / Regional Rural / Small Finance Bank or Udyamimitra",
+      "url": "https://www.mudra.org.in",
+      "description": "Apply directly at any local bank branch or online on Udyamimitra portal without collateral."
+    },
+    "documents": ["Proof of Identity (Aadhaar/Voter ID)", "Proof of Residence", "Business Address Proof", "Quotation for items to be purchased"],
+    "sources": [
+      {
+        "sourceId": "src_pmmy",
+        "title": "PMMY Operational Guidelines",
+        "organization": "MUDRA Ltd",
+        "url": "https://www.mudra.org.in",
+        "documentType": "official_guideline",
+        "clause": "Product Guidelines 2024",
+        "page": 2,
+        "verifiedOn": "2026-09-01"
+      }
+    ],
+    "verifiedOn": "2026-09-01"
+  },
+  {
+    "schemeId": "mudra_kishore_016",
+    "name": "Pradhan Mantri MUDRA Yojana (PMMY) - Kishore",
+    "shortDescription": "Collateral-free business loans from ₹50,000 to ₹5 Lakh for expanding and established micro-enterprises.",
+    "organization": {
+      "name": "MUDRA / Department of Financial Services",
+      "ministry": "Ministry of Finance"
+    },
+    "version": 1,
+    "status": "ACTIVE",
+    "purpose": ["business_loan", "working_capital", "expansion", "manufacturing"],
+    "targetBeneficiaries": ["ALL", "SC", "ST", "OBC", "women"],
+    "applicableGender": ["female", "male", "transgender", "all"],
+    "applicableCategories": ["SC", "ST", "OBC", "GENERAL", "ALL"],
+    "states": ["ALL"],
+    "businessTypes": ["tailoring", "manufacturing", "retail", "service", "food_processing", "workshop"],
+    "requiredFields": ["age", "projectCost"],
+    "conditions": [
+      {
+        "conditionId": "mudra_k_age",
+        "field": "age",
+        "operator": ">=",
+        "value": 18,
+        "unit": "YEARS",
+        "description": "Applicant must be minimum 18 years old.",
+        "clause": "Clause 1",
+        "sourceId": "src_pmmy",
+        "required": true
+      },
+      {
+        "conditionId": "mudra_k_cost_min",
+        "field": "projectCost",
+        "operator": ">=",
+        "value": 50000,
+        "unit": "INR",
+        "description": "Project loan above ₹50,000.",
+        "clause": "Clause 2.2 - Kishore Slab",
+        "sourceId": "src_pmmy",
+        "required": true
+      },
+      {
+        "conditionId": "mudra_k_cost_max",
+        "field": "projectCost",
+        "operator": "<=",
+        "value": 500000,
+        "unit": "INR",
+        "description": "Project loan up to ₹5,00,000.",
+        "clause": "Clause 2.2 - Kishore Slab",
+        "sourceId": "src_pmmy",
+        "required": true
+      }
+    ],
+    "financialBenefits": {
+      "minimumLoan": 50001,
+      "maximumLoan": 500000,
+      "subsidy": null,
+      "marginMoney": "Up to 15% borrower contribution",
+      "interestRate": "8.5% to 11.5% p.a.",
+      "repaymentPeriod": "3 to 5 years"
+    },
+    "applicationRoute": {
+      "type": "BANK",
+      "name": "Public / Private Sector Bank / MFI",
+      "url": "https://www.mudra.org.in",
+      "description": "Apply with business track record and quotations at any participating bank branch."
+    },
+    "documents": ["Identity Proof", "Address Proof", "6 months Bank Statement", "Business Registration / Udyam Certificate", "Equipment/Machinery Quotation"],
+    "sources": [
+      {
+        "sourceId": "src_pmmy",
+        "title": "PMMY Guidelines",
+        "organization": "MUDRA Ltd",
+        "url": "https://www.mudra.org.in",
+        "documentType": "official_guideline",
+        "clause": "Kishore Lending Norms",
+        "page": 2,
+        "verifiedOn": "2026-09-01"
+      }
+    ],
+    "verifiedOn": "2026-09-01"
+  },
+  {
+    "schemeId": "pm_vishwakarma_017",
+    "name": "PM Vishwakarma Scheme",
+    "shortDescription": "End-to-end support including collateral-free enterprise loan up to ₹3 Lakh (5% concessional interest) and skill verification for 18 traditional artisan trades.",
+    "organization": {
+      "name": "Ministry of Micro, Small and Medium Enterprises",
+      "ministry": "Ministry of MSME / MoSDE"
+    },
+    "version": 1,
+    "status": "ACTIVE",
+    "purpose": ["business_loan", "working_capital", "skill_training", "self_employment"],
+    "targetBeneficiaries": ["artisan", "traditional_craftsman", "OBC", "SC", "ST", "ALL"],
+    "applicableGender": ["female", "male", "transgender", "all"],
+    "applicableCategories": ["SC", "ST", "OBC", "GENERAL", "ALL"],
+    "states": ["ALL"],
+    "businessTypes": ["tailoring", "carpenter", "blacksmith", "potter", "sculptor", "cobbler", "mason", "barber", "washerman", "basket_maker"],
+    "requiredFields": ["age", "projectCost"],
+    "conditions": [
+      {
+        "conditionId": "vishwa_age",
+        "field": "age",
+        "operator": ">=",
+        "value": 18,
+        "unit": "YEARS",
+        "description": "Beneficiary must be at least 18 years on date of registration.",
+        "clause": "Eligibility Section 3.1",
+        "sourceId": "src_pm_vishwakarma",
+        "required": true
+      },
+      {
+        "conditionId": "vishwa_cost",
+        "field": "projectCost",
+        "operator": "<=",
+        "value": 300000,
+        "unit": "INR",
+        "description": "Credit support up to ₹1 Lakh (Tranche 1) and ₹2 Lakh (Tranche 2).",
+        "clause": "Financial Support 4.2",
+        "sourceId": "src_pm_vishwakarma",
+        "required": true
+      }
+    ],
+    "financialBenefits": {
+      "minimumLoan": 15000,
+      "maximumLoan": 300000,
+      "subsidy": "₹15,000 toolkit incentive + ₹500/day training stipend + 8% interest subvention",
+      "marginMoney": "Nil (100% financed, collateral-free)",
+      "interestRate": "Concessional 5% p.a. to beneficiary",
+      "repaymentPeriod": "18 months (Tranche 1) / 30 months (Tranche 2)"
+    },
+    "applicationRoute": {
+      "type": "ONLINE_PORTAL",
+      "name": "Common Services Centre (CSC) / PM Vishwakarma Portal",
+      "url": "https://pmvishwakarma.gov.in",
+      "description": "Register with biometric authentication at any Common Service Centre (CSC) or on pmvishwakarma.gov.in."
+    },
+    "documents": ["Aadhaar Card", "Mobile Number linked to Aadhaar", "Bank Account Details", "Ration Card"],
+    "sources": [
+      {
+        "sourceId": "src_pm_vishwakarma",
+        "title": "PM Vishwakarma Scheme Guidelines",
+        "organization": "Ministry of MSME",
+        "url": "https://pmvishwakarma.gov.in",
+        "documentType": "official_guideline",
+        "clause": "Official Scheme Document 2024",
+        "page": 5,
+        "verifiedOn": "2026-09-01"
+      }
+    ],
+    "verifiedOn": "2026-09-01"
+  },
+  {
+    "schemeId": "nbcfdc_mahila_samriddhi_018",
+    "name": "NBCFDC Mahila Samriddhi Yojana",
+    "shortDescription": "Micro-finance loan facility for poor women belonging to Backward Classes through Self Help Groups (SHGs) or individually.",
+    "organization": {
+      "name": "National Backward Classes Finance & Development Corporation",
+      "ministry": "Ministry of Social Justice and Empowerment"
+    },
+    "version": 1,
+    "status": "ACTIVE",
+    "purpose": ["women_entrepreneur", "working_capital", "self_employment"],
+    "targetBeneficiaries": ["OBC", "women"],
+    "applicableGender": ["female"],
+    "applicableCategories": ["OBC"],
+    "states": ["ALL"],
+    "businessTypes": ["tailoring", "embroidery", "dairy", "poultry", "street_vendor", "kirana"],
+    "requiredFields": ["category", "gender", "familyIncome", "age", "projectCost"],
+    "conditions": [
+      {
+        "conditionId": "nbcfdc_msy_gender",
+        "field": "gender",
+        "operator": "==",
+        "value": "female",
+        "unit": null,
+        "description": "Beneficiary must be a woman.",
+        "clause": "Target Group 1",
+        "sourceId": "src_nbcfdc_msy",
+        "required": true
+      },
+      {
+        "conditionId": "nbcfdc_msy_cat",
+        "field": "category",
+        "operator": "IN",
+        "value": ["OBC"],
+        "unit": null,
+        "description": "Applicant must belong to OBC category.",
+        "clause": "Target Group 2",
+        "sourceId": "src_nbcfdc_msy",
+        "required": true
+      },
+      {
+        "conditionId": "nbcfdc_msy_income",
+        "field": "familyIncome",
+        "operator": "<=",
+        "value": 300000,
+        "unit": "INR",
+        "description": "Annual family income must not exceed ₹3,00,000.",
+        "clause": "Target Group 3",
+        "sourceId": "src_nbcfdc_msy",
+        "required": true
+      },
+      {
+        "conditionId": "nbcfdc_msy_age",
+        "field": "age",
+        "operator": ">=",
+        "value": 18,
+        "unit": "YEARS",
+        "description": "Minimum age is 18 years.",
+        "clause": "Target Group 4",
+        "sourceId": "src_nbcfdc_msy",
+        "required": true
+      },
+      {
+        "conditionId": "nbcfdc_msy_cost",
+        "field": "projectCost",
+        "operator": "<=",
+        "value": 140000,
+        "unit": "INR",
+        "description": "Maximum project unit cost up to ₹1,40,000 per beneficiary.",
+        "clause": "Funding Pattern",
+        "sourceId": "src_nbcfdc_msy",
+        "required": true
+      }
+    ],
+    "financialBenefits": {
+      "minimumLoan": 10000,
+      "maximumLoan": 140000,
+      "subsidy": null,
+      "marginMoney": "Up to 95% financed by NBCFDC",
+      "interestRate": "4% p.a. for women beneficiaries",
+      "repaymentPeriod": "4 years including moratorium"
+    },
+    "applicationRoute": {
+      "type": "SCA",
+      "name": "State Channelizing Agency / Women Development Corporation",
+      "url": "https://nbcfdc.gov.in/en/mahila-samriddhi-yojana",
+      "description": "Apply through State Channelizing Agency or affiliated rural women SHG federations."
+    },
+    "documents": ["OBC Caste Certificate", "Income Certificate", "Aadhaar Card", "Bank Passbook"],
+    "sources": [
+      {
+        "sourceId": "src_nbcfdc_msy",
+        "title": "NBCFDC Mahila Samriddhi Guidelines",
+        "organization": "National Backward Classes Finance & Development Corporation",
+        "url": "https://nbcfdc.gov.in/en/mahila-samriddhi-yojana",
+        "documentType": "official_guideline",
+        "clause": "Operational Norms 2024",
+        "page": 1,
+        "verifiedOn": "2026-09-01"
+      }
+    ],
+    "verifiedOn": "2026-09-01"
+  }
+]
