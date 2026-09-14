@@ -79,7 +79,6 @@ export const extractSlotsOffline = (message = '') => {
     } else if (text.includes('project') || text.includes('cost') || text.includes('laagat') || text.includes('kharach') || text.includes('budget')) {
       extracted.projectCost = parsedAmount;
     } else if (parsedAmount <= 500000 && !extracted.familyIncome) {
-      // Default heuristic: smaller amount mentioned alone without context is usually income
       extracted.familyIncome = parsedAmount;
     } else if (parsedAmount > 500000 && !extracted.projectCost) {
       extracted.projectCost = parsedAmount;
@@ -105,14 +104,55 @@ export const extractSlotsOffline = (message = '') => {
 
 /**
  * Main NLU Slot Extraction Service.
- * Attempts LLM API if configured, otherwise uses offline deterministic extractor.
+ * Attempts Gemini API or OpenAI API if configured, otherwise uses offline deterministic extractor.
  * 
  * @param {string} message 
  * @param {Object} currentProfile 
  * @returns {Promise<Object>} Extracted slots & intent
  */
 export const extractProfileSlots = async (message = '', currentProfile = {}) => {
-  // If OpenAI API key is configured
+  // 1. Google Gemini API Integration
+  if (process.env.GEMINI_API_KEY) {
+    try {
+      const model = process.env.GEMINI_MODEL || 'gemini-1.5-flash';
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${process.env.GEMINI_API_KEY}`;
+
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents: [
+            {
+              parts: [
+                {
+                  text: `${SLOT_FILLING_SYSTEM_PROMPT}\n\nCurrent User Profile: ${JSON.stringify(currentProfile)}\nUser Message: "${message}"\n\nReturn ONLY pure JSON matching the schema:`
+                }
+              ]
+            }
+          ],
+          generationConfig: {
+            responseMimeType: 'application/json',
+            temperature: 0.1
+          }
+        })
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        const contentText = data.candidates?.[0]?.content?.parts?.[0]?.text;
+        if (contentText) {
+          const parsed = JSON.parse(contentText);
+          return parsed;
+        }
+      } else {
+        console.warn(`[Gemini API Warning] Status ${response.status}: ${await response.text()}`);
+      }
+    } catch (err) {
+      console.warn(`[Gemini API Failed] Falling back to local offline extractor: ${err.message}`);
+    }
+  }
+
+  // 2. OpenAI API Integration
   if (process.env.OPENAI_API_KEY && process.env.OPENAI_API_KEY.startsWith('sk-')) {
     try {
       const response = await fetch('https://api.openai.com/v1/chat/completions', {
@@ -138,11 +178,11 @@ export const extractProfileSlots = async (message = '', currentProfile = {}) => 
         return parsed;
       }
     } catch (err) {
-      console.warn(`[LLM Service] Online API failed, falling back to offline extractor: ${err.message}`);
+      console.warn(`[OpenAI API Failed] Falling back to local offline extractor: ${err.message}`);
     }
   }
 
-  // Fallback to offline regex/heuristic extractor
+  // 3. Fallback to offline regex/heuristic extractor
   return extractSlotsOffline(message);
 };
 
@@ -155,9 +195,9 @@ export const generateExplanation = async (fullTrace = {}) => {
   if (status === 'ELIGIBLE') {
     return {
       status: 'ELIGIBLE',
-      explanationEnglish: `Congratulations! You meet all the eligibility criteria for ${schemeName}. You can proceed with your application through ${nextAction.routeName}.`,
-      explanationHindi: `बधाई हो! आप ${schemeName} की सभी पात्रता शर्तों को पूरा करते हैं। आप ${nextAction.routeName} के माध्यम से अपना आवेदन आगे बढ़ा सकते हैं।`,
-      actionableAdvice: `Next Step: ${nextAction.instructions}`,
+      explanationEnglish: `Congratulations! You meet all the eligibility criteria for ${schemeName}. You can proceed with your application through ${nextAction?.routeName || 'the designated agency'}.`,
+      explanationHindi: `बधाई हो! आप ${schemeName} की सभी पात्रता शर्तों को पूरा करते हैं। आप ${nextAction?.routeName || 'नामित एजेंसी'} के माध्यम से अपना आवेदन आगे बढ़ा सकते हैं।`,
+      actionableAdvice: `Next Step: ${nextAction?.instructions || 'Follow official guidelines.'}`,
       keyHighlight: 'All required parameters passed successfully.'
     };
   }

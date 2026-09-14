@@ -38,10 +38,10 @@ const SchemeSchema = new mongoose.Schema({
   version: { type: Number, default: 1 },
   status: { type: String, enum: ['ACTIVE', 'INACTIVE', 'UNDER_REVIEW'], default: 'ACTIVE' },
   
-  // Search & Filtering Metadata
+  // Search & Filtering Metadata (indexed individually)
   purpose: [{ type: String, index: true }],
   targetBeneficiaries: [{ type: String }],
-  applicableGender: [{ type: String, enum: ['female', 'male', 'all', 'transgender'], index: true }],
+  applicableGender: [{ type: String, enum: ['female', 'male', 'transgender', 'all'], index: true }],
   applicableCategories: [{ type: String, index: true }],
   states: [{ type: String, index: true }],
   businessTypes: [{ type: String, index: true }],
@@ -82,8 +82,5 @@ const SchemeSchema = new mongoose.Schema({
 }, {
   timestamps: true
 });
-
-// Compound Index for fast pre-filtering
-SchemeSchema.index({ purpose: 1, applicableCategories: 1, applicableGender: 1 });
 
 export const Scheme = mongoose.model('Scheme', SchemeSchema);

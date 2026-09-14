@@ -72,7 +72,12 @@ const seedDatabase = async () => {
       throw new Error(`Data validation failed with ${totalErrors} errors. Aborting seed.`);
     }
 
-    console.log(`[Seed] All ${schemes.length} schemes passed strict validation!`);
+    console.log(`[Seed] Dropping old collection indexes if any...`);
+    try {
+      await Scheme.collection.dropIndexes();
+    } catch (e) {
+      // Collection may not exist yet
+    }
 
     let inserted = 0;
     let updated = 0;
