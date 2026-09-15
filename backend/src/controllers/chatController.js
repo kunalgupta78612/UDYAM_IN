@@ -16,8 +16,8 @@ export const startConversation = async (req, res, next) => {
 
     const initialMessage = {
       role: 'assistant',
-      contentEn: 'Namaste! I am SchemeSaathi. I can help you discover government schemes, grants, and loans tailored to your business.\n\nDo you already have a specific scheme in mind, or would you like me to help you find one?',
-      contentHi: 'नमस्ते! मैं स्कीमसाथी हूँ। मैं आपके व्यवसाय के लिए उपयुक्त सरकारी योजनाओं, अनुदानों और ऋणों को खोजने में आपकी मदद कर सकता हूँ।\n\nक्या आप पहले से किसी विशिष्ट योजना के बारे में जानते हैं, या आप चाहते हैं कि मैं आपके लिए उपयुक्त योजना खोजूँ?',
+      contentEn: 'Namaste! I am Udyam Setu AI. I can help you discover government schemes, subsidies, and loans tailored to your business.\n\nDo you already have a specific scheme in mind, or would you like me to help you find one?',
+      contentHi: 'नमस्ते! मैं उद्यम सेतु एआई (UDYAM SETU) हूँ। मैं आपके व्यवसाय के लिए उपयुक्त सरकारी योजनाओं, अनुदानों और ऋणों को खोजने में आपकी मदद कर सकता हूँ।\n\nक्या आप पहले से किसी विशिष्ट योजना के बारे में जानते हैं, या आप चाहते हैं कि मैं आपके लिए उपयुक्त योजना खोजूँ?',
       quickReplies: ['Help me find a scheme (योजना खोजने में मदद करें)', 'I know my scheme (मुझे योजना का नाम पता है)'],
       timestamp: new Date()
     };

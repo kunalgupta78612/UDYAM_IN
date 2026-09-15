@@ -13,25 +13,25 @@ export const Home = () => {
         {/* Badge */}
         <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-brand-50 border border-brand-200 text-brand-700 text-xs font-bold shadow-sm">
           <Sparkles className="w-4 h-4 text-brand-600" />
-          <span>{language === 'hi' ? 'स्मार्ट इंडिया हैकथॉन 2024' : 'Smart India Hackathon 2024 Theme Solution'}</span>
+          <span>{language === 'hi' ? 'स्मार्ट इंडिया हैकथॉन 2026' : 'Smart India Hackathon 2026 Theme Solution'}</span>
         </div>
 
         {/* Heading */}
         <h1 className="text-4xl sm:text-6xl font-black text-slate-900 tracking-tight leading-tight">
           {language === 'hi' ? (
             <>
-              अपने व्यवसाय के लिए खोजें <span className="bg-gradient-to-r from-india-saffron via-brand-600 to-india-green bg-clip-text text-transparent">सही सरकारी योजना</span>
+              उद्यम सेतु - अपने व्यवसाय के लिए खोजें <span className="bg-gradient-to-r from-india-saffron via-brand-600 to-india-green bg-clip-text text-transparent">सही सरकारी योजना</span>
             </>
           ) : (
             <>
-              Find the Right Government Scheme for <span className="bg-gradient-to-r from-india-saffron via-brand-600 to-india-green bg-clip-text text-transparent">Your Business</span>
+              UDYAM SETU — Find the Right Government Scheme for <span className="bg-gradient-to-r from-india-saffron via-brand-600 to-india-green bg-clip-text text-transparent">Your Business</span>
             </>
           )}
         </h1>
 
         <p className="text-base sm:text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">
           {language === 'hi'
-            ? 'बिना किसी जटिलता के, अपनी भाषा (हिंदी/अंग्रेजी) में बोलकर या लिखकर जानें कि आप किस सरकारी योजना के लिए 100% पात्र हैं।'
+            ? 'उद्यम सेतु के साथ बिना किसी जटिलता के, अपनी भाषा (हिंदी/अंग्रेजी) में बोलकर या लिखकर जानें कि आप किस सरकारी योजना के लिए 100% पात्र हैं।'
             : 'AI-driven conversational matching paired with a 100% deterministic rule engine. Get verified eligibility traces, rejection gap reports, and direct application routes.'}
         </p>
 

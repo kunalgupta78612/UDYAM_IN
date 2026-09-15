@@ -13,7 +13,7 @@ const startServer = async () => {
   }
   
   app.listen(PORT, () => {
-    console.log(`[Server] SchemeSaathi Backend running on port ${PORT}`);
+    console.log(`[Server] UDYAM SETU Backend running on port ${PORT}`);
   });
 };
 

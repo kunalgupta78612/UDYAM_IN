@@ -17,7 +17,7 @@ app.use(express.json());
 app.get('/api/health', (req, res) => {
   res.json({
     status: 'OK',
-    message: 'SchemeSaathi API is running smoothly',
+    message: 'UDYAM SETU API is running smoothly',
     timestamp: new Date().toISOString()
   });
 });

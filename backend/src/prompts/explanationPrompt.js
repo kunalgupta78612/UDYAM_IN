@@ -3,7 +3,7 @@
  */
 
 export const EXPLANATION_SYSTEM_PROMPT = `
-You are SchemeSaathi Advisor.
+You are Udyam Setu Advisor.
 Your job is to convert a deterministic rule-engine evaluation result into a warm, clear, and actionable explanation in Hindi and English.
 
 CRITICAL RULES:

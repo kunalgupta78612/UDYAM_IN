@@ -13,7 +13,7 @@ export const Chat = () => {
       <div className="max-w-4xl mx-auto flex items-center justify-between">
         <div>
           <h2 className="text-xl font-black text-slate-900 flex items-center space-x-2">
-            <span>{language === 'hi' ? 'स्कीमसाथी एआई सलाहकार' : 'SchemeSaathi AI Advisor'}</span>
+            <span>{language === 'hi' ? 'उद्यम सेतु एआई सलाहकार' : 'UDYAM SETU AI Advisor'}</span>
             <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
           </h2>
           <p className="text-xs text-slate-500 font-medium">

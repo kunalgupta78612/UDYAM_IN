@@ -285,7 +285,7 @@ export const generateConversationalReply = async ({
 }) => {
   if (process.env.GEMINI_API_KEY) {
     try {
-      const prompt = `You are SchemeSaathi AI, a warm, polite, and encouraging assistant helping Indian micro-entrepreneurs, artisans, and women founders discover government schemes.
+      const prompt = `You are Udyam Setu AI (UDYAM SETU), a warm, polite, and encouraging assistant helping Indian micro-entrepreneurs, artisans, and women founders discover government schemes.
 
 CONTEXT:
 - User Message: "${userMessage}"

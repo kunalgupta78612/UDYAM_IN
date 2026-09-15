@@ -23,15 +23,15 @@ export const Header = () => {
           </div>
           <div>
             <div className="flex items-center space-x-2">
-              <span className="font-extrabold text-xl tracking-tight bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">
-                SchemeSaathi
+              <span className="font-black text-xl tracking-tight bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">
+                UDYAM SETU
               </span>
               <span className="text-[10px] uppercase font-bold tracking-wider px-1.5 py-0.5 rounded bg-amber-100 text-amber-800 border border-amber-200">
-                SIH 2024
+                SIH 2026
               </span>
             </div>
             <p className="text-[11px] text-slate-500 font-medium">
-              {language === 'hi' ? 'उद्यमी योजना सलाहकार' : 'AI-Driven MSME Scheme Matching'}
+              {language === 'hi' ? 'उद्यम सेतु - एमएसएमई योजना सलाहकार' : 'AI-Driven MSME Scheme Matching'}
             </p>
           </div>
         </Link>
