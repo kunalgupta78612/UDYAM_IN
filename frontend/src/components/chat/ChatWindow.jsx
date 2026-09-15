@@ -25,9 +25,16 @@ export const ChatWindow = () => {
   const showConfirmation = lastMessage?.showProfileConfirmation || conversationStatus === 'CONFIRMATION';
 
   return (
-    <div className="flex flex-col h-[calc(100vh-8rem)] max-w-4xl mx-auto bg-white/70 backdrop-blur-xl rounded-3xl border border-slate-200/80 shadow-2xl overflow-hidden">
+    <div className="flex flex-col h-[560px] sm:h-[620px] lg:h-[650px] max-w-4xl mx-auto bg-white/80 backdrop-blur-xl rounded-3xl border border-slate-200/80 shadow-xl overflow-hidden">
       {/* Messages Scroll Area */}
       <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-2">
+        {messages.length === 0 && isLoading && (
+          <div className="flex flex-col items-center justify-center h-full text-slate-400 space-y-2 py-12">
+            <div className="w-8 h-8 border-2 border-brand-500 border-t-transparent rounded-full animate-spin"></div>
+            <p className="text-xs font-medium">Connecting to UDYAM SETU Advisor...</p>
+          </div>
+        )}
+
         {messages.map((msg, index) => (
           <ChatMessage key={index} message={msg} />
         ))}

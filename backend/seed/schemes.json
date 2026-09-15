@@ -73,8 +73,8 @@
     "applicationRoute": {
       "type": "SCA",
       "name": "State Channelizing Agency (SCA) / RRB",
-      "url": "https://nsfdc.nic.in/en/term-loan-scheme",
-      "description": "Submit application through your State Scheduled Castes Development Corporation (SCA) or designated RRB branch."
+      "url": "",
+      "description": "Submit application through https://nsfdc.nic.in/faqs State Scheduled Castes Development Corporation (SCA) or designated RRB branch."
     },
     "documents": ["Caste Certificate", "Income Certificate", "Aadhaar Card", "Project Profile / Business Plan", "Bank Passbook"],
     "sources": [
@@ -82,7 +82,7 @@
         "sourceId": "src_nsfdc_tls",
         "title": "NSFDC Lending Guidelines - Term Loan Scheme",
         "organization": "National Scheduled Castes Finance and Development Corporation",
-        "url": "https://nsfdc.nic.in/en/term-loan-scheme",
+        "url": "https://nsfdc.nic.in/faqs?utm",
         "documentType": "official_guideline",
         "clause": "Section 2 & 3",
         "page": 1,
@@ -165,7 +165,7 @@
     "applicationRoute": {
       "type": "SCA",
       "name": "State Channelizing Agency / Micro Finance NGO",
-      "url": "https://nsfdc.nic.in/en/micro-credit-finance",
+      "url": "https://nsfdc.nic.in/faqs",
       "description": "Apply through designated SCA, District SC/ST welfare office, or partnered Micro-finance intermediary."
     },
     "documents": ["Caste Certificate", "Income Certificate", "Aadhaar Card", "Bank Account Details"],
@@ -174,7 +174,7 @@
         "sourceId": "src_nsfdc_mcy",
         "title": "Micro Credit Scheme Document",
         "organization": "National Scheduled Castes Finance and Development Corporation",
-        "url": "https://nsfdc.nic.in/en/micro-credit-finance",
+        "url": "https://nsfdc.nic.in/faqs",
         "documentType": "official_guideline",
         "clause": "Operational Norms 2024",
         "page": 2,
@@ -268,7 +268,7 @@
     "applicationRoute": {
       "type": "SCA",
       "name": "State Channelizing Agency",
-      "url": "https://nsfdc.nic.in/en/mahila-samriddhi-yojana",
+      "url": "https://nsfdc.nic.in/faqs",
       "description": "Apply through your State Scheduled Castes Development Corporation (SCA) district office."
     },
     "documents": ["Caste Certificate", "Income Certificate", "Aadhaar Card", "Bank Account Details"],
@@ -277,7 +277,7 @@
         "sourceId": "src_nsfdc_msy",
         "title": "NSFDC Mahila Samriddhi Guidelines",
         "organization": "National Scheduled Castes Finance and Development Corporation",
-        "url": "https://nsfdc.nic.in/en/mahila-samriddhi-yojana",
+        "url": "https://nsfdc.nic.in/faqs",
         "documentType": "official_guideline",
         "clause": "Policy Circular 2024",
         "page": 1,
@@ -463,7 +463,7 @@
     "applicationRoute": {
       "type": "SCA",
       "name": "State Channelizing Agency (OBC Corporation) / RRB",
-      "url": "https://nbcfdc.gov.in/en/new-swarnima-scheme",
+      "url": "https://nsfdc.nic.in/faqs",
       "description": "Apply through State Backward Classes Development Corporation / nominated Channel Partners."
     },
     "documents": ["OBC Caste Certificate", "Income Certificate", "Aadhaar Card", "Passport Photo", "Bank Account Passbook"],
@@ -472,7 +472,7 @@
         "sourceId": "src_nbcfdc_swarnima",
         "title": "NBCFDC New Swarnima Scheme Guidelines",
         "organization": "National Backward Classes Finance & Development Corporation",
-        "url": "https://nbcfdc.gov.in/en/new-swarnima-scheme",
+        "url": "https://nsfdc.nic.in/faqs",
         "documentType": "official_guideline",
         "clause": "Guidelines 2024",
         "page": 1,
@@ -555,7 +555,7 @@
     "applicationRoute": {
       "type": "SCA",
       "name": "State Channelizing Agency / Partnered Public Banks",
-      "url": "https://nbcfdc.gov.in/en/saksham-scheme",
+      "url": "https://nsfdc.nic.in/faqs",
       "description": "Apply through State Channelizing Agency with degree/diploma proof."
     },
     "documents": ["OBC Caste Certificate", "Income Certificate", "Professional Qualification Certificate", "Project Report", "Aadhaar Card"],
@@ -564,7 +564,7 @@
         "sourceId": "src_nbcfdc_saksham",
         "title": "NBCFDC Saksham Scheme Document",
         "organization": "National Backward Classes Finance & Development Corporation",
-        "url": "https://nbcfdc.gov.in/en/saksham-scheme",
+        "url": "https://nsfdc.nic.in/faqs",
         "documentType": "official_guideline",
         "clause": "Guidelines Section 3",
         "page": 2,
@@ -647,7 +647,7 @@
     "applicationRoute": {
       "type": "SCA",
       "name": "State Channelizing Agency",
-      "url": "https://nbcfdc.gov.in/en/shilp-sampada",
+      "url": "https://nsfdc.nic.in/faqs",
       "description": "Submit application to State SCA with artisan/craftsman identity card or proof of traditional skill."
     },
     "documents": ["OBC Certificate", "Income Certificate", "Pehchan / Artisan ID Card", "Aadhaar Card", "Bank Account Details"],
@@ -656,7 +656,7 @@
         "sourceId": "src_nbcfdc_shilp",
         "title": "NBCFDC Shilp Sampada Guidelines",
         "organization": "National Backward Classes Finance & Development Corporation",
-        "url": "https://nbcfdc.gov.in/en/shilp-sampada",
+        "url": "https://nsfdc.nic.in/faqs",
         "documentType": "official_guideline",
         "clause": "Policy 2024",
         "page": 1,
@@ -739,7 +739,7 @@
     "applicationRoute": {
       "type": "SCA",
       "name": "State Channelizing Agency / Rural Banks",
-      "url": "https://nbcfdc.gov.in/en/krishi-sampada",
+      "url": "https://nsfdc.nic.in/faqs",
       "description": "Apply through your State Backward Classes Finance Corporation."
     },
     "documents": ["OBC Certificate", "Income Certificate", "Land/Khasra Records or Tenancy Agreement", "Aadhaar Card"],
@@ -748,7 +748,7 @@
         "sourceId": "src_nbcfdc_krishi",
         "title": "NBCFDC Krishi Sampada Guidelines",
         "organization": "National Backward Classes Finance & Development Corporation",
-        "url": "https://nbcfdc.gov.in/en/krishi-sampada",
+        "url": "https://nsfdc.nic.in/faqs",
         "documentType": "official_guideline",
         "clause": "Guidelines 2024",
         "page": 1,
@@ -1203,7 +1203,7 @@
     "applicationRoute": {
       "type": "ONLINE_PORTAL",
       "name": "KVIC PMEGP e-Portal",
-      "url": "https://www.kviconline.gov.in/pmegpeportal",
+      "url": "https://nsfdc.nic.in/faqs",
       "description": "Submit application online on the official PMEGP e-portal and choose preferred financing bank."
     },
     "documents": ["Aadhaar Card", "Caste Certificate (for subsidy)", "Special Category Certificate", "Project Report", "Educational Qualification (if >₹10L Mfg or >₹5L Svc)"],
@@ -1212,7 +1212,7 @@
         "sourceId": "src_pmegp",
         "title": "PMEGP Scheme Guidelines 2024",
         "organization": "KVIC / Ministry of MSME",
-        "url": "https://www.kviconline.gov.in/pmegpeportal",
+        "url": "https://nsfdc.nic.in/faqs",
         "documentType": "official_guideline",
         "clause": "PMEGP Operational Guidelines",
         "page": 4,
@@ -1527,7 +1527,7 @@
     "applicationRoute": {
       "type": "SCA",
       "name": "State Channelizing Agency / Women Development Corporation",
-      "url": "https://nbcfdc.gov.in/en/mahila-samriddhi-yojana",
+      "url": "https://nsfdc.nic.in/faqs",
       "description": "Apply through State Channelizing Agency or affiliated rural women SHG federations."
     },
     "documents": ["OBC Caste Certificate", "Income Certificate", "Aadhaar Card", "Bank Passbook"],
@@ -1536,7 +1536,7 @@
         "sourceId": "src_nbcfdc_msy",
         "title": "NBCFDC Mahila Samriddhi Guidelines",
         "organization": "National Backward Classes Finance & Development Corporation",
-        "url": "https://nbcfdc.gov.in/en/mahila-samriddhi-yojana",
+        "url": "https://nsfdc.nic.in/faqs",
         "documentType": "official_guideline",
         "clause": "Operational Norms 2024",
         "page": 1,

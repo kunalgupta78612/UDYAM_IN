@@ -50,7 +50,7 @@ export const translations = {
       ctaButton: 'Launch Scheme Advisor Now'
     },
     chat: {
-      advisorTitle: 'SchemeSaathi AI Advisor',
+      advisorTitle: 'UDYAM SETU AI Advisor',
       advisorSubtitle: 'Interactive slot-filling with dynamic question optimization',
       activeStatus: 'Active Session',
       shortlistedSchemes: 'Candidate Schemes Shortlisted',
@@ -225,7 +225,7 @@ export const translations = {
 
   hi: {
     brand: {
-      name: 'स्कीमसाथी',
+      name: 'उद्यम सेतु',
       edition: 'SIH 2026',
       tagline: 'उद्यमी योजना सलाहकार एवं प्रत्यक्ष मार्गदर्शन प्रणाली'
     },
@@ -274,7 +274,7 @@ export const translations = {
       ctaButton: 'योजना सलाहकार अभी शुरू करें'
     },
     chat: {
-      advisorTitle: 'स्कीमसाथी एआई सलाहकार',
+      advisorTitle: 'उद्यम सेतु एआई सलाहकार',
       advisorSubtitle: 'इंटरएक्टिव स्लॉट-फिलिंग एवं गतिशील प्रश्न अनुकूलन',
       activeStatus: 'सक्रिय सत्र',
       shortlistedSchemes: 'योजनाएं जांची जा रही हैं',
@@ -449,7 +449,7 @@ export const translations = {
 
   mr: {
     brand: {
-      name: 'स्कीमसाथी',
+      name: 'उद्यम सेतु',
       edition: 'SIH 2026',
       tagline: 'एआय-आधारित सरकारी योजना आणि मार्गदर्शन प्रणाली'
     },
@@ -498,7 +498,7 @@ export const translations = {
       ctaButton: 'सल्लागार सुरू करा'
     },
     chat: {
-      advisorTitle: 'स्कीमसाथी एआय सल्लागार',
+      advisorTitle: 'उद्यम सेतू एआय सल्लागार',
       advisorSubtitle: 'सुलभ संवाद आणि अचूक योजना शिफारस',
       activeStatus: 'सक्रिय सत्र',
       shortlistedSchemes: 'योजनांची पडताळणी सुरू आहे',
@@ -673,7 +673,7 @@ export const translations = {
 
   bn: {
     brand: {
-      name: 'স্কিমসাথী',
+      name: 'উদ্যম সেতু',
       edition: 'SIH 2026',
       tagline: 'এআই-চালিত সরকারি স্কিম ম্যাচিং ও পরামর্শ ব্যবস্থা'
     },
@@ -722,7 +722,7 @@ export const translations = {
       ctaButton: 'এখনই শুরু করুন'
     },
     chat: {
-      advisorTitle: 'স্কিমসাথী এআই উপদেষ্টা',
+      advisorTitle: 'উদ্যম সেতু এআই উপদেষ্টা',
       advisorSubtitle: 'ইন্টারেক্টিভ চ্যাট ও সঠিক স্কিম নির্বাচন',
       activeStatus: 'সক্রিয় সেশন',
       shortlistedSchemes: 'স্কিম যাচাই প্রক্রিয়াধীন',
@@ -897,7 +897,7 @@ export const translations = {
 
   ta: {
     brand: {
-      name: 'ஸ்கீம்சாத்தி',
+      name: 'உத்யம் சேது',
       edition: 'SIH 2026',
       tagline: 'அரசு திட்டங்கள் & கடன் ஆலோசனை தளம்'
     },
@@ -946,7 +946,7 @@ export const translations = {
       ctaButton: 'இப்போதே தொடங்கவும்'
     },
     chat: {
-      advisorTitle: 'ஸ்கீம்சாத்தி AI ஆலோசகர்',
+      advisorTitle: 'உத்யம் சேது AI ஆலோசகர்',
       advisorSubtitle: 'துல்லியமான அரசு திட்ட பரிந்துரைகள்',
       activeStatus: 'செயலில் உள்ள அமர்வு',
       shortlistedSchemes: 'திட்டங்கள் சரிபார்க்கப்படுகின்றன',
@@ -1121,7 +1121,7 @@ export const translations = {
 
   te: {
     brand: {
-      name: 'స్కీమ్‌సాథీ',
+      name: 'ఉద్యమ్ సేతు',
       edition: 'SIH 2026',
       tagline: 'ప్రభుత్వ పథకాలు & రుణాల సలహా వేదిక'
     },
@@ -1170,7 +1170,7 @@ export const translations = {
       ctaButton: 'ఇప్పుడే ప్రారంభించండి'
     },
     chat: {
-      advisorTitle: 'స్కీమ్‌సాథీ AI సలహాదారు',
+      advisorTitle: 'ఉద్యమ్ సేతు AI సలహాదారు',
       advisorSubtitle: 'ఖచ్చితమైన ప్రభుత్వ పథకాల మార్గదర్శకత్వం',
       activeStatus: 'యాక్టివ్ సెషన్',
       shortlistedSchemes: 'పథకాల పరిశీలన జరుగుతోంది',
@@ -1345,7 +1345,7 @@ export const translations = {
 
   gu: {
     brand: {
-      name: 'સ્કીમસાથી',
+      name: 'ઉદ્યમ સેતુ',
       edition: 'SIH 2026',
       tagline: 'સરકારી યોજનાઓ અને ધિરાણ માર્ગદર્શન પ્રણાલી'
     },
@@ -1394,7 +1394,7 @@ export const translations = {
       ctaButton: 'હમણાં શરૂ કરો'
     },
     chat: {
-      advisorTitle: 'સ્કીમસાથી AI સલાહકાર',
+      advisorTitle: 'ઉદ્યમ સેતુ AI સલાહકાર',
       advisorSubtitle: 'સરળ સંવાદ અને સચોટ યોજના ભલામણ',
       activeStatus: 'સક્રિય સત્ર',
       shortlistedSchemes: 'યોજનાઓની ચકાસણી ચાલુ છે',
@@ -1569,7 +1569,7 @@ export const translations = {
 
   kn: {
     brand: {
-      name: 'ಸ್ಕೀಮ್‌ಸಾಥಿ',
+      name: 'ಉದ್ಯಮ್ ಸೇತು',
       edition: 'SIH 2026',
       tagline: 'ಸರ್ಕಾರಿ ಯೋಜನೆಗಳು & ಸಾಲಗಳ ಮಾರ್ಗದರ್ಶಿ ವೇದಿಕೆ'
     },
@@ -1618,7 +1618,7 @@ export const translations = {
       ctaButton: 'ಈಗಲೇ ಪ್ರಾರಂಭಿಸಿ'
     },
     chat: {
-      advisorTitle: 'ಸ್ಕೀಮ್‌ಸಾಥಿ AI ಸಲಹೆಗಾರ',
+      advisorTitle: 'ಉದ್ಯಮ್ ಸೇತು AI ಸಲಹೆಗಾರ',
       advisorSubtitle: 'ನಿಖರ ಸರ್ಕಾರಿ ಯೋಜನೆಗಳ ಮಾರ್ಗದರ್ಶನ',
       activeStatus: 'ಸಕ್ರಿಯ ಅವಧಿ',
       shortlistedSchemes: 'ಯೋಜನೆಗಳ ಪರಿಶೀಲನೆ ನಡೆಯುತ್ತಿದೆ',
@@ -1793,7 +1793,7 @@ export const translations = {
 
   pa: {
     brand: {
-      name: 'ਸਕੀਮਸਾਥੀ',
+      name: 'ਉਦਯਮ ਸੇਤੂ',
       edition: 'SIH 2026',
       tagline: 'ਸਰਕਾਰੀ ਸਕੀਮਾਂ ਅਤੇ ਕਰਜ਼ਾ ਸਲਾਹਕਾਰ ਪ੍ਰਣਾਲੀ'
     },
@@ -1842,7 +1842,7 @@ export const translations = {
       ctaButton: 'ਹੁਣੇ ਸ਼ੁਰੂ ਕਰੋ'
     },
     chat: {
-      advisorTitle: 'ਸਕੀਮਸਾਥੀ AI ਸਲਾਹਕਾਰ',
+      advisorTitle: 'ਉਦਯਮ ਸੇਤੂ AI ਸਲਾਹਕਾਰ',
       advisorSubtitle: 'ਇੰਟਰਐਕਟਿਵ ਗੱਲਬਾਤ ਅਤੇ ਸਹੀ ਸਕੀਮ ਚੋਣ',
       activeStatus: 'ਸਰਗਰਮ ਸੈਸ਼ਨ',
       shortlistedSchemes: 'ਸਕੀਮਾਂ ਦੀ ਜਾਂਚ ਜਾਰੀ ਹੈ',
@@ -2017,7 +2017,7 @@ export const translations = {
 
   or: {
     brand: {
-      name: 'ସ୍କିମ୍‌ସାଥୀ',
+      name: 'ଉଦ୍ୟମ ସେତୁ',
       edition: 'SIH 2026',
       tagline: 'ସରକାରୀ ଯୋଜନା ଓ ଋଣ ପରାମର୍ଶ ମଞ୍ଚ'
     },
@@ -2066,7 +2066,7 @@ export const translations = {
       ctaButton: 'ବର୍ତ୍ତମାନ ଆରମ୍ଭ କରନ୍ତୁ'
     },
     chat: {
-      advisorTitle: 'ସ୍କିମ୍‌ସାଥୀ AI ପରାମର୍ଶଦାତା',
+      advisorTitle: 'ଉଦ୍ୟମ ସେତୁ AI ପରାମର୍ଶଦାତା',
       advisorSubtitle: 'ସଠିକ୍ ସରକାରୀ ଯୋଜନା ଚୟନ',
       activeStatus: 'ସକ୍ରିୟ ଅଧିବେଶନ',
       shortlistedSchemes: 'ଯୋଜନା ଯାଞ୍ଚ ଚାଲିଛି',
