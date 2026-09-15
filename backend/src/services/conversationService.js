@@ -37,6 +37,11 @@ const QUESTION_TEMPLATES = {
     questionHi: 'आपका लिंग (Gender) क्या है?',
     quickReplies: ['Female (महिला)', 'Male (पुरुष)', 'Transgender']
   },
+  projectCost: {
+    questionEn: 'What is the estimated total project cost or loan amount required?',
+    questionHi: 'परियोजना की अनुमानित कुल लागत या आवश्यक ऋण राशि कितनी है?',
+    quickReplies: ['Up to ₹50,000', '₹1 - ₹2 Lakh', '₹5 - ₹10 Lakh', '₹25 Lakh - ₹1 Crore']
+  },
   familyIncome: {
     questionEn: 'What is your approximate annual family income?',
     questionHi: 'आपकी वार्षिक पारिवारिक आय (Annual Family Income) कितनी है?',
@@ -46,11 +51,6 @@ const QUESTION_TEMPLATES = {
     questionEn: 'What is your age in years?',
     questionHi: 'आपकी आयु (Age) कितने वर्ष है?',
     quickReplies: ['18 - 25 Years', '26 - 35 Years', '36 - 50 Years', 'Above 50 Years']
-  },
-  projectCost: {
-    questionEn: 'What is the estimated total project cost or loan amount required?',
-    questionHi: 'परियोजना की अनुमानित कुल लागत या आवश्यक ऋण राशि कितनी है?',
-    quickReplies: ['Up to ₹50,000', '₹1 - ₹2 Lakh', '₹5 - ₹10 Lakh', '₹25 Lakh - ₹1 Crore']
   },
   udyamRegistered: {
     questionEn: 'Do you have an MSME / Udyam Registration certificate?',
@@ -64,19 +64,32 @@ const QUESTION_TEMPLATES = {
  * Prioritizes the missing field that will resolve or eliminate the largest number of candidate schemes.
  */
 export const selectNextFieldToQuery = (candidateSchemes = [], profile = {}) => {
-  const missingFieldFrequency = {};
-
-  // Standard high-priority intent fields if completely uninitialized
+  // 1. Initial trade / purpose if missing
   if (isValueMissing(profile.purpose) && isValueMissing(profile.businessType)) {
     return 'purpose';
   }
+  if (isValueMissing(profile.businessType)) {
+    return 'businessType';
+  }
 
-  // Count missing required fields across all candidate schemes
-  for (const scheme of candidateSchemes) {
-    const required = scheme.requiredFields || [];
-    for (const field of required) {
+  // 2. Count missing required fields across all candidate schemes
+  const missingFieldFrequency = {};
+
+  if (candidateSchemes && candidateSchemes.length > 0) {
+    for (const scheme of candidateSchemes) {
+      const required = scheme.requiredFields || [];
+      for (const field of required) {
+        if (isValueMissing(profile[field])) {
+          missingFieldFrequency[field] = (missingFieldFrequency[field] || 0) + 1;
+        }
+      }
+    }
+  } else {
+    // If no candidate schemes loaded yet, check core demographic parameters
+    const coreFields = ['category', 'gender', 'projectCost', 'familyIncome', 'age'];
+    for (const field of coreFields) {
       if (isValueMissing(profile[field])) {
-        missingFieldFrequency[field] = (missingFieldFrequency[field] || 0) + 1;
+        missingFieldFrequency[field] = 1;
       }
     }
   }
@@ -97,7 +110,6 @@ export const selectNextFieldToQuery = (candidateSchemes = [], profile = {}) => {
  */
 export const processUserMessage = async ({ message, conversation = {}, profile = {} }) => {
   const expectedField = conversation.nextQueryField || conversation.currentQueryField || null;
-  const isJourneyAIntent = conversation.journey === 'SPECIFIC_SCHEME';
 
   // 1. Extract NLU slots from user message with expectedField context
   const nluResult = await extractProfileSlots(message, profile, expectedField);
@@ -167,7 +179,7 @@ export const processUserMessage = async ({ message, conversation = {}, profile =
     limit: 15 
   });
 
-  // 5. Determine Next Action or Question using elimination heuristic
+  // 5. Determine Next Action or Question
   const nextField = selectNextFieldToQuery(candidateSchemes, updatedProfile);
 
   // If all required fields are filled -> Transition to Profile Confirmation
