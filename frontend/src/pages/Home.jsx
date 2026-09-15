@@ -30,6 +30,35 @@ export const Home = () => {
           {t('home.heroSubtitle')}
         </p>
 
+        {/* Special Highlighted Slogan Card */}
+        <div className="relative inline-block max-w-2xl mx-auto my-3 group">
+          {/* Glowing Ambient Backdrop */}
+          <div className="absolute -inset-1 bg-gradient-to-r from-amber-500 via-india-saffron to-brand-600 rounded-3xl blur-lg opacity-35 group-hover:opacity-65 transition duration-500 animate-pulse"></div>
+          
+          <div className="relative px-6 sm:px-8 py-4 rounded-2xl bg-gradient-to-r from-amber-500/10 via-brand-500/10 to-emerald-500/10 backdrop-blur-xl border-2 border-amber-400/50 shadow-xl flex flex-col sm:flex-row items-center justify-center gap-3 text-center sm:text-left">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-500 to-amber-600 text-white flex items-center justify-center shadow-md flex-shrink-0">
+              <Award className="w-5 h-5 text-white animate-bounce" />
+            </div>
+            <div>
+              <div className="flex items-center justify-center sm:justify-start space-x-2">
+                <span className="flex h-2.5 w-2.5 relative">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-amber-500"></span>
+                </span>
+                <span className="text-xs uppercase font-extrabold tracking-widest text-amber-800 bg-amber-100/90 px-2 py-0.5 rounded-md border border-amber-300">
+                  Mission Affirmative Action & Self-Reliance
+                </span>
+              </div>
+              <h2 className="text-lg sm:text-2xl font-black bg-gradient-to-r from-amber-800 via-brand-800 to-emerald-900 bg-clip-text text-transparent tracking-tight mt-1">
+                “{t('home.scSlogan', 'Sabka Saath, Har SC Udyami Ka Vikas.')}”
+              </h2>
+              <p className="text-xs text-slate-600 font-medium line-clamp-1 mt-0.5">
+                {t('home.scSloganSub', 'Empowering SC Entrepreneurs with Capital Subsidies, Collateral-Free Loans & Government Support')}
+              </p>
+            </div>
+          </div>
+        </div>
+
         {/* 3D Solar Interactive Emblem */}
         <SolarHero3D />
 

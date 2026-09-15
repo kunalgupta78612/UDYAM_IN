@@ -16,6 +16,8 @@ export const translations = {
     },
     home: {
       badge: 'Smart India Hackathon 2026 Theme Solution',
+      scSlogan: 'Sabka Saath, Har SC Udyami Ka Vikas',
+      scSloganSub: 'Empowering SC Entrepreneurs with Capital Subsidies, Collateral-Free Loans & Government Support',
       heroTitle1: 'Find the Right Government',
       heroTitleHighlight1: 'Scheme for Your',
       heroTitleHighlight2: 'Business',
@@ -240,6 +242,8 @@ export const translations = {
     },
     home: {
       badge: 'स्मार्ट इंडिया हैकाथॉन 2026 थीम समाधान',
+      scSlogan: 'सबका साथ, हर SC उद्यमी का विकास',
+      scSloganSub: 'अनुसूचित जाति (SC) के उद्यमियों हेतु पूंजीगत अनुदान, बिना गारंटी ऋण एवं सरकारी योजनाओं का सीधा लाभ',
       heroTitle1: 'अपने व्यवसाय के लिए पाएं',
       heroTitleHighlight1: 'सटीक सरकारी योजनाएं',
       heroTitleHighlight2: 'और ऋण',
