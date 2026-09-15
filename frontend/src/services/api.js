@@ -52,5 +52,53 @@ export const api = {
     const res = await fetch(`${BASE_URL}/schemes/${schemeId}`);
     if (!res.ok) throw new Error(`Failed to fetch scheme ${schemeId}`);
     return res.json();
+  },
+
+  // Calculator Endpoints
+  async getCalculatorSchemes() {
+    const res = await fetch(`${BASE_URL}/calculator/schemes`);
+    if (!res.ok) throw new Error('Failed to fetch calculator schemes');
+    return res.json();
+  },
+
+  async calculateEMI(params) {
+    const res = await fetch(`${BASE_URL}/calculator/emi`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(params)
+    });
+    if (!res.ok) throw new Error('Failed to calculate EMI');
+    return res.json();
+  },
+
+  async calculateSubsidy(params) {
+    const res = await fetch(`${BASE_URL}/calculator/subsidy`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(params)
+    });
+    if (!res.ok) throw new Error('Failed to calculate subsidy');
+    return res.json();
+  },
+
+  // Channel Partner Locator Endpoints
+  async getNearbyPartners(params = {}) {
+    const query = new URLSearchParams(params).toString();
+    const res = await fetch(`${BASE_URL}/partners/nearby${query ? `?${query}` : ''}`);
+    if (!res.ok) throw new Error('Failed to fetch nearby partners');
+    return res.json();
+  },
+
+  async getAllPartners(params = {}) {
+    const query = new URLSearchParams(params).toString();
+    const res = await fetch(`${BASE_URL}/partners${query ? `?${query}` : ''}`);
+    if (!res.ok) throw new Error('Failed to fetch channel partners');
+    return res.json();
+  },
+
+  async getPartnerById(partnerId) {
+    const res = await fetch(`${BASE_URL}/partners/${partnerId}`);
+    if (!res.ok) throw new Error(`Failed to fetch partner ${partnerId}`);
+    return res.json();
   }
 };

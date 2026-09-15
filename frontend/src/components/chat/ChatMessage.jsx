@@ -43,13 +43,24 @@ export const ChatMessage = ({ message }) => {
     <div className={`flex items-start space-x-3 my-4 ${isBot ? '' : 'flex-row-reverse space-x-reverse'}`}>
       {/* Avatar */}
       <div
-        className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 shadow-sm ${
+        className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 shadow-sm relative ${
           isBot
-            ? 'bg-gradient-to-tr from-brand-600 to-indigo-600 text-white'
+            ? 'bg-gradient-to-tr from-amber-500/20 via-orange-500/10 to-amber-600/20 border border-amber-400/40 p-1'
             : 'bg-slate-800 text-white'
         }`}
       >
-        {isBot ? <Bot className="w-5 h-5" /> : <User className="w-5 h-5" />}
+        {isBot ? (
+          <img 
+            src="/logo-gold.png" 
+            alt="Udyam Setu Bot" 
+            className={`w-7 h-7 object-contain drop-shadow-[0_0_6px_rgba(245,158,11,0.6)] ${isSpeaking ? 'animate-pulse scale-110' : 'hover:scale-110 transition-transform'}`} 
+          />
+        ) : (
+          <User className="w-5 h-5" />
+        )}
+        {isBot && isSpeaking && (
+          <div className="absolute inset-0 rounded-xl bg-amber-400/30 animate-ping pointer-events-none" />
+        )}
       </div>
 
       {/* Message Bubble */}

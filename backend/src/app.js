@@ -5,6 +5,8 @@ import chatRoutes from './routes/chatRoutes.js';
 import schemeRoutes from './routes/schemeRoutes.js';
 import matchRoutes from './routes/matchRoutes.js';
 import profileRoutes from './routes/profileRoutes.js';
+import calculatorRoutes from './routes/calculatorRoutes.js';
+import partnerRoutes from './routes/partnerRoutes.js';
 import { errorHandler } from './middleware/errorHandler.js';
 
 const app = express();
@@ -27,8 +29,11 @@ app.use('/api/chat', chatRoutes);
 app.use('/api/schemes', schemeRoutes);
 app.use('/api/match', matchRoutes);
 app.use('/api/profile', profileRoutes);
+app.use('/api/calculator', calculatorRoutes);
+app.use('/api/partners', partnerRoutes);
 
 // Global Error Handler
 app.use(errorHandler);
 
 export default app;
+

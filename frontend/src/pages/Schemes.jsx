@@ -79,10 +79,10 @@ export const Schemes = () => {
             className="px-3 py-2 text-xs font-semibold rounded-xl bg-slate-50 border border-slate-200 text-slate-700 focus:outline-none"
           >
             <option value="">{t('schemes.allCategories')}</option>
-            <option value="SC">SC (Scheduled Caste)</option>
-            <option value="OBC">OBC</option>
-            <option value="ST">ST</option>
-            <option value="GENERAL">General</option>
+            <option value="SC">{t('schemes.catSC', 'SC (Scheduled Caste)')}</option>
+            <option value="OBC">{t('schemes.catOBC', 'OBC')}</option>
+            <option value="ST">{t('schemes.catST', 'ST')}</option>
+            <option value="GENERAL">{t('schemes.catGeneral', 'General')}</option>
           </select>
 
           {/* Purpose Filter */}
@@ -92,11 +92,11 @@ export const Schemes = () => {
             className="px-3 py-2 text-xs font-semibold rounded-xl bg-slate-50 border border-slate-200 text-slate-700 focus:outline-none"
           >
             <option value="">{t('schemes.allPurposes')}</option>
-            <option value="business_loan">Business Loan</option>
-            <option value="women_entrepreneur">Women Entrepreneur</option>
-            <option value="startup">Startup / Enterprise</option>
-            <option value="working_capital">Working Capital</option>
-            <option value="self_employment">Self Employment</option>
+            <option value="business_loan">{t('schemes.purposeBusinessLoan', 'Business Loan')}</option>
+            <option value="women_entrepreneur">{t('schemes.purposeWomen', 'Women Entrepreneur')}</option>
+            <option value="startup">{t('schemes.purposeStartup', 'Startup / Enterprise')}</option>
+            <option value="working_capital">{t('schemes.purposeWorkingCapital', 'Working Capital')}</option>
+            <option value="self_employment">{t('schemes.purposeSelfEmployment', 'Self Employment')}</option>
           </select>
         </div>
       </div>

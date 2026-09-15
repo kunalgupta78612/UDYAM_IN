@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Sparkles, ArrowRight, ShieldCheck, Scale, Cpu, Search, CheckCircle2, Zap, Award, Layers } from 'lucide-react';
 import { useChatContext } from '../context/ChatContext.jsx';
+import { SolarHero3D } from '../components/common/SolarHero3D.jsx';
 
 export const Home = () => {
   const { t } = useChatContext();
@@ -9,7 +10,7 @@ export const Home = () => {
   return (
     <div className="min-h-[calc(100vh-4rem)] flex flex-col justify-between py-10 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-16">
       {/* Hero Section */}
-      <div className="text-center max-w-3xl mx-auto space-y-6 pt-4">
+      <div className="text-center max-w-4xl mx-auto space-y-6 pt-4">
         {/* Badge */}
         <div className="inline-flex items-center space-x-2 px-4 py-1.5 rounded-full bg-brand-50 border border-brand-200 text-brand-700 text-xs font-bold shadow-sm">
           <Sparkles className="w-4 h-4 text-brand-600" />
@@ -28,6 +29,9 @@ export const Home = () => {
         <p className="text-base sm:text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">
           {t('home.heroSubtitle')}
         </p>
+
+        {/* 3D Solar Interactive Emblem */}
+        <SolarHero3D />
 
         {/* CTAs */}
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">

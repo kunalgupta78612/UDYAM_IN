@@ -20,6 +20,81 @@
   border-image: linear-gradient(to right, #FF671F, #06038D, #046A38) 1;
 }
 
+/* 3D Transform Utilities */
+.perspective-1000 {
+  perspective: 1000px;
+}
+
+.preserve-3d {
+  transform-style: preserve-3d;
+}
+
+.backface-hidden {
+  backface-visibility: hidden;
+}
+
+/* 3D Solar Animations */
+@keyframes solarFloat3D {
+  0%, 100% {
+    transform: translateY(0px) rotateX(4deg) rotateY(-4deg);
+  }
+  50% {
+    transform: translateY(-12px) rotateX(-4deg) rotateY(6deg);
+  }
+}
+
+@keyframes solarPulseGlow {
+  0%, 100% {
+    filter: drop-shadow(0 0 15px rgba(245, 158, 11, 0.45)) drop-shadow(0 0 35px rgba(234, 88, 12, 0.25));
+  }
+  50% {
+    filter: drop-shadow(0 0 28px rgba(245, 158, 11, 0.75)) drop-shadow(0 0 55px rgba(234, 88, 12, 0.45));
+  }
+}
+
+@keyframes spinSlowSolar {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes spinSlowSolarReverse {
+  from {
+    transform: rotate(360deg);
+  }
+  to {
+    transform: rotate(0deg);
+  }
+}
+
+@keyframes orbitNode {
+  0% {
+    transform: rotate(0deg) translateX(150px) rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg) translateX(150px) rotate(-360deg);
+  }
+}
+
+.animate-solar-float {
+  animation: solarFloat3D 6s ease-in-out infinite;
+}
+
+.animate-solar-glow {
+  animation: solarPulseGlow 3.5s ease-in-out infinite;
+}
+
+.animate-spin-slow {
+  animation: spinSlowSolar 40s linear infinite;
+}
+
+.animate-spin-slow-reverse {
+  animation: spinSlowSolarReverse 55s linear infinite;
+}
+
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
@@ -38,3 +113,4 @@
 ::-webkit-scrollbar-thumb:hover {
   background: #94a3b8;
 }
+
