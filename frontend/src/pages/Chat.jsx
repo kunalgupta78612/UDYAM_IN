@@ -7,9 +7,9 @@ export const Chat = () => {
   const { t, candidateCount, sendUserMessage, isLoading } = useChatContext();
 
   return (
-    <div className="py-6 px-4 sm:px-6 max-w-7xl mx-auto space-y-4">
+    <div className="py-4 px-4 sm:px-6 max-w-7xl mx-auto space-y-3 sm:space-y-4">
       {/* Top Banner */}
-      <div className="max-w-4xl mx-auto flex items-center justify-between">
+      <div className="max-w-4xl mx-auto flex items-center justify-between pt-1">
         <div>
           <h2 className="text-xl font-black text-slate-900 flex items-center space-x-2">
             <span>{t('chat.advisorTitle')}</span>

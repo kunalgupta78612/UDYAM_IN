@@ -13,7 +13,7 @@ export const translations = {
       language: 'Language'
     },
     home: {
-      badge: 'Smart India Hackathon 2024 Theme Solution',
+      badge: 'Smart India Hackathon 2026 Theme Solution',
       heroTitle1: 'Find the Right Government',
       heroTitleHighlight1: 'Scheme for Your',
       heroTitleHighlight2: 'Business',
@@ -48,7 +48,7 @@ export const translations = {
       ctaButton: 'Launch Scheme Advisor Now'
     },
     chat: {
-      advisorTitle: 'SchemeSaathi AI Advisor',
+      advisorTitle: 'UDYAM SETU AI Advisor',
       advisorSubtitle: 'Interactive slot-filling with dynamic question optimization',
       activeStatus: 'Active Session',
       shortlistedSchemes: 'Candidate Schemes Shortlisted',
@@ -162,8 +162,8 @@ export const translations = {
 
   hi: {
     brand: {
-      name: 'स्कीमसाथी',
-      edition: 'SIH 2024',
+      name: 'उद्यम सेतु',
+      edition: 'SIH 2026',
       tagline: 'उद्यमी योजना सलाहकार एवं प्रत्यक्ष मार्गदर्शन प्रणाली'
     },
     nav: {
@@ -174,7 +174,7 @@ export const translations = {
       language: 'भाषा'
     },
     home: {
-      badge: 'स्मार्ट इंडिया हैकाथॉन 2024 थीम समाधान',
+      badge: 'स्मार्ट इंडिया हैकाथॉन 2026 थीम समाधान',
       heroTitle1: 'अपने व्यवसाय के लिए पाएं',
       heroTitleHighlight1: 'सटीक सरकारी योजनाएं',
       heroTitleHighlight2: 'और ऋण',
@@ -209,7 +209,7 @@ export const translations = {
       ctaButton: 'योजना सलाहकार अभी शुरू करें'
     },
     chat: {
-      advisorTitle: 'स्कीमसाथी एआई सलाहकार',
+      advisorTitle: 'उद्यम सेतु एआई सलाहकार',
       advisorSubtitle: 'इंटरएक्टिव स्लॉट-फिलिंग एवं गतिशील प्रश्न अनुकूलन',
       activeStatus: 'सक्रिय सत्र',
       shortlistedSchemes: 'योजनाएं जांची जा रही हैं',
@@ -323,8 +323,8 @@ export const translations = {
 
   mr: {
     brand: {
-      name: 'स्कीमसाथी',
-      edition: 'SIH 2024',
+      name: 'उद्यम सेतु',
+      edition: 'SIH 2026',
       tagline: 'एआय-आधारित सरकारी योजना आणि मार्गदर्शन प्रणाली'
     },
     nav: {
@@ -335,7 +335,7 @@ export const translations = {
       language: 'भाषा'
     },
     home: {
-      badge: 'स्मार्ट इंडिया हॅकाथॉन 2024 थीम सोल्यूशन',
+      badge: 'स्मार्ट इंडिया हॅकाथॉन 2026 थीम सोल्यूशन',
       heroTitle1: 'तुमच्या व्यवसायासाठी योग्य',
       heroTitleHighlight1: 'सरकारी योजना व',
       heroTitleHighlight2: 'कर्ज शोधा',
@@ -370,7 +370,7 @@ export const translations = {
       ctaButton: 'सल्लागार सुरू करा'
     },
     chat: {
-      advisorTitle: 'स्कीमसाथी एआय सल्लागार',
+      advisorTitle: 'उद्यम सेतू एआय सल्लागार',
       advisorSubtitle: 'सुलभ संवाद आणि अचूक योजना शिफारस',
       activeStatus: 'सक्रिय सत्र',
       shortlistedSchemes: 'योजनांची पडताळणी सुरू आहे',
@@ -484,8 +484,8 @@ export const translations = {
 
   bn: {
     brand: {
-      name: 'স্কিমসাথী',
-      edition: 'SIH 2024',
+      name: 'উদ্যম সেতু',
+      edition: 'SIH 2026',
       tagline: 'এআই-চালিত সরকারি স্কিম ম্যাচিং ও পরামর্শ ব্যবস্থা'
     },
     nav: {
@@ -531,7 +531,7 @@ export const translations = {
       ctaButton: 'এখনই শুরু করুন'
     },
     chat: {
-      advisorTitle: 'স্কিমসাথী এআই উপদেষ্টা',
+      advisorTitle: 'উদ্যম সেতু এআই উপদেষ্টা',
       advisorSubtitle: 'ইন্টারেক্টিভ চ্যাট ও সঠিক স্কিম নির্বাচন',
       activeStatus: 'সক্রিয় সেশন',
       shortlistedSchemes: 'স্কিম যাচাই প্রক্রিয়াধীন',
@@ -645,8 +645,8 @@ export const translations = {
 
   ta: {
     brand: {
-      name: 'ஸ்கீம்சாத்தி',
-      edition: 'SIH 2024',
+      name: 'உத்யம் சேது',
+      edition: 'SIH 2026',
       tagline: 'அரசு திட்டங்கள் & கடன் ஆலோசனை தளம்'
     },
     nav: {
@@ -657,7 +657,7 @@ export const translations = {
       language: 'மொழி'
     },
     home: {
-      badge: 'ஸ்மார்ட் இந்தியா ஹேக்கத்தான் 2024 தீர்வு',
+      badge: 'ஸ்மார்ட் இந்தியா ஹேக்கத்தான் 2026 தீர்வு',
       heroTitle1: 'உங்கள் தொழிலுக்கான சரியான',
       heroTitleHighlight1: 'அரசு திட்டங்கள் &',
       heroTitleHighlight2: 'கடன்கள்',
@@ -692,7 +692,7 @@ export const translations = {
       ctaButton: 'இப்போதே தொடங்கவும்'
     },
     chat: {
-      advisorTitle: 'ஸ்கீம்சாத்தி AI ஆலோசகர்',
+      advisorTitle: 'உத்யம் சேது AI ஆலோசகர்',
       advisorSubtitle: 'துல்லியமான அரசு திட்ட பரிந்துரைகள்',
       activeStatus: 'செயலில் உள்ள அமர்வு',
       shortlistedSchemes: 'திட்டங்கள் சரிபார்க்கப்படுகின்றன',
@@ -806,8 +806,8 @@ export const translations = {
 
   te: {
     brand: {
-      name: 'స్కీమ్‌సాథీ',
-      edition: 'SIH 2024',
+      name: 'ఉద్యమ్ సేతు',
+      edition: 'SIH 2026',
       tagline: 'ప్రభుత్వ పథకాలు & రుణాల సలహా వేదిక'
     },
     nav: {
@@ -818,7 +818,7 @@ export const translations = {
       language: 'భాష'
     },
     home: {
-      badge: 'స్మార్ట్ ఇండియా హ్యాకథాన్ 2024 పరిష్కారం',
+      badge: 'స్మార్ట్ ఇండియా హ్యాకథాన్ 2026 పరిష్కారం',
       heroTitle1: 'మీ వ్యాపారానికి సరైన',
       heroTitleHighlight1: 'ప్రభుత్వ పథకాలు మరియు',
       heroTitleHighlight2: 'రుణాలు పొందండి',
@@ -853,7 +853,7 @@ export const translations = {
       ctaButton: 'ఇప్పుడే ప్రారంభించండి'
     },
     chat: {
-      advisorTitle: 'స్కీమ్‌సాథీ AI సలహాదారు',
+      advisorTitle: 'ఉద్యమ్ సేతు AI సలహాదారు',
       advisorSubtitle: 'ఖచ్చితమైన ప్రభుత్వ పథకాల మార్గదర్శకత్వం',
       activeStatus: 'యాక్టివ్ సెషన్',
       shortlistedSchemes: 'పథకాల పరిశీలన జరుగుతోంది',
@@ -967,8 +967,8 @@ export const translations = {
 
   gu: {
     brand: {
-      name: 'સ્કીમસાથી',
-      edition: 'SIH 2024',
+      name: 'ઉદ્યમ સેતુ',
+      edition: 'SIH 2026',
       tagline: 'સરકારી યોજનાઓ અને ધિરાણ માર્ગદર્શન પ્રણાલી'
     },
     nav: {
@@ -979,7 +979,7 @@ export const translations = {
       language: 'ભાષા'
     },
     home: {
-      badge: 'સ્માર્ટ ઇન્ડિયા હેકાથોન 2024 સોલ્યુશન',
+      badge: 'સ્માર્ટ ઇન્ડિયા હેકાથોન 2026 સોલ્યુશન',
       heroTitle1: 'તમારા વ્યવસાય માટે યોગ્ય',
       heroTitleHighlight1: 'સરકારી યોજનાઓ અને',
       heroTitleHighlight2: 'લોન મેળવો',
@@ -1014,7 +1014,7 @@ export const translations = {
       ctaButton: 'હમણાં શરૂ કરો'
     },
     chat: {
-      advisorTitle: 'સ્કીમસાથી AI સલાહકાર',
+      advisorTitle: 'ઉદ્યમ સેતુ AI સલાહકાર',
       advisorSubtitle: 'સરળ સંવાદ અને સચોટ યોજના ભલામણ',
       activeStatus: 'સક્રિય સત્ર',
       shortlistedSchemes: 'યોજનાઓની ચકાસણી ચાલુ છે',
@@ -1128,8 +1128,8 @@ export const translations = {
 
   kn: {
     brand: {
-      name: 'ಸ್ಕೀಮ್‌ಸಾಥಿ',
-      edition: 'SIH 2024',
+      name: 'ಉದ್ಯಮ್ ಸೇತು',
+      edition: 'SIH 2026',
       tagline: 'ಸರ್ಕಾರಿ ಯೋಜನೆಗಳು & ಸಾಲಗಳ ಮಾರ್ಗದರ್ಶಿ ವೇದಿಕೆ'
     },
     nav: {
@@ -1140,7 +1140,7 @@ export const translations = {
       language: 'ಭಾಷೆ'
     },
     home: {
-      badge: 'ಸ್ಮಾರ್ಟ್ ಇಂಡಿಯಾ ಹ್ಯಾಕಥಾನ್ 2024 ಪರಿಹಾರ',
+      badge: 'ಸ್ಮಾರ್ಟ್ ಇಂಡಿಯಾ ಹ್ಯಾಕಥಾನ್ 2026 ಪರಿಹಾರ',
       heroTitle1: 'ನಿಮ್ಮ ವ್ಯವಹಾರಕ್ಕೆ ಸೂಕ್ತವಾದ',
       heroTitleHighlight1: 'ಸರ್ಕಾರಿ ಯೋಜನೆಗಳು &',
       heroTitleHighlight2: 'ಸಾಲ ಪಡೆಯಿರಿ',
@@ -1175,7 +1175,7 @@ export const translations = {
       ctaButton: 'ಈಗಲೇ ಪ್ರಾರಂಭಿಸಿ'
     },
     chat: {
-      advisorTitle: 'ಸ್ಕೀಮ್‌ಸಾಥಿ AI ಸಲಹೆಗಾರ',
+      advisorTitle: 'ಉದ್ಯಮ್ ಸೇತು AI ಸಲಹೆಗಾರ',
       advisorSubtitle: 'ನಿಖರ ಸರ್ಕಾರಿ ಯೋಜನೆಗಳ ಮಾರ್ಗದರ್ಶನ',
       activeStatus: 'ಸಕ್ರಿಯ ಅವಧಿ',
       shortlistedSchemes: 'ಯೋಜನೆಗಳ ಪರಿಶೀಲನೆ ನಡೆಯುತ್ತಿದೆ',
@@ -1289,8 +1289,8 @@ export const translations = {
 
   pa: {
     brand: {
-      name: 'ਸਕੀਮਸਾਥੀ',
-      edition: 'SIH 2024',
+      name: 'ਉਦਯਮ ਸੇਤੂ',
+      edition: 'SIH 2026',
       tagline: 'ਸਰਕਾਰੀ ਸਕੀਮਾਂ ਅਤੇ ਕਰਜ਼ਾ ਸਲਾਹਕਾਰ ਪ੍ਰਣਾਲੀ'
     },
     nav: {
@@ -1301,7 +1301,7 @@ export const translations = {
       language: 'ਭਾਸ਼ਾ'
     },
     home: {
-      badge: 'ਸਮਾਰਟ ਇੰਡੀਆ ਹੈਕਾਥੌਨ 2024 ਹੱਲ',
+      badge: 'ਸਮਾਰਟ ਇੰਡੀਆ ਹੈਕਾਥੌਨ 2026 ਹੱਲ',
       heroTitle1: 'ਆਪਣੇ ਕਾਰੋਬਾਰ ਲਈ ਸਹੀ',
       heroTitleHighlight1: 'ਸਰਕਾਰੀ ਸਕੀਮਾਂ ਅਤੇ',
       heroTitleHighlight2: 'ਕਰਜ਼ੇ ਲੱਭੋ',
@@ -1336,7 +1336,7 @@ export const translations = {
       ctaButton: 'ਹੁਣੇ ਸ਼ੁਰੂ ਕਰੋ'
     },
     chat: {
-      advisorTitle: 'ਸਕੀਮਸਾਥੀ AI ਸਲਾਹਕਾਰ',
+      advisorTitle: 'ਉਦਯਮ ਸੇਤੂ AI ਸਲਾਹਕਾਰ',
       advisorSubtitle: 'ਇੰਟਰਐਕਟਿਵ ਗੱਲਬਾਤ ਅਤੇ ਸਹੀ ਸਕੀਮ ਚੋਣ',
       activeStatus: 'ਸਰਗਰਮ ਸੈਸ਼ਨ',
       shortlistedSchemes: 'ਸਕੀਮਾਂ ਦੀ ਜਾਂਚ ਜਾਰੀ ਹੈ',
@@ -1450,8 +1450,8 @@ export const translations = {
 
   or: {
     brand: {
-      name: 'ସ୍କିମ୍‌ସାଥୀ',
-      edition: 'SIH 2024',
+      name: 'ଉଦ୍ୟମ ସେତୁ',
+      edition: 'SIH 2026',
       tagline: 'ସରକାରୀ ଯୋଜନା ଓ ଋଣ ପରାମର୍ଶ ମଞ୍ଚ'
     },
     nav: {
@@ -1497,7 +1497,7 @@ export const translations = {
       ctaButton: 'ବର୍ତ୍ତମାନ ଆରମ୍ଭ କରନ୍ତୁ'
     },
     chat: {
-      advisorTitle: 'ସ୍କିମ୍‌ସାଥୀ AI ପରାମର୍ଶଦାତା',
+      advisorTitle: 'ଉଦ୍ୟମ ସେତୁ AI ପରାମର୍ଶଦାତା',
       advisorSubtitle: 'ସଠିକ୍ ସରକାରୀ ଯୋଜନା ଚୟନ',
       activeStatus: 'ସକ୍ରିୟ ଅଧିବେଶନ',
       shortlistedSchemes: 'ଯୋଜନା ଯାଞ୍ଚ ଚାଲିଛି',

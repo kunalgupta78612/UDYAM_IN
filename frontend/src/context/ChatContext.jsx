@@ -18,7 +18,7 @@ export const ChatProvider = ({ children }) => {
   // Load language preference from localStorage or default
   const [language, setLanguageState] = useState(() => {
     try {
-      const saved = localStorage.getItem('schemesaathi_language');
+      const saved = localStorage.getItem('udyamsetu_language') || localStorage.getItem('schemesaathi_language');
       if (saved && SUPPORTED_LANGUAGES.some((l) => l.code === saved)) {
         return saved;
       }
@@ -31,7 +31,7 @@ export const ChatProvider = ({ children }) => {
   const setLanguage = (newLang) => {
     setLanguageState(newLang);
     try {
-      localStorage.setItem('schemesaathi_language', newLang);
+      localStorage.setItem('udyamsetu_language', newLang);
     } catch (e) {
       // ignore
     }
@@ -103,6 +103,20 @@ export const ChatProvider = ({ children }) => {
       setMatchResults(null);
     } catch (err) {
       console.error('Session init error:', err);
+      setMessages([
+        {
+          role: 'assistant',
+          content: 'Namaste! I am UDYAM SETU AI Advisor. Let us find the right government scheme for your business. Tell me about your enterprise, required loan amount, and social category to begin.',
+          contentEn: 'Namaste! I am UDYAM SETU AI Advisor. Let us find the right government scheme for your business. Tell me about your enterprise, required loan amount, and social category to begin.',
+          contentHi: 'नमस्ते! मैं उद्यम सेतु एआई सलाहकार हूँ। आइए आपके व्यवसाय के लिए सही सरकारी योजना खोजें। शुरुआत करने के लिए अपने उद्यम, आवश्यक ऋण राशि और सामाजिक श्रेणी के बारे में बताएं।',
+          quickReplies: [
+            { text: 'Tailoring / Boutique (सिलाई / बुटीक)', payload: 'I run a tailoring boutique shop and need loan' },
+            { text: 'Food Stall / Vendor (खान-पान / विक्रेता)', payload: 'I am a street food vendor and need working capital' },
+            { text: 'Manufacturing / Tech (विनिर्माण / तकनीकी)', payload: 'I want to start a manufacturing unit' }
+          ],
+          timestamp: new Date()
+        }
+      ]);
     } finally {
       setIsLoading(false);
     }
