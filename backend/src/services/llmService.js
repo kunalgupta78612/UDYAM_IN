@@ -36,7 +36,6 @@ async function callGeminiApi(prompt, temperature = 0.2) {
     'gemini-flash-lite-latest'
   ];
 
-  // Deduplicate model list
   const models = [...new Set(candidateModels)];
 
   for (const model of models) {
@@ -60,11 +59,9 @@ async function callGeminiApi(prompt, temperature = 0.2) {
           return contentText;
         }
       } else if (response.status === 429 || response.status === 503 || response.status === 404) {
-        // Continue to fallback model
         continue;
       }
     } catch (err) {
-      // Continue to next model on network glitch
       continue;
     }
   }
@@ -73,7 +70,7 @@ async function callGeminiApi(prompt, temperature = 0.2) {
 }
 
 /**
- * Deterministic offline slot extractor using regex patterns, range parsers, and active conversational field context.
+ * Deterministic offline slot extractor with comprehensive Hindi/Hinglish speech-to-text phonetic support.
  */
 export const extractSlotsOffline = (message = '', currentProfile = {}, expectedField = null) => {
   const text = message.toLowerCase().trim();
@@ -130,7 +127,7 @@ export const extractSlotsOffline = (message = '', currentProfile = {}, expectedF
     } else if (expectedField === 'purpose') {
       extracted.purpose = normalizePurpose(text);
     } else if (expectedField === 'udyamRegistered') {
-      if (text.includes('yes') || text.includes('haan') || text.includes('हाँ') || text.includes('have')) {
+      if (text.includes('yes') || text.includes('haan') || text.includes('हाँ') || text.includes('have') || text.includes('hai')) {
         extracted.udyamRegistered = true;
       } else if (text.includes('no') || text.includes('nahi') || text.includes('नहीं')) {
         extracted.udyamRegistered = false;
@@ -145,35 +142,39 @@ export const extractSlotsOffline = (message = '', currentProfile = {}, expectedF
   const gen = normalizeGender(text);
   if (gen && !extracted.gender) extracted.gender = gen;
 
-  if (text.includes('tailor') || text.includes('silai') || text.includes('kirana') || 
-      text.includes('dairy') || text.includes('doodh') || text.includes('murgi') || 
-      text.includes('poultry') || text.includes('startup') || text.includes('handicraft') ||
-      text.includes('shop') || text.includes('boutique') || text.includes('business')) {
+  const parsedAge = parseAge(text);
+  if (parsedAge && !extracted.age) {
+    extracted.age = parsedAge;
+  }
+
+  if (text.includes('tailor') || text.includes('silai') || text.includes('silaye') || text.includes('bunai') ||
+      text.includes('kirana') || text.includes('dairy') || text.includes('doodh') || text.includes('murgi') || 
+      text.includes('poultry') || text.includes('startup') || text.includes('handicraft') || text.includes('hastshilp') ||
+      text.includes('shop') || text.includes('boutique') || text.includes('business') || text.includes('dukaan')) {
     if (!extracted.businessType) extracted.businessType = normalizeBusinessType(text);
   }
 
-  if (text.includes('loan') || text.includes('paisa') || text.includes('finance') || text.includes('ऋण')) {
+  if (text.includes('loan') || text.includes('paisa') || text.includes('finance') || text.includes('ऋण') || text.includes('karz') || text.includes('chahiye tha')) {
     if (!extracted.purpose) extracted.purpose = 'business_loan';
   } else if (text.includes('women') || text.includes('mahila')) {
     if (!extracted.purpose) extracted.purpose = 'women_entrepreneur';
-  } else if (text.includes('startup') || text.includes('naya business') || text.includes('start new')) {
+  } else if (text.includes('startup') || text.includes('naya business') || text.includes('start new') || text.includes('kholna')) {
     if (!extracted.purpose) extracted.purpose = 'new_business';
-  }
-
-  const ageVal = parseAge(text);
-  if (ageVal && !extracted.age) {
-    extracted.age = ageVal;
   }
 
   const parsedAmount = parseIndianCurrency(text);
   if (parsedAmount && !extracted.familyIncome && !extracted.projectCost && !['age', 'category', 'gender', 'udyamRegistered', 'specificScheme'].includes(expectedField)) {
-    if (text.includes('income') || text.includes('aamdani') || text.includes('kamata') || text.includes('kamate')) {
+    const isLoanOrProject = text.includes('loan') || text.includes('karz') || text.includes('laagat') || 
+                            text.includes('kharach') || text.includes('budget') || text.includes('project') || 
+                            text.includes('chahiye') || text.includes('ke liye') || text.includes('ka liya');
+    const isIncome = text.includes('income') || text.includes('aamdani') || text.includes('kamata') || 
+                     text.includes('kamati') || text.includes('kamate') || text.includes('salary') || text.includes('tankha');
+
+    if (isIncome && !isLoanOrProject) {
       extracted.familyIncome = parsedAmount;
-    } else if (text.includes('project') || text.includes('cost') || text.includes('laagat') || text.includes('kharach') || text.includes('budget') || text.includes('loan')) {
+    } else if (isLoanOrProject) {
       extracted.projectCost = parsedAmount;
-    } else if (currentProfile.familyIncome && !currentProfile.projectCost) {
-      extracted.projectCost = parsedAmount;
-    } else if (!currentProfile.familyIncome) {
+    } else if (currentProfile.projectCost && !currentProfile.familyIncome) {
       extracted.familyIncome = parsedAmount;
     } else {
       extracted.projectCost = parsedAmount;
@@ -197,7 +198,7 @@ export const extractSlotsOffline = (message = '', currentProfile = {}, expectedF
 };
 
 /**
- * Main NLU Slot Extraction Service using Gemini LLM.
+ * Main NLU Slot Extraction Service using Gemini LLM with STT phonetic resilience.
  */
 export const extractProfileSlots = async (message = '', currentProfile = {}, expectedField = null) => {
   const localSlots = extractSlotsOffline(message, currentProfile, expectedField);
@@ -224,11 +225,26 @@ Return ONLY pure JSON matching the schema.`;
               if (k === 'businessType' && typeof v === 'string') {
                 cleanExtracted[k] = normalizeBusinessType(v) || v;
               } else if (k === 'category' && typeof v === 'string') {
-                cleanExtracted[k] = normalizeCategory(v) || v;
+                const normalizedCat = normalizeCategory(v) || normalizeCategory(message);
+                // Prevent hallucinated GENERAL if user didn't say general/samanya/open
+                if (normalizedCat === 'GENERAL') {
+                  const hasGenWord = /\b(general|gen|samanya|open|ur|unreserved)\b/i.test(message);
+                  if (hasGenWord) {
+                    cleanExtracted[k] = 'GENERAL';
+                  }
+                } else if (normalizedCat) {
+                  cleanExtracted[k] = normalizedCat;
+                }
               } else if (k === 'gender' && typeof v === 'string') {
                 cleanExtracted[k] = normalizeGender(v) || v;
               } else if (k === 'purpose' && typeof v === 'string') {
                 cleanExtracted[k] = normalizePurpose(v) || v;
+              } else if (k === 'age' && typeof v === 'number') {
+                cleanExtracted[k] = v;
+              } else if (k === 'projectCost' && typeof v === 'number') {
+                cleanExtracted[k] = v;
+              } else if (k === 'familyIncome' && typeof v === 'number') {
+                cleanExtracted[k] = v;
               } else {
                 cleanExtracted[k] = v;
               }
@@ -236,12 +252,13 @@ Return ONLY pure JSON matching the schema.`;
           }
         }
 
+        // Merge, letting verified offline speech parsers take precedence on voice patterns
         return {
           intent: parsed.intent || localSlots.intent,
           knownSchemeName: parsed.knownSchemeName || localSlots.knownSchemeName,
           extractedFields: {
-            ...localSlots.extractedFields,
-            ...cleanExtracted
+            ...cleanExtracted,
+            ...localSlots.extractedFields // ensures deterministic offline STT regex isn't overwritten by LLM hallucinations
           },
           confidence: parsed.confidence || 0.95
         };
