@@ -1,6 +1,7 @@
 {
   "name": "udyam-in-monorepo",
   "version": "1.0.0",
+  "type": "module",
   "private": true,
   "description": "SchemeSaathi - AI-Driven Government Scheme Matching & Actionable Advisory System (SIH 2024)",
   "scripts": {

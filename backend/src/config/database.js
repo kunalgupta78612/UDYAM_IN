@@ -10,8 +10,7 @@ export const connectDB = async () => {
   try {
     const mongoUri = process.env.MONGODB_URI || 'mongodb://localhost:27017/schemesaathi';
     const conn = await mongoose.connect(mongoUri, {
-      serverSelectionTimeoutMS: 5000,
-      bufferCommands: false
+      serverSelectionTimeoutMS: 5000
     });
     cachedConnection = conn;
     console.log(`[Database] MongoDB Connected: ${conn.connection.host}`);
