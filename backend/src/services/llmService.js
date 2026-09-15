@@ -123,7 +123,10 @@ export const extractSlotsOffline = (message = '', currentProfile = {}, expectedF
       const gen = normalizeGender(text);
       if (gen) extracted.gender = gen;
     } else if (expectedField === 'businessType') {
-      extracted.businessType = normalizeBusinessType(text);
+      const normalizedBt = normalizeBusinessType(text);
+      if (normalizedBt && !['other', 'others', 'business_loan', 'start_new_business', 'new_business'].includes(normalizedBt)) {
+        extracted.businessType = normalizedBt;
+      }
     } else if (expectedField === 'purpose') {
       extracted.purpose = normalizePurpose(text);
     } else if (expectedField === 'udyamRegistered') {
@@ -147,11 +150,25 @@ export const extractSlotsOffline = (message = '', currentProfile = {}, expectedF
     extracted.age = parsedAge;
   }
 
-  if (text.includes('tailor') || text.includes('silai') || text.includes('silaye') || text.includes('bunai') ||
-      text.includes('kirana') || text.includes('dairy') || text.includes('doodh') || text.includes('murgi') || 
-      text.includes('poultry') || text.includes('startup') || text.includes('handicraft') || text.includes('hastshilp') ||
-      text.includes('shop') || text.includes('boutique') || text.includes('business') || text.includes('dukaan')) {
-    if (!extracted.businessType) extracted.businessType = normalizeBusinessType(text);
+  const isGenericLoanOrPurpose = /^(business loan|start new business|new business|loan|self employment|agriculture|karz|paisa|other|others|अन्य)$/i.test(text.trim());
+
+  if (!isGenericLoanOrPurpose) {
+    if (text.includes('tailor') || text.includes('silai') || text.includes('silaye') || text.includes('bunai') ||
+        text.includes('kirana') || text.includes('dairy') || text.includes('doodh') || text.includes('murgi') || 
+        text.includes('poultry') || text.includes('tech startup') || text.includes('handicraft') || text.includes('hastshilp') ||
+        text.includes('boutique') || text.includes('carpenter') || text.includes('badhai') || text.includes('parlor') ||
+        text.includes('parlour') || text.includes('salon') || text.includes('cyber cafe') || text.includes('csc') ||
+        text.includes('repair') || text.includes('mechanic') || text.includes('welding') || text.includes('karkhana') ||
+        text.includes('factory') || text.includes('bakery') || text.includes('restaurant') || text.includes('hotel') ||
+        text.includes('dhaba') || text.includes('transport') || text.includes('auto rickshaw') || text.includes('farming') ||
+        text.includes('kheti')) {
+      if (!extracted.businessType) {
+        const norm = normalizeBusinessType(text);
+        if (norm && !['other', 'others', 'business_loan', 'start_new_business'].includes(norm)) {
+          extracted.businessType = norm;
+        }
+      }
+    }
   }
 
   if (text.includes('loan') || text.includes('paisa') || text.includes('finance') || text.includes('ऋण') || text.includes('karz') || text.includes('chahiye tha')) {
@@ -223,7 +240,10 @@ Return ONLY pure JSON matching the schema.`;
           for (const [k, v] of Object.entries(parsed.extractedFields)) {
             if (v !== null && v !== undefined && v !== '') {
               if (k === 'businessType' && typeof v === 'string') {
-                cleanExtracted[k] = normalizeBusinessType(v) || v;
+                const norm = normalizeBusinessType(v);
+                if (norm && !['other', 'others', 'business_loan', 'start_new_business'].includes(norm)) {
+                  cleanExtracted[k] = norm;
+                }
               } else if (k === 'category' && typeof v === 'string') {
                 const normalizedCat = normalizeCategory(v) || normalizeCategory(message);
                 // Prevent hallucinated GENERAL if user didn't say general/samanya/open

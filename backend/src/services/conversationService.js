@@ -293,6 +293,108 @@ export const processUserMessage = async ({ message, conversation = {}, profile =
     limit: 15 
   });
 
+  // Check if user clicked/typed "Other" for businessType or purpose
+  const trimmedMsg = message.trim();
+  const isOtherBusinessRequest = 
+    /^(other|others|अन्य|kuch aur|koi aur|other business|something else|dusra)$/i.test(trimmedMsg) &&
+    (expectedField === 'businessType' || isValueMissing(updatedProfile.businessType));
+
+  if (isOtherBusinessRequest) {
+    const questionConfig = {
+      questionEn: 'Could you please specify what business, trade, or craft you are planning or running?',
+      questionHi: 'कृपया बताएं कि आप किस प्रकार का व्यवसाय, व्यापार या कार्य कर रहे हैं या शुरू करना चाहते हैं?',
+      byLang: {
+        en: 'Could you please specify what business, trade, or craft you are planning or running?',
+        hi: 'कृपया बताएं कि आप किस प्रकार का व्यवसाय, व्यापार या कार्य कर रहे हैं या शुरू करना चाहते हैं?',
+        mr: 'कृपया स्पष्ट करा की तुम्ही कोणत्या प्रकारचा व्यवसाय, व्यापार किंवा काम सुरू करण्याचा विचार करत आहात?',
+        bn: 'অনুগ্রহ করে নির্দিষ্ট করে বলুন আপনি কী ধরনের ব্যবসা বা কাজ শুরু করতে চান?',
+        ta: 'நீங்கள் என்ன குறிப்பிட்ட தொழில் அல்லது வணிகத்தைத் தொடங்க விரும்புகிறீர்கள் என்பதைத் தெரிவிக்கவும்?',
+        te: 'మీరు ఏ నిర్దిష్ట వ్యాపారం లేదా పనిని ప్రారంభించాలనుకుంటున్నారో దయచేసి పేర్కొనండి?',
+        gu: 'કૃપા કરીને જણાવો કે તમે કયા ચોક્કસ પ્રકારનો વ્યવસાય કે કામ શરૂ કરવા માંગો છો?',
+        kn: 'ನೀವು ಯಾವ ನಿರ್ದಿಷ್ಟ ವ್ಯವಹಾರ ಅಥವಾ ಕೆಲಸವನ್ನು ಪ್ರಾರಂಭಿಸಲು ಯೋಜಿಸುತ್ತಿದ್ದೀರಿ ಎಂಬುದನ್ನು ದಯವಿಟ್ಟು ತಿಳಿಸಿ?',
+        pa: 'ਕਿਰਪਾ ਕਰਕੇ ਦੱਸੋ ਕਿ ਤੁਸੀਂ ਕਿਸ ਖਾਸ ਕਾਰੋਬਾਰ ਜਾਂ ਕੰਮ ਦੀ ਯੋਜਨਾ ਬਣਾ ਰਹੇ ਹੋ?',
+        or: 'ଦୟାକରି ସ୍ପଷ୍ଟ କରନ୍ତୁ ଯେ ଆପଣ କେଉଁ ନିର୍ଦ୍ଦିଷ୍ଟ ବ୍ୟବସାୟ ବା କାର୍ଯ୍ୟ ଆରମ୍ଭ କରିବାକୁ ଚାହୁଁଛନ୍ତି?'
+      },
+      quickReplies: [
+        'Cyber Cafe / CSC Center',
+        'Mobile & Electronics Repair',
+        'Coaching / Tuition Center',
+        'Welding / Fabrication Unit',
+        'Food Stall / Catering'
+      ]
+    };
+
+    const reply = await generateConversationalReply({
+      userMessage: message,
+      profile: updatedProfile,
+      nextField: 'businessType',
+      isConfirmation: false,
+      contextPrompt: 'The user clicked or mentioned "Other" for business type. Politely ask them what specific trade, enterprise, or business they are running or planning.',
+      defaultEn: questionConfig.questionEn,
+      defaultHi: questionConfig.questionHi
+    });
+
+    return {
+      conversationStatus: 'WAITING_INFO',
+      journey,
+      selectedSchemeId,
+      candidateSchemeIds: candidateSchemes.map(s => s.schemeId),
+      profile: updatedProfile,
+      nextQueryField: 'businessType',
+      botMessage: {
+        role: 'assistant',
+        contentEn: reply.contentEn,
+        contentHi: reply.contentHi,
+        contentByLang: questionConfig.byLang,
+        quickReplies: questionConfig.quickReplies,
+        showProfileConfirmation: false
+      }
+    };
+  }
+
+  const isOtherPurposeRequest = 
+    /^(other|others|अन्य|kuch aur|koi aur)$/i.test(trimmedMsg) &&
+    expectedField === 'purpose';
+
+  if (isOtherPurposeRequest) {
+    const questionConfig = {
+      questionEn: 'Please specify what kind of financial support or scheme assistance you need.',
+      questionHi: 'कृपया बताएं कि आपको किस प्रकार की वित्तीय सहायता या योजना की आवश्यकता है?',
+      byLang: {
+        en: 'Please specify what kind of financial support or scheme assistance you need.',
+        hi: 'कृपया बताएं कि आपको किस प्रकार की वित्तीय सहायता या योजना की आवश्यकता है?'
+      },
+      quickReplies: ['Working Capital Loan', 'Machinery / Equipment Grant', 'Skill Development Training']
+    };
+
+    const reply = await generateConversationalReply({
+      userMessage: message,
+      profile: updatedProfile,
+      nextField: 'purpose',
+      isConfirmation: false,
+      contextPrompt: 'The user clicked "Other" for purpose. Ask them specifically what kind of scheme or financial support they need.',
+      defaultEn: questionConfig.questionEn,
+      defaultHi: questionConfig.questionHi
+    });
+
+    return {
+      conversationStatus: 'WAITING_INFO',
+      journey,
+      selectedSchemeId,
+      candidateSchemeIds: candidateSchemes.map(s => s.schemeId),
+      profile: updatedProfile,
+      nextQueryField: 'purpose',
+      botMessage: {
+        role: 'assistant',
+        contentEn: reply.contentEn,
+        contentHi: reply.contentHi,
+        contentByLang: questionConfig.byLang,
+        quickReplies: questionConfig.quickReplies,
+        showProfileConfirmation: false
+      }
+    };
+  }
+
   // 5. Determine Next Action or Question
   const nextField = selectNextFieldToQuery(candidateSchemes, updatedProfile);
 

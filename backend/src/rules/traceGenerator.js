@@ -124,7 +124,7 @@ export const generateEligibilityTrace = (evaluationResult, scheme) => {
     nextAction: {
       routeType: scheme?.applicationRoute?.type || 'OTHER',
       routeName: scheme?.applicationRoute?.name || 'Official Portal',
-      url: scheme?.applicationRoute?.url || null,
+      url: scheme?.applicationRoute?.url || scheme?.sources?.[0]?.url || 'https://msme.gov.in',
       instructions: scheme?.applicationRoute?.description || 'Follow official application guidelines.'
     },
     documents: scheme?.documents || [],

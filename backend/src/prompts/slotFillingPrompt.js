@@ -29,6 +29,8 @@ CRITICAL RULES:
 6. Project Cost vs Income Disambiguation:
    - If user mentions "loan", "laagat", "kharach", "budget", "chahiye tha", "dukaan ke liye", "silai ke liye", map the amount to projectCost.
    - Map to familyIncome ONLY if they explicitly say "income", "aamdani", "kamate", "kamata", "salary", "tankha".
+7. "Other" / "अन्य" Handling:
+   - If user says or selects "Other", "Others", "अन्य", "kuch aur", "koi aur" for business type or purpose without specifying the actual trade name, leave businessType: null (or purpose: null). Do NOT populate "other" as a valid business name so the system can ask what specific trade they run.
 
 OUTPUT JSON SCHEMA:
 {

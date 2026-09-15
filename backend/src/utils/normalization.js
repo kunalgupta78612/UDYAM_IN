@@ -55,6 +55,12 @@ const BUSINESS_TYPE_SYNONYMS = {
   manufacturing: [
     'manufacturing', 'factory', 'small industry', 'workshop', 'plastic molding',
     'fabrication', 'welding', 'lathe machine', 'packaging', 'karkhana'
+  ],
+  repair_services: [
+    'repair', 'repairing', 'electrician', 'mobile repair', 'motor repair', 'mechanic', 'plumber', 'repair shop', 'marammat'
+  ],
+  services: [
+    'cyber cafe', 'csc', 'csc center', 'online services', 'photocopy', 'internet cafe', 'jan seva kendra', 'coaching', 'tuition'
   ]
 };
 
@@ -132,8 +138,13 @@ const HINDI_AGE_WORDS = {
  * Normalizes user-input business descriptions into a standardized taxonomy key.
  */
 export const normalizeBusinessType = (rawInput) => {
-  if (!rawInput || typeof rawInput !== 'string') return 'general_trade';
+  if (!rawInput || typeof rawInput !== 'string') return null;
   const clean = rawInput.toLowerCase().trim();
+
+  // If user says "Other" / "अन्य" without providing a specific trade
+  if (['other', 'others', 'अन्य', 'kuch aur', 'koi aur', 'other business', 'something else', 'dusra'].includes(clean)) {
+    return null;
+  }
 
   for (const [standardKey, synonyms] of Object.entries(BUSINESS_TYPE_SYNONYMS)) {
     if (synonyms.some(syn => clean.includes(syn) || syn.includes(clean))) {
@@ -141,7 +152,8 @@ export const normalizeBusinessType = (rawInput) => {
     }
   }
 
-  return clean.replace(/[^a-z0-9]+/g, '_').replace(/^_+|_+$/g, '');
+  const formatted = clean.replace(/[^a-z0-9]+/g, '_').replace(/^_+|_+$/g, '');
+  return formatted || 'general_trade';
 };
 
 /**

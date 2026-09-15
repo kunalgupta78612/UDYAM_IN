@@ -73,8 +73,8 @@
     "applicationRoute": {
       "type": "SCA",
       "name": "State Channelizing Agency (SCA) / RRB",
-      "url": "",
-      "description": "Submit application through https://nsfdc.nic.in/faqs State Scheduled Castes Development Corporation (SCA) or designated RRB branch."
+      "url": "https://nsfdc.nic.in/faqs",
+      "description": "Submit application through State Scheduled Castes Development Corporation (SCA) or designated RRB branch."
     },
     "documents": ["Caste Certificate", "Income Certificate", "Aadhaar Card", "Project Profile / Business Plan", "Bank Passbook"],
     "sources": [
