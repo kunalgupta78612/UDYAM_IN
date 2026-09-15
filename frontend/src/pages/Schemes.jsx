@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { api } from '../services/api.js';
-import { Search, Building, ArrowUpRight, Filter } from 'lucide-react';
+import { Search, Building, ArrowUpRight, Filter, Sparkles } from 'lucide-react';
 import { useChatContext } from '../context/ChatContext.jsx';
+import { useNavigate } from 'react-router-dom';
 
 export const Schemes = () => {
   const [schemes, setSchemes] = useState([]);
@@ -9,7 +10,8 @@ export const Schemes = () => {
   const [search, setSearch] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('');
   const [purposeFilter, setPurposeFilter] = useState('');
-  const { language } = useChatContext();
+  const { t, sendUserMessage } = useChatContext();
+  const navigate = useNavigate();
 
   const fetchSchemes = async () => {
     try {
@@ -37,15 +39,20 @@ export const Schemes = () => {
     fetchSchemes();
   };
 
+  const handleCheckEligibility = (schemeName) => {
+    navigate('/chat');
+    sendUserMessage(`I want to evaluate my eligibility for ${schemeName}`);
+  };
+
   return (
     <div className="py-8 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-6">
       {/* Header */}
       <div>
         <h2 className="text-3xl font-black text-slate-900 tracking-tight">
-          {language === 'hi' ? 'सरकारी योजना निर्देशिका' : 'Government Scheme Directory'}
+          {t('schemes.title')}
         </h2>
         <p className="text-xs text-slate-500 mt-1">
-          {language === 'hi' ? 'सभी 18 सत्यापित सरकारी योजनाओं की आधिकारिक शर्तें और विवरण' : 'Verified dataset from NSFDC, NBCFDC, NSKFDC, Stand-Up India, and MSME'}
+          {t('schemes.subtitle')}
         </p>
       </div>
 
@@ -58,7 +65,7 @@ export const Schemes = () => {
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder={language === 'hi' ? 'योजना का नाम, मंत्रालय या कीवर्ड खोजें...' : 'Search by scheme name, ministry, or business keywords...'}
+            placeholder={t('schemes.searchPlaceholder')}
             className="w-full pl-9 pr-4 py-2 text-xs rounded-xl bg-slate-50 border border-slate-200 focus:outline-none focus:border-brand-500 focus:bg-white transition-all"
           />
         </form>
@@ -71,10 +78,11 @@ export const Schemes = () => {
             onChange={(e) => setCategoryFilter(e.target.value)}
             className="px-3 py-2 text-xs font-semibold rounded-xl bg-slate-50 border border-slate-200 text-slate-700 focus:outline-none"
           >
-            <option value="">All Categories (सभी श्रेणियां)</option>
+            <option value="">{t('schemes.allCategories')}</option>
             <option value="SC">SC (Scheduled Caste)</option>
             <option value="OBC">OBC</option>
             <option value="ST">ST</option>
+            <option value="GENERAL">General</option>
           </select>
 
           {/* Purpose Filter */}
@@ -83,21 +91,22 @@ export const Schemes = () => {
             onChange={(e) => setPurposeFilter(e.target.value)}
             className="px-3 py-2 text-xs font-semibold rounded-xl bg-slate-50 border border-slate-200 text-slate-700 focus:outline-none"
           >
-            <option value="">All Purposes (सभी उद्देश्य)</option>
+            <option value="">{t('schemes.allPurposes')}</option>
             <option value="business_loan">Business Loan</option>
             <option value="women_entrepreneur">Women Entrepreneur</option>
-            <option value="startup">Startup</option>
+            <option value="startup">Startup / Enterprise</option>
             <option value="working_capital">Working Capital</option>
+            <option value="self_employment">Self Employment</option>
           </select>
         </div>
       </div>
 
       {/* Schemes Grid */}
       {loading ? (
-        <div className="py-12 text-center text-xs text-slate-400">Loading verified scheme database...</div>
+        <div className="py-12 text-center text-xs text-slate-400">{t('common.loading')}</div>
       ) : schemes.length === 0 ? (
         <div className="py-12 text-center text-xs text-slate-500 bg-white rounded-2xl border border-slate-200">
-          No schemes found matching your search filters.
+          {t('schemes.noSchemesFound')}
         </div>
       ) : (
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
@@ -119,27 +128,38 @@ export const Schemes = () => {
 
                 {scheme.financialBenefits?.maximumLoan && (
                   <div className="p-2 rounded-lg bg-slate-50 border border-slate-100 text-[11px] font-semibold text-emerald-800">
-                    Max Loan: ₹{Number(scheme.financialBenefits.maximumLoan).toLocaleString('en-IN')}
+                    {t('schemes.maxAssistance')}: ₹{Number(scheme.financialBenefits.maximumLoan).toLocaleString('en-IN')}
                   </div>
                 )}
               </div>
 
-              <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between">
-                <span className="text-[10px] text-slate-400">
-                  {scheme.conditions?.length || 0} Machine Rules
-                </span>
+              <div className="mt-4 pt-3 border-t border-slate-100 space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="text-[10px] text-slate-400">
+                    {scheme.conditions?.length || 0} {t('schemes.rulesCount')}
+                  </span>
 
-                {scheme.sources?.[0]?.url && (
-                  <a
-                    href={scheme.sources[0].url}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="flex items-center space-x-1 text-xs font-bold text-brand-600 hover:text-brand-800"
-                  >
-                    <span>Official Portal</span>
-                    <ArrowUpRight className="w-3.5 h-3.5" />
-                  </a>
-                )}
+                  {scheme.sources?.[0]?.url && (
+                    <a
+                      href={scheme.sources[0].url}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="flex items-center space-x-1 text-xs font-bold text-brand-600 hover:text-brand-800"
+                    >
+                      <span>{t('common.officialUrl')}</span>
+                      <ArrowUpRight className="w-3.5 h-3.5" />
+                    </a>
+                  )}
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => handleCheckEligibility(scheme.name)}
+                  className="w-full flex items-center justify-center space-x-1.5 py-2 rounded-xl bg-brand-50 hover:bg-brand-100 border border-brand-200 text-brand-700 font-bold text-xs transition-colors"
+                >
+                  <Sparkles className="w-3.5 h-3.5" />
+                  <span>{t('schemes.checkEligibility')}</span>
+                </button>
               </div>
             </div>
           ))}

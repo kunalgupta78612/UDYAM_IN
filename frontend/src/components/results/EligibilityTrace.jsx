@@ -3,14 +3,14 @@ import { ExternalLink, Check, X, AlertTriangle } from 'lucide-react';
 import { useChatContext } from '../../context/ChatContext.jsx';
 
 export const EligibilityTrace = ({ traceItems = [] }) => {
-  const { language } = useChatContext();
+  const { t } = useChatContext();
 
   if (!traceItems || traceItems.length === 0) return null;
 
   return (
     <div className="space-y-2.5 my-3">
       <h5 className="text-xs font-bold text-slate-500 uppercase tracking-wider">
-        {language === 'hi' ? 'शर्त-दर-शर्त पात्रता सत्यापन' : 'Clause-by-Clause Evaluation Trace'}
+        {t('results.legalAuditTitle', 'Clause-by-Clause Evaluation Trace')}
       </h5>
 
       <div className="space-y-2">
@@ -58,7 +58,7 @@ export const EligibilityTrace = ({ traceItems = [] }) => {
 
                 {/* Values Comparison */}
                 <div className="text-right shrink-0 ml-2">
-                  <div className="text-[10px] text-slate-400 font-medium">{language === 'hi' ? 'आपका विवरण' : 'Your Value'}</div>
+                  <div className="text-[10px] text-slate-400 font-medium">{t('profile.confirmTitle', 'Your Value')}</div>
                   <div className="font-bold text-slate-800">{item.userValue}</div>
                   <div className="text-[10px] text-slate-500">{item.requirement}</div>
                 </div>
@@ -67,14 +67,14 @@ export const EligibilityTrace = ({ traceItems = [] }) => {
               {/* Legal Source URL */}
               {item.sourceUrl && (
                 <div className="mt-2 pt-1.5 border-t border-slate-200/60 flex items-center justify-between text-[10px]">
-                  <span className="text-slate-500 font-medium">Official Government Source:</span>
+                  <span className="text-slate-500 font-medium">{t('schemes.officialGazette', 'Official Source')}:</span>
                   <a
                     href={item.sourceUrl}
                     target="_blank"
                     rel="noreferrer"
                     className="inline-flex items-center space-x-1 text-brand-600 hover:text-brand-800 font-semibold underline"
                   >
-                    <span>View Gazette / Guideline</span>
+                    <span>{t('schemes.officialGazette', 'View Gazette / Guideline')}</span>
                     <ExternalLink className="w-3 h-3" />
                   </a>
                 </div>

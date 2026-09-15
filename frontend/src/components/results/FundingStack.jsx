@@ -1,9 +1,9 @@
 import React from 'react';
-import { Layers, Plus, Sparkles, ShieldAlert, ArrowUpRight } from 'lucide-react';
+import { Layers, Plus, Sparkles } from 'lucide-react';
 import { useChatContext } from '../../context/ChatContext.jsx';
 
 export const FundingStack = ({ fundingStacks = [] }) => {
-  const { language } = useChatContext();
+  const { t, language } = useChatContext();
 
   if (!fundingStacks || fundingStacks.length === 0) return null;
 
@@ -15,15 +15,13 @@ export const FundingStack = ({ fundingStacks = [] }) => {
         </div>
         <div>
           <h3 className="text-lg font-black text-slate-900 flex items-center space-x-2">
-            <span>{language === 'hi' ? 'अनुशंसित फंडिंग स्टैक संयोजन (Funding Stacks)' : 'Recommended Funding Stacks (Scheme Convergence)'}</span>
+            <span>{t('results.fundingStackTitle')}</span>
             <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 border border-amber-200">
-              Innovation
+              Convergence
             </span>
           </h3>
           <p className="text-xs text-slate-500 font-medium">
-            {language === 'hi'
-              ? 'सब्सिडी और रियायती ऋण योजनाओं का कानूनी रूप से अनुमत संयोजन'
-              : 'Legally permitted combinations of capital subsidies and term loans for maximized enterprise support'}
+            {t('results.fundingStackSubtitle')}
           </p>
         </div>
       </div>
@@ -41,7 +39,7 @@ export const FundingStack = ({ fundingStacks = [] }) => {
                 </span>
                 <span className="text-xs font-bold text-amber-800 flex items-center space-x-1">
                   <Sparkles className="w-3.5 h-3.5 text-amber-600" />
-                  <span>Converged Support</span>
+                  <span>{t('results.stackCombined')}</span>
                 </span>
               </div>
 
@@ -65,7 +63,7 @@ export const FundingStack = ({ fundingStacks = [] }) => {
 
             <div className="mt-4 pt-3 border-t border-amber-200/80 flex items-center justify-between text-[11px] text-slate-500">
               <span className="font-mono text-[10px] text-slate-400">{stack.legalClause}</span>
-              <span className="text-[10px] text-amber-700 font-semibold">*Subject to approval</span>
+              <span className="text-[10px] text-amber-700 font-semibold">*Subject to eligibility criteria</span>
             </div>
           </div>
         ))}

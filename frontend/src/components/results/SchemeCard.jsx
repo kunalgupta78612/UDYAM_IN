@@ -8,7 +8,7 @@ import { useChatContext } from '../../context/ChatContext.jsx';
 
 export const SchemeCard = ({ schemeResult }) => {
   const [isExpanded, setIsExpanded] = useState(schemeResult.status === 'ELIGIBLE');
-  const { language } = useChatContext();
+  const { language, t } = useChatContext();
 
   const isEligible = schemeResult.status === 'ELIGIBLE';
 
@@ -47,7 +47,10 @@ export const SchemeCard = ({ schemeResult }) => {
             )}
           </div>
 
-          <button className="p-1 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 transition-colors">
+          <button
+            type="button"
+            className="p-1 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 transition-colors"
+          >
             {isExpanded ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
           </button>
         </div>
@@ -58,7 +61,7 @@ export const SchemeCard = ({ schemeResult }) => {
             {schemeResult.financialBenefits.maximumLoan && (
               <span className="inline-flex items-center space-x-1 px-2.5 py-1 rounded-md bg-brand-50 text-brand-800 font-bold border border-brand-200">
                 <IndianRupee className="w-3.5 h-3.5" />
-                <span>Loan: Up to ₹{Number(schemeResult.financialBenefits.maximumLoan).toLocaleString('en-IN')}</span>
+                <span>{t('schemes.maxAssistance')}: Up to ₹{Number(schemeResult.financialBenefits.maximumLoan).toLocaleString('en-IN')}</span>
               </span>
             )}
             {schemeResult.financialBenefits.interestRate && (
@@ -68,7 +71,7 @@ export const SchemeCard = ({ schemeResult }) => {
             )}
             {schemeResult.financialBenefits.subsidy && (
               <span className="px-2.5 py-1 rounded-md bg-purple-50 text-purple-800 font-semibold border border-purple-200">
-                Subsidy: {schemeResult.financialBenefits.subsidy}
+                {t('schemes.subsidyRate')}: {schemeResult.financialBenefits.subsidy}
               </span>
             )}
           </div>

@@ -3,10 +3,10 @@ import { useChatContext } from '../context/ChatContext.jsx';
 import { SchemeCard } from '../components/results/SchemeCard.jsx';
 import { FundingStack } from '../components/results/FundingStack.jsx';
 import { Link } from 'react-router-dom';
-import { CheckCircle2, AlertCircle, XCircle, ArrowLeft, RefreshCw, FileText } from 'lucide-react';
+import { CheckCircle2, AlertCircle, XCircle, ArrowLeft, RefreshCw, FileText, Printer } from 'lucide-react';
 
 export const Results = () => {
-  const { matchResults, language, profile, triggerEligibilityCheck, isLoading } = useChatContext();
+  const { matchResults, t, profile, triggerEligibilityCheck, isLoading } = useChatContext();
   const [activeTab, setActiveTab] = useState('eligible'); // 'eligible' | 'needInfo' | 'notEligible'
 
   if (!matchResults) {
@@ -16,18 +16,16 @@ export const Results = () => {
           <FileText className="w-8 h-8" />
         </div>
         <h3 className="text-xl font-bold text-slate-800">
-          {language === 'hi' ? 'कोई सक्रिय परिणाम नहीं मिला' : 'No Evaluation Results Yet'}
+          {t('results.noResultsTitle')}
         </h3>
         <p className="text-xs text-slate-500">
-          {language === 'hi'
-            ? 'कृपया पहले चैट सलाहकार में विवरण दर्ज करें या पात्रता जांच प्रारंभ करें।'
-            : 'Please start a chat session to build your profile and evaluate eligibility against government schemes.'}
+          {t('results.noResultsSubtitle')}
         </p>
         <Link
           to="/chat"
           className="px-6 py-3 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-xs shadow-md transition-all"
         >
-          {language === 'hi' ? 'चैट प्रारंभ करें' : 'Start Chat Session'}
+          {t('results.startChatBtn')}
         </Link>
       </div>
     );
@@ -37,6 +35,10 @@ export const Results = () => {
   const eligibleSchemes = results.eligible || [];
   const needInfoSchemes = results.needInfo || [];
   const notEligibleSchemes = results.notEligible || [];
+
+  const handlePrint = () => {
+    window.print();
+  };
 
   return (
     <div className="py-8 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto space-y-6">
@@ -48,31 +50,45 @@ export const Results = () => {
             className="inline-flex items-center space-x-1.5 text-xs font-semibold text-brand-600 hover:text-brand-800 mb-2"
           >
             <ArrowLeft className="w-4 h-4" />
-            <span>{language === 'hi' ? 'चैट पर वापस जाएं' : 'Back to Chat'}</span>
+            <span>{t('results.backToChat')}</span>
           </Link>
 
           <h2 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
-            {language === 'hi' ? 'आपकी पात्रता परिणाम' : 'Your Eligibility Evaluation Report'}
+            {t('results.reportTitle')}
           </h2>
           <p className="text-xs text-slate-500 mt-1">
-            {language === 'hi' ? '100% सटीक नियम इंजन द्वारा सत्यापित' : 'Deterministic evaluation completed with clause-by-clause traces'}
+            {t('results.reportSubtitle')}
           </p>
         </div>
 
-        <button
-          onClick={() => triggerEligibilityCheck(profile)}
-          disabled={isLoading}
-          className="self-start sm:self-auto flex items-center space-x-2 px-4 py-2 rounded-xl bg-white border border-slate-300 hover:bg-slate-50 text-xs font-bold text-slate-700 shadow-sm transition-all"
-        >
-          <RefreshCw className={`w-3.5 h-3.5 ${isLoading ? 'animate-spin' : ''}`} />
-          <span>{language === 'hi' ? 'पुनः मूल्यांकन करें' : 'Re-evaluate'}</span>
-        </button>
+        <div className="flex items-center space-x-2 self-start sm:self-auto">
+          <button
+            type="button"
+            onClick={handlePrint}
+            className="flex items-center space-x-1.5 px-3.5 py-2 rounded-xl bg-white border border-slate-300 hover:bg-slate-50 text-xs font-bold text-slate-700 shadow-sm transition-all"
+            title={t('results.printReport')}
+          >
+            <Printer className="w-3.5 h-3.5" />
+            <span>{t('results.printReport')}</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => triggerEligibilityCheck(profile)}
+            disabled={isLoading}
+            className="flex items-center space-x-2 px-4 py-2 rounded-xl bg-white border border-slate-300 hover:bg-slate-50 text-xs font-bold text-slate-700 shadow-sm transition-all"
+          >
+            <RefreshCw className={`w-3.5 h-3.5 ${isLoading ? 'animate-spin' : ''}`} />
+            <span>{t('results.reEvaluate')}</span>
+          </button>
+        </div>
       </div>
 
       {/* 3 Triage Tab Counters */}
       <div className="grid grid-cols-3 gap-3 sm:gap-4">
         {/* Eligible Tab */}
         <button
+          type="button"
           onClick={() => setActiveTab('eligible')}
           className={`p-4 rounded-2xl border text-left transition-all ${
             activeTab === 'eligible'
@@ -82,7 +98,7 @@ export const Results = () => {
         >
           <div className="flex items-center justify-between">
             <span className="text-xs font-bold text-emerald-800 uppercase tracking-wider">
-              {language === 'hi' ? 'पात्र योजनाएं' : 'Eligible Schemes'}
+              {t('results.tabEligible')}
             </span>
             <CheckCircle2 className="w-5 h-5 text-emerald-600" />
           </div>
@@ -91,6 +107,7 @@ export const Results = () => {
 
         {/* Need Info Tab */}
         <button
+          type="button"
           onClick={() => setActiveTab('needInfo')}
           className={`p-4 rounded-2xl border text-left transition-all ${
             activeTab === 'needInfo'
@@ -100,7 +117,7 @@ export const Results = () => {
         >
           <div className="flex items-center justify-between">
             <span className="text-xs font-bold text-amber-800 uppercase tracking-wider">
-              {language === 'hi' ? 'अधूरी जानकारी' : 'Need More Info'}
+              {t('results.tabNeedInfo')}
             </span>
             <AlertCircle className="w-5 h-5 text-amber-600" />
           </div>
@@ -109,6 +126,7 @@ export const Results = () => {
 
         {/* Not Eligible Tab */}
         <button
+          type="button"
           onClick={() => setActiveTab('notEligible')}
           className={`p-4 rounded-2xl border text-left transition-all ${
             activeTab === 'notEligible'
@@ -118,7 +136,7 @@ export const Results = () => {
         >
           <div className="flex items-center justify-between">
             <span className="text-xs font-bold text-rose-800 uppercase tracking-wider">
-              {language === 'hi' ? 'अपात्र योजनाएं' : 'Not Eligible'}
+              {t('results.tabNotEligible')}
             </span>
             <XCircle className="w-5 h-5 text-rose-600" />
           </div>

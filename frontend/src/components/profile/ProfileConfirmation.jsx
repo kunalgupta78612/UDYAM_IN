@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
-import { UserCheck, Edit3, Check, ShieldCheck, ArrowRight } from 'lucide-react';
+import { UserCheck, Edit3, ShieldCheck, ArrowRight } from 'lucide-react';
 import { useChatContext } from '../../context/ChatContext.jsx';
 import { useNavigate } from 'react-router-dom';
 
 export const ProfileConfirmation = ({ onConfirm }) => {
-  const { profile, setProfile, language, triggerEligibilityCheck } = useChatContext();
+  const { profile, setProfile, t, triggerEligibilityCheck } = useChatContext();
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({ ...profile });
   const navigate = useNavigate();
 
   const handleInputChange = (field, value) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       [field]: value
     }));
@@ -25,7 +25,7 @@ export const ProfileConfirmation = ({ onConfirm }) => {
   };
 
   const formatINR = (val) => {
-    if (!val) return 'Not Provided';
+    if (!val) return t('profile.notProvided', 'Not Provided');
     return '₹' + Number(val).toLocaleString('en-IN');
   };
 
@@ -39,20 +39,21 @@ export const ProfileConfirmation = ({ onConfirm }) => {
           </div>
           <div>
             <h3 className="text-base font-bold text-slate-900">
-              {language === 'hi' ? 'अपनी प्रोफ़ाइल की पुष्टि करें' : 'Confirm Your Profile Details'}
+              {t('profile.confirmTitle')}
             </h3>
             <p className="text-xs text-slate-500">
-              {language === 'hi' ? 'सटीक पात्रता जांच के लिए विवरण सत्यापित करें' : 'Verified before deterministic rule engine evaluation'}
+              {t('profile.confirmSubtitle')}
             </p>
           </div>
         </div>
 
         <button
+          type="button"
           onClick={() => setIsEditing(!isEditing)}
           className="flex items-center space-x-1 text-xs font-semibold text-brand-600 hover:text-brand-800 px-2.5 py-1 rounded-md bg-brand-50 border border-brand-200 hover:bg-brand-100 transition-colors"
         >
           <Edit3 className="w-3.5 h-3.5" />
-          <span>{isEditing ? (language === 'hi' ? 'रद्द करें' : 'Cancel') : (language === 'hi' ? 'संशोधित करें' : 'Edit')}</span>
+          <span>{isEditing ? t('profile.cancel') : t('profile.edit')}</span>
         </button>
       </div>
 
@@ -61,7 +62,7 @@ export const ProfileConfirmation = ({ onConfirm }) => {
         {/* Category */}
         <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-200">
           <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
-            {language === 'hi' ? 'सामाजिक श्रेणी' : 'Social Category'}
+            {t('profile.category')}
           </span>
           {isEditing ? (
             <select
@@ -82,7 +83,7 @@ export const ProfileConfirmation = ({ onConfirm }) => {
         {/* Gender */}
         <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-200">
           <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
-            {language === 'hi' ? 'लिंग (Gender)' : 'Gender'}
+            {t('profile.gender')}
           </span>
           {isEditing ? (
             <select
@@ -90,19 +91,21 @@ export const ProfileConfirmation = ({ onConfirm }) => {
               onChange={(e) => handleInputChange('gender', e.target.value)}
               className="mt-1 w-full bg-white border border-slate-300 rounded p-1 text-xs font-semibold"
             >
-              <option value="female">Female</option>
-              <option value="male">Male</option>
-              <option value="transgender">Transgender</option>
+              <option value="female">{t('profile.female')}</option>
+              <option value="male">{t('profile.male')}</option>
+              <option value="transgender">{t('profile.transgender')}</option>
             </select>
           ) : (
-            <span className="font-bold text-slate-800 text-sm capitalize mt-0.5 block">{formData.gender || 'N/A'}</span>
+            <span className="font-bold text-slate-800 text-sm capitalize mt-0.5 block">
+              {formData.gender ? (formData.gender === 'female' ? t('profile.female') : formData.gender === 'male' ? t('profile.male') : formData.gender) : 'N/A'}
+            </span>
           )}
         </div>
 
         {/* Annual Income */}
         <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-200">
           <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
-            {language === 'hi' ? 'वार्षिक आय' : 'Annual Income'}
+            {t('profile.familyIncome')}
           </span>
           {isEditing ? (
             <input
@@ -120,7 +123,7 @@ export const ProfileConfirmation = ({ onConfirm }) => {
         {/* Project Cost */}
         <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-200">
           <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
-            {language === 'hi' ? 'परियोजना लागत' : 'Project Cost'}
+            {t('profile.projectCost')}
           </span>
           {isEditing ? (
             <input
@@ -138,7 +141,7 @@ export const ProfileConfirmation = ({ onConfirm }) => {
         {/* Business Type */}
         <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-200">
           <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
-            {language === 'hi' ? 'व्यवसाय का प्रकार' : 'Business Type'}
+            {t('profile.businessType')}
           </span>
           {isEditing ? (
             <input
@@ -149,14 +152,16 @@ export const ProfileConfirmation = ({ onConfirm }) => {
               placeholder="e.g. tailoring"
             />
           ) : (
-            <span className="font-bold text-slate-800 text-sm capitalize mt-0.5 block">{formData.businessType || 'General'}</span>
+            <span className="font-bold text-slate-800 text-sm capitalize mt-0.5 block">
+              {formData.businessType || 'General'}
+            </span>
           )}
         </div>
 
         {/* Age */}
         <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-200">
           <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
-            {language === 'hi' ? 'आयु (वर्ष)' : 'Age (Years)'}
+            {t('profile.age')}
           </span>
           {isEditing ? (
             <input
@@ -167,7 +172,9 @@ export const ProfileConfirmation = ({ onConfirm }) => {
               placeholder="e.g. 28"
             />
           ) : (
-            <span className="font-bold text-slate-800 text-sm mt-0.5 block">{formData.age ? `${formData.age} Yrs` : 'N/A'}</span>
+            <span className="font-bold text-slate-800 text-sm mt-0.5 block">
+              {formData.age ? `${formData.age} ${t('profile.yearsOld')}` : 'N/A'}
+            </span>
           )}
         </div>
       </div>
@@ -176,14 +183,15 @@ export const ProfileConfirmation = ({ onConfirm }) => {
       <div className="mt-5 pt-3 border-t border-slate-100 flex items-center justify-between">
         <div className="flex items-center space-x-1.5 text-[11px] text-slate-500 font-medium">
           <ShieldCheck className="w-4 h-4 text-emerald-600" />
-          <span>{language === 'hi' ? 'शर्तों के अनुसार 100% सटीक जांच' : '100% Rule Engine Checked'}</span>
+          <span>{t('chat.ruleChecked')}</span>
         </div>
 
         <button
+          type="button"
           onClick={handleSaveAndConfirm}
           className="flex items-center space-x-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-emerald-700 text-white font-bold text-xs shadow-md hover:from-emerald-700 hover:to-emerald-800 transition-all transform hover:-translate-y-0.5"
         >
-          <span>{language === 'hi' ? 'पुष्टि करें और पात्रता देखें' : 'Confirm & Evaluate Eligibility'}</span>
+          <span>{t('profile.confirmButton')}</span>
           <ArrowRight className="w-4 h-4" />
         </button>
       </div>

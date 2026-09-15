@@ -1,20 +1,21 @@
 const BASE_URL = '/api';
 
 export const api = {
-  async startChat() {
+  async startChat(language = 'en') {
     const res = await fetch(`${BASE_URL}/chat/start`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' }
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ language })
     });
     if (!res.ok) throw new Error('Failed to start chat session');
     return res.json();
   },
 
-  async sendMessage(conversationId, message) {
+  async sendMessage(conversationId, message, language = 'en') {
     const res = await fetch(`${BASE_URL}/chat/message`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ conversationId, message })
+      body: JSON.stringify({ conversationId, message, language })
     });
     if (!res.ok) throw new Error('Failed to send message');
     return res.json();

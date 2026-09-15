@@ -1,5 +1,7 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { api } from '../services/api.js';
+import { SUPPORTED_LANGUAGES, DEFAULT_LANGUAGE, getLanguageConfig } from '../i18n/languages.js';
+import { t as translate } from '../i18n/translations.js';
 
 const ChatContext = createContext();
 
@@ -11,16 +13,89 @@ export const ChatProvider = ({ children }) => {
   const [candidateCount, setCandidateCount] = useState(0);
   const [conversationStatus, setConversationStatus] = useState('ACTIVE');
   const [matchResults, setMatchResults] = useState(null);
-  const [language, setLanguage] = useState('en'); // 'en' or 'hi'
+  const [speakingMessageId, setSpeakingMessageId] = useState(null);
+
+  // Load language preference from localStorage or default
+  const [language, setLanguageState] = useState(() => {
+    try {
+      const saved = localStorage.getItem('schemesaathi_language');
+      if (saved && SUPPORTED_LANGUAGES.some((l) => l.code === saved)) {
+        return saved;
+      }
+    } catch (e) {
+      // ignore
+    }
+    return DEFAULT_LANGUAGE;
+  });
+
+  const setLanguage = (newLang) => {
+    setLanguageState(newLang);
+    try {
+      localStorage.setItem('schemesaathi_language', newLang);
+    } catch (e) {
+      // ignore
+    }
+  };
 
   const toggleLanguage = () => {
-    setLanguage(prev => prev === 'en' ? 'hi' : 'en');
+    setLanguage(language === 'en' ? 'hi' : 'en');
   };
+
+  // Translation helper bound to current language
+  const t = useCallback(
+    (keyPath, fallback = '') => {
+      return translate(language, keyPath, fallback);
+    },
+    [language]
+  );
+
+  const currentLanguageConfig = getLanguageConfig(language);
+
+  // Text-To-Speech Synthesis
+  const stopSpeaking = useCallback(() => {
+    if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+      window.speechSynthesis.cancel();
+      setSpeakingMessageId(null);
+    }
+  }, []);
+
+  const speakText = useCallback(
+    (text, messageId = null) => {
+      if (typeof window === 'undefined' || !('speechSynthesis' in window)) {
+        alert('Text-to-speech is not supported in this browser.');
+        return;
+      }
+
+      window.speechSynthesis.cancel();
+
+      if (speakingMessageId === messageId) {
+        setSpeakingMessageId(null);
+        return;
+      }
+
+      if (!text) return;
+
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = currentLanguageConfig.speechVoiceLang || 'en-IN';
+      utterance.rate = 0.95;
+
+      utterance.onend = () => {
+        setSpeakingMessageId(null);
+      };
+      utterance.onerror = () => {
+        setSpeakingMessageId(null);
+      };
+
+      setSpeakingMessageId(messageId);
+      window.speechSynthesis.speak(utterance);
+    },
+    [currentLanguageConfig, speakingMessageId]
+  );
 
   const initSession = async () => {
     try {
       setIsLoading(true);
-      const data = await api.startChat();
+      const data = await api.startChat(language);
       setConversationId(data.conversationId);
       setMessages([data.botMessage]);
       setProfile(data.profile || {});
@@ -42,22 +117,22 @@ export const ChatProvider = ({ children }) => {
       timestamp: new Date()
     };
 
-    setMessages(prev => [...prev, userMsg]);
+    setMessages((prev) => [...prev, userMsg]);
     setIsLoading(true);
 
     try {
-      const data = await api.sendMessage(conversationId, text);
-      setMessages(prev => [...prev, data.botMessage]);
+      const data = await api.sendMessage(conversationId, text, language);
+      setMessages((prev) => [...prev, data.botMessage]);
       setProfile(data.profile || {});
       setCandidateCount(data.candidateCount || 0);
       setConversationStatus(data.status);
     } catch (err) {
       console.error('Message send error:', err);
-      setMessages(prev => [
+      setMessages((prev) => [
         ...prev,
         {
           role: 'assistant',
-          content: 'Sorry, I encountered an error connecting to the server. Please try again.',
+          content: t('common.error', 'Sorry, I encountered an error connecting to the server. Please try again.'),
           contentEn: 'Sorry, I encountered an error connecting to the server. Please try again.',
           contentHi: 'क्षमा करें, सर्वर से कनेक्ट करने में समस्या आई। कृपया पुनः प्रयास करें।',
           timestamp: new Date()
@@ -98,7 +173,14 @@ export const ChatProvider = ({ children }) => {
         conversationStatus,
         matchResults,
         language,
+        setLanguage,
         toggleLanguage,
+        t,
+        currentLanguageConfig,
+        supportedLanguages: SUPPORTED_LANGUAGES,
+        speakText,
+        stopSpeaking,
+        speakingMessageId,
         initSession,
         sendUserMessage,
         triggerEligibilityCheck

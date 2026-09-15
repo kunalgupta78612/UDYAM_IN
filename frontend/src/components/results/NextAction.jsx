@@ -3,7 +3,7 @@ import { Landmark, ArrowUpRight, FileCheck, Building2, Globe } from 'lucide-reac
 import { useChatContext } from '../../context/ChatContext.jsx';
 
 export const NextAction = ({ nextAction, documents = [] }) => {
-  const { language } = useChatContext();
+  const { t } = useChatContext();
 
   if (!nextAction) return null;
 
@@ -27,7 +27,7 @@ export const NextAction = ({ nextAction, documents = [] }) => {
           </div>
           <div>
             <span className="text-[10px] font-bold text-brand-300 uppercase tracking-wider block">
-              {language === 'hi' ? 'अगला कदम / आवेदन मार्ग' : 'Actionable Next Step'}
+              {t('results.nextStepsTitle')}
             </span>
             <h5 className="text-sm font-bold text-white">{nextAction.routeName}</h5>
           </div>
@@ -40,7 +40,7 @@ export const NextAction = ({ nextAction, documents = [] }) => {
             rel="noreferrer"
             className="flex items-center space-x-1 px-3 py-1.5 rounded-lg bg-brand-600 hover:bg-brand-500 text-white text-xs font-bold shadow-sm transition-all"
           >
-            <span>{language === 'hi' ? 'आवेदन पोर्टल खोलें' : 'Apply Online'}</span>
+            <span>{t('results.applyButton')}</span>
             <ArrowUpRight className="w-3.5 h-3.5" />
           </a>
         )}
@@ -54,7 +54,7 @@ export const NextAction = ({ nextAction, documents = [] }) => {
       {documents && documents.length > 0 && (
         <div className="pt-2.5 border-t border-slate-800">
           <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1.5">
-            {language === 'hi' ? 'आवश्यक दस्तावेज (Document Checklist)' : 'Required Documents Checklist'}
+            {t('results.checklistTitle')}
           </span>
           <div className="flex flex-wrap gap-1.5">
             {documents.map((doc, idx) => (

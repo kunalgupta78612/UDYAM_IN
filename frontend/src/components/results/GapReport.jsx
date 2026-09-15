@@ -1,9 +1,9 @@
 import React from 'react';
-import { AlertCircle, HelpCircle } from 'lucide-react';
+import { AlertCircle } from 'lucide-react';
 import { useChatContext } from '../../context/ChatContext.jsx';
 
 export const GapReport = ({ gapReport }) => {
-  const { language } = useChatContext();
+  const { t } = useChatContext();
 
   if (!gapReport || !gapReport.hasGaps) return null;
 
@@ -11,7 +11,7 @@ export const GapReport = ({ gapReport }) => {
     <div className="my-3 p-3.5 rounded-xl bg-amber-50 border border-amber-200">
       <div className="flex items-center space-x-2 text-amber-800 font-bold text-xs mb-2">
         <AlertCircle className="w-4 h-4 text-amber-600" />
-        <span>{language === 'hi' ? 'पात्रता अंतर रिपोर्ट (Gap Analysis)' : 'Eligibility Gap Analysis'}</span>
+        <span>{t('results.gapReportTitle', 'Eligibility Gap Analysis')}</span>
       </div>
 
       <p className="text-xs text-amber-900 font-medium leading-relaxed">

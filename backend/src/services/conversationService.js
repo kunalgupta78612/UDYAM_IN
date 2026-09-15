@@ -3,11 +3,23 @@ import { findCandidateSchemes } from '../retrieval/schemeRetriever.js';
 import { evaluateMultipleSchemes } from '../rules/ruleEngine.js';
 import { isValueMissing } from '../rules/conditionEvaluator.js';
 
-// Question templates with contextual quick-reply chips
+// Question templates with contextual quick-reply chips and 10 Indian language translations
 const QUESTION_TEMPLATES = {
   specificScheme: {
     questionEn: 'Which government scheme would you like to evaluate?',
     questionHi: 'आप किस सरकारी योजना के लिए अपनी पात्रता जांचना चाहते हैं?',
+    byLang: {
+      en: 'Which government scheme would you like to evaluate?',
+      hi: 'आप किस सरकारी योजना के लिए अपनी पात्रता जांचना चाहते हैं?',
+      mr: 'तुम्हाला कोणत्या सरकारी योजनेसाठी तुमची पात्रता तपासायची आहे?',
+      bn: 'আপনি কোন সরকারি স্কিমের জন্য আপনার যোগ্যতা যাচাই করতে চান?',
+      ta: 'எந்த அரசு திட்டத்திற்கான உங்கள் தகுதியை மதிப்பிட விரும்புகிறீர்கள்?',
+      te: 'మీరు ఏ ప్రభుత్వ పథకానికి మీ అర్హతను పరిశీలించాలనుకుంటున్నారు?',
+      gu: 'તમે કઈ સરકારી યોજના માટે તમારી પાત્રતા તપાસવા માંગો છો?',
+      kn: 'ಯಾವ ಸರ್ಕಾರಿ ಯೋಜನೆಗೆ ನಿಮ್ಮ ಅರ್ಹತೆಯನ್ನು ಪರೀಕ್ಷಿಸಲು ನೀವು ಬಯಸುತ್ತೀರಿ?',
+      pa: 'ਤੁਸੀਂ ਕਿਸ ਸਰਕਾਰੀ ਸਕੀਮ ਲਈ ਆਪਣੀ ਯੋਗਤਾ ਦੀ ਜਾਂਚ ਕਰਨਾ ਚਾਹੁੰਦੇ ਹੋ?',
+      or: 'ଆପଣ କେଉଁ ସରକାରୀ ଯୋଜନା ପାଇଁ ଆପଣଙ୍କ ଯୋଗ୍ୟତା ଯାଞ୍ଚ କରିବାକୁ ଚାହାଁନ୍ତି?'
+    },
     quickReplies: [
       'Stand-Up India Scheme',
       'PMEGP Loan & Subsidy',
@@ -20,21 +32,69 @@ const QUESTION_TEMPLATES = {
   purpose: {
     questionEn: 'What kind of support are you looking for?',
     questionHi: 'आप किस प्रकार की सहायता या योजना खोज रहे हैं?',
+    byLang: {
+      en: 'What kind of support are you looking for?',
+      hi: 'आप किस प्रकार की सहायता या योजना खोज रहे हैं?',
+      mr: 'तुम्हाला कोणत्या प्रकारच्या मदतीची किंवा योजनेची गरज आहे?',
+      bn: 'আপনি কী ধরনের সহায়তা বা স্কিম খুঁজছেন?',
+      ta: 'நீங்கள் எந்த வகையான உதவி அல்லது திட்டத்தை நாடுகிறீர்கள்?',
+      te: 'మీరు ఎలాంటి సహాయం లేదా పథకం కోసం చూస్తున్నారు?',
+      gu: 'તમે કેવા પ્રકારની સહાય અથવા યોજના શોધી રહ્યા છો?',
+      kn: 'ನೀವು ಯಾವ ರೀತಿಯ ಬೆಂಬಲ ಅಥವಾ ಯೋಜನೆಯನ್ನು ಹುಡುಕುತ್ತಿದ್ದೀರಿ?',
+      pa: 'ਤੁਸੀਂ ਕਿਸ ਤਰ੍ਹਾਂ ਦੀ ਸਹਾਇਤਾ ਜਾਂ ਸਕੀਮ ਲੱਭ ਰਹੇ ਹੋ?',
+      or: 'ଆପଣ କେଉଁ ପ୍ରକାରର ସହାୟତା ବା ଯୋଜନା ଖୋଜୁଛନ୍ତି?'
+    },
     quickReplies: ['Business Loan', 'Start New Business', 'Women Entrepreneur Support', 'Self Employment', 'Agriculture']
   },
   businessType: {
     questionEn: 'What type of business or trade are you planning or currently running?',
     questionHi: 'आप किस प्रकार का व्यवसाय या व्यापार शुरू करने या चलाने की योजना बना रहे हैं?',
+    byLang: {
+      en: 'What type of business or trade are you planning or currently running?',
+      hi: 'आप किस प्रकार का व्यवसाय या व्यापार शुरू करने या चलाने की योजना बना रहे हैं?',
+      mr: 'तुम्ही कोणत्या प्रकारचा व्यवसाय किंवा व्यापार सुरू करण्याची किंवा चालवण्याची योजना आखत आहात?',
+      bn: 'আপনি কোন ধরনের ব্যবসা শুরু করার বা চালানোর পরিকল্পনা করছেন?',
+      ta: 'நீங்கள் என்ன வகையான வணிகம் அல்லது தொழிலைத் தொடங்க திட்டமிட்டுள்ளீர்கள்?',
+      te: 'మీరు ఏ రకమైన వ్యాపారాన్ని ప్రారంభించాలని లేదా నడపాలని ప్లాన్ చేస్తున్నారు?',
+      gu: 'તમે કયા પ્રકારનો વ્યવસાય અથવા વેપાર શરૂ કરવા કે ચલાવવાનું વિચારી રહ્યા છો?',
+      kn: 'ನೀವು ಯಾವ ರೀತಿಯ ವ್ಯವಹಾರ ಅಥವಾ ವ್ಯಾಪಾರವನ್ನು ಪ್ರಾರಂಭಿಸಲು ಯೋಜಿಸುತ್ತಿದ್ದೀರಿ?',
+      pa: 'ਤੁਸੀਂ ਕਿਸ ਕਿਸਮ ਦਾ ਕਾਰੋਬਾਰ ਸ਼ੁਰੂ ਕਰਨ ਜਾਂ ਚਲਾਉਣ ਦੀ ਯੋਜਨਾ ਬਣਾ ਰਹੇ ਹੋ?',
+      or: 'ଆପଣ କେଉଁ ପ୍ରକାରର ବ୍ୟବସାୟ ଆରମ୍ଭ କରିବାକୁ ଯୋଜନା କରୁଛନ୍ତି?'
+    },
     quickReplies: ['Tailoring / Boutique', 'Kirana / Grocery', 'Dairy / Milk', 'Handicraft / Artisan', 'Tech Startup', 'Other']
   },
   category: {
     questionEn: 'What is your social category?',
     questionHi: 'आपकी सामाजिक श्रेणी (Category) क्या है?',
+    byLang: {
+      en: 'What is your social category?',
+      hi: 'आपकी सामाजिक श्रेणी (Category) क्या है?',
+      mr: 'तुमचा सामाजिक प्रवर्ग (Category) कोणता आहे?',
+      bn: 'আপনার সামাজিক শ্রেণি (Category) কী?',
+      ta: 'உங்கள் சமூகப் பிரிவு (Category) எது?',
+      te: 'మీ సామాజిక వర్గం (Category) ఏమిటి?',
+      gu: 'તમારો સામાજિક વર્ગ (Category) કયો છે?',
+      kn: 'ನಿಮ್ಮ ಸಾಮಾಜಿಕ ವರ್ಗ (Category) ಯಾವುದು?',
+      pa: 'ਤੁਹਾਡੀ ਸਮਾਜਿਕ ਸ਼੍ਰੇਣੀ (Category) ਕੀ ਹੈ?',
+      or: 'ଆପଣଙ୍କ ସାମାଜିକ ବର୍ଗ (Category) କ’ଣ?'
+    },
     quickReplies: ['OBC', 'SC', 'ST', 'General']
   },
   gender: {
     questionEn: 'What is your gender?',
     questionHi: 'आपका लिंग (Gender) क्या है?',
+    byLang: {
+      en: 'What is your gender?',
+      hi: 'आपका लिंग (Gender) क्या है?',
+      mr: 'तुमचे लिंग (Gender) काय आहे?',
+      bn: 'আপনার লিঙ্গ (Gender) কী?',
+      ta: 'உங்கள் பாலினம் (Gender) எது?',
+      te: 'మీ లింగం (Gender) ఏమిటి?',
+      gu: 'તમારી જાતિ (Gender) શું છે?',
+      kn: 'ನಿಮ್ಮ ಲಿಂಗ (Gender) ಯಾವುದು?',
+      pa: 'ਤੁਹਾਡਾ ਲਿੰਗ (Gender) ਕੀ ਹੈ?',
+      or: 'ଆପଣଙ୍କ ଲିଙ୍ଗ (Gender) କ’ଣ?'
+    },
     quickReplies: ['Female (महिला)', 'Male (पुरुष)', 'Transgender']
   },
   projectCost: {
@@ -45,16 +105,69 @@ const QUESTION_TEMPLATES = {
   familyIncome: {
     questionEn: 'What is your approximate annual family income?',
     questionHi: 'आपकी वार्षिक पारिवारिक आय (Annual Family Income) कितनी है?',
+    byLang: {
+      en: 'What is your approximate annual family income?',
+      hi: 'आपकी वार्षिक पारिवारिक आय (Annual Family Income) कितनी है?',
+      mr: 'तुमचे अंदाजे वार्षिक कौटुंबिक उत्पन्न किती आहे?',
+      bn: 'আপনার আনুমানিক বার্ষিক পারিবারিক আয় কত?',
+      ta: 'உங்கள் தோராயமான குடும்ப ஆண்டு வருமானம் எவ்வளவு?',
+      te: 'మీ సుమారు వార్షిక కుటుంబ ఆదాయం ఎంత?',
+      gu: 'તમારી અંદાજિત વાર્ષિક પારિવારિક આવક કેટલી છે?',
+      kn: 'ನಿಮ್ಮ ಅಂದಾಜು ವಾರ್ಷಿಕ ಕುಟುಂಬ ಆದಾಯ ಎಷ್ಟು?',
+      pa: 'ਤੁਹਾਡੀ ਅੰਦਾਜ਼ਨ ਸਾਲਾਨਾ ਪਰਿਵਾਰਕ ਆਮਦਨ ਕਿੰਨੀ ਹੈ?',
+      or: 'ଆପଣଙ୍କ ଆନୁମାନିକ ବାର୍ଷିକ ପାରିବାରିକ ଆୟ କେତେ?'
+    },
     quickReplies: ['Below ₹1.5 Lakh', '₹2.5 Lakh', '₹3 Lakh', '₹5 Lakh', 'Above ₹5 Lakh']
   },
   age: {
     questionEn: 'What is your age in years?',
     questionHi: 'आपकी आयु (Age) कितने वर्ष है?',
+    byLang: {
+      en: 'What is your age in years?',
+      hi: 'आपकी आयु (Age) कितने वर्ष है?',
+      mr: 'तुमचे वय (Age) किती वर्षे आहे?',
+      bn: 'আপনার বয়স (Age) কত বছর?',
+      ta: 'உங்கள் வயது (Age) எத்தனை ஆண்டுகள்?',
+      te: 'మీ వయస్సు (Age) ఎన్ని సంవత్సరాలు?',
+      gu: 'તમારી ઉંમર (Age) કેટલા વર્ષ છે?',
+      kn: 'ನಿಮ್ಮ ವಯಸ್ಸು (Age) ಎಷ್ಟು ವರ್ಷ?',
+      pa: 'ਤੁਹਾਡੀ ਉਮਰ (Age) ਕਿੰਨੇ ਸਾਲ ਹੈ?',
+      or: 'ଆପଣଙ୍କ ବୟସ (Age) କେତେ ବର୍ଷ?'
+    },
     quickReplies: ['18 - 25 Years', '26 - 35 Years', '36 - 50 Years', 'Above 50 Years']
+  },
+  projectCost: {
+    questionEn: 'What is the estimated total project cost or loan amount required?',
+    questionHi: 'परियोजना की अनुमानित कुल लागत या आवश्यक ऋण राशि कितनी है?',
+    byLang: {
+      en: 'What is the estimated total project cost or loan amount required?',
+      hi: 'परियोजना की अनुमानित कुल लागत या आवश्यक ऋण राशि कितनी है?',
+      mr: 'प्रकल्पाचा अंदाजे एकूण खर्च किंवा आवश्यक कर्ज रक्कम किती आहे?',
+      bn: 'প্রকল্পের আনুমানিক মোট ব্যয় বা প্রয়োজনীয় ঋণের পরিমাণ কত?',
+      ta: 'திட்டத்தின் மதிப்பிடப்பட்ட மொத்த செலவு அல்லது கடன் தொகை எவ்வளவு?',
+      te: 'ప్రాజెక్ట్ సుమారు మొత్తం ఖర్చు లేదా అవసరమైన రుణం ఎంత?',
+      gu: 'પ્રોજેક્ટનો અંદાજિત કુલ ખર્ચ અથવા જરૂરી લોનની રકમ કેટલી છે?',
+      kn: 'ಯೋಜನೆಯ ಅಂದಾಜು ಒಟ್ಟು ವೆಚ್ಚ ಅಥವಾ ಸಾಲದ ಮೊತ್ತ ಎಷ್ಟು?',
+      pa: 'ਪ੍ਰੋਜੈਕਟ ਦੀ ਅੰਦਾਜ਼ਨ ਕੁੱਲ ਲਾਗਤ ਜਾਂ ਲੋੜੀਂਦੀ ਕਰਜ਼ਾ ਰਕਮ ਕਿੰਨੀ ਹੈ?',
+      or: 'ପ୍ରକଳ୍ପର ଆନୁମାନିକ ମୋଟ ଖର୍ଚ୍ଚ ବା ଆବଶ୍ୟକ ଋଣ ରାଶି କେତେ?'
+    },
+    quickReplies: ['Up to ₹50,000', '₹1 - ₹2 Lakh', '₹5 - ₹10 Lakh', '₹25 Lakh - ₹1 Crore']
   },
   udyamRegistered: {
     questionEn: 'Do you have an MSME / Udyam Registration certificate?',
     questionHi: 'क्या आपके पास एमएसएमई / उद्यम पंजीकरण (Udyam Registration) है?',
+    byLang: {
+      en: 'Do you have an MSME / Udyam Registration certificate?',
+      hi: 'क्या आपके पास एमएसएमई / उद्यम पंजीकरण (Udyam Registration) है?',
+      mr: 'तुमच्याकडे एमएसएमई / उद्यम नोंदणी प्रमाणपत्र आहे का?',
+      bn: 'আপনার কি এমএসএমই / উদ্যম নিবন্ধন সনদ রয়েছে?',
+      ta: 'உங்களிடம் MSME / உத்யம் பதிவு சான்றிதழ் உள்ளதா?',
+      te: 'మీకు MSME / ఉద్యమ్ రిజిస్ట్రేషన్ సర్టిఫికేట్ ఉందా?',
+      gu: 'શું તમારી પાસે MSME / ઉદ્યમ નોંધણી પ્રમાણપત્ર છે?',
+      kn: 'ನಿಮ್ಮ ಬಳಿ MSME / ಉದ್ಯಮ್ ನೋಂದಣಿ ಪ್ರಮಾಣಪತ್ರವಿದೆಯೇ?',
+      pa: 'ਕੀ ਤੁਹਾਡੇ ਕੋਲ MSME / ਉਦਯਮ ਰਜਿਸਟ੍ਰੇਸ਼ਨ ਸਰਟੀਫਿਕੇਟ ਹੈ?',
+      or: 'ଆପଣଙ୍କ ପାଖରେ MSME / ଉଦ୍ୟମ ପଞ୍ଜୀକରଣ ପ୍ରମାଣପତ୍ର ଅଛି କି?'
+    },
     quickReplies: ['Yes (हाँ)', 'No (नहीं)', 'Applying Soon']
   }
 };
@@ -167,6 +280,7 @@ export const processUserMessage = async ({ message, conversation = {}, profile =
         role: 'assistant',
         contentEn: reply.contentEn,
         contentHi: reply.contentHi,
+        contentByLang: questionConfig.byLang,
         quickReplies: questionConfig.quickReplies,
         showProfileConfirmation: false
       }
@@ -207,6 +321,18 @@ export const processUserMessage = async ({ message, conversation = {}, profile =
         role: 'assistant',
         contentEn: reply.contentEn,
         contentHi: reply.contentHi,
+        contentByLang: {
+          en: defaultEn,
+          hi: defaultHi,
+          mr: 'धन्यवाद! मी तुमचे तपशील नोंदवले आहेत. अधिकृत पात्रता तपासण्यापूर्वी कृपया आपल्या प्रोफाइलची पुष्टी करा.',
+          bn: 'ধন্যবাদ! আমি আপনার বিবরণ রেকর্ড করেছি। অফিসিয়াল যোগ্যতা মূল্যায়নের আগে দয়া করে আপনার প্রোফাইল নিশ্চিত করুন।',
+          ta: 'நன்றி! உங்கள் விவரங்களை பதிவு செய்துள்ளேன். தகுதி மதிப்பீட்டிற்கு முன் உங்கள் சுயவிவரத்தை உறுதிப்படுத்தவும்.',
+          te: 'ధన్యవాదాలు! మీ వివరాలను నమోదు చేశాను. అధికారిక అర్హత పరిశీలనకు ముందు దయచేసి మీ ప్రొఫైల్‌ను ధృవీకరించండి.',
+          gu: 'આભાર! મેં તમારી વિગતો નોંધી લીધી છે. સત્તાવાર પાત્રતા મૂલ્યાંકન પહેલાં કૃપા કરીને તમારી પ્રોਫાઇલની પુષ્ટિ કરો.',
+          kn: 'ಧನ್ಯವಾದಗಳು! ನಿಮ್ಮ ವಿವರಗಳನ್ನು ದಾಖಲಿಸಿದ್ದೇನೆ. ಅಧಿಕೃತ ಅರ್ಹತಾ ಮೌಲ್ಯಮಾಪನಕ್ಕೂ ಮುನ್ನ ದಯವಿಟ್ಟು ನಿಮ್ಮ ಪ್ರೊಫೈಲ್ ದೃಢೀಕರಿಸಿ.',
+          pa: 'ਧੰਨਵਾਦ! ਮੈਂ ਤੁਹਾਡੇ ਵੇਰਵੇ ਦਰਜ ਕਰ ਲਏ ਹਨ। ਅਧਿਕਾਰਤ ਯੋਗਤਾ ਜਾਂਚ ਤੋਂ ਪਹਿਲਾਂ ਕਿਰਪਾ ਕਰਕੇ ਆਪਣੇ ਪ੍ਰੋਫਾਈਲ ਦੀ ਪੁਸ਼ਟੀ ਕਰੋ।',
+          or: 'ଧନ୍ୟବାଦ! ମୁଁ ଆପଣଙ୍କ ବିବରଣୀ ରେକର୍ଡ କରିଛି। ଯୋଗ୍ୟତା ମୂଲ୍ୟାୟନ ପୂର୍ବରୁ ଦୟାକରି ଆପଣଙ୍କ ପ୍ରୋଫାଇଲ୍ ନିଶ୍ଚିତ କରନ୍ତୁ।'
+        },
         quickReplies: ['Confirm & Check Eligibility (पुष्टि करें)', 'Edit Details (संशोधित करें)'],
         showProfileConfirmation: true
       }
@@ -217,6 +343,10 @@ export const processUserMessage = async ({ message, conversation = {}, profile =
   const questionConfig = QUESTION_TEMPLATES[nextField] || {
     questionEn: `Please provide your ${nextField}.`,
     questionHi: `कृपया अपना ${nextField} बताएं।`,
+    byLang: {
+      en: `Please provide your ${nextField}.`,
+      hi: `कृपया अपना ${nextField} बताएं।`
+    },
     quickReplies: []
   };
 
@@ -245,6 +375,7 @@ export const processUserMessage = async ({ message, conversation = {}, profile =
       role: 'assistant',
       contentEn: reply.contentEn,
       contentHi: reply.contentHi,
+      contentByLang: questionConfig.byLang,
       quickReplies: questionConfig.quickReplies,
       showProfileConfirmation: false
     }

@@ -1,0 +1,18 @@
+{
+  "name": "udyam-in-monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "description": "SchemeSaathi - AI-Driven Government Scheme Matching & Actionable Advisory System (SIH 2024)",
+  "scripts": {
+    "dev": "concurrently -n \"backend,frontend\" -c \"blue,green\" \"npm --prefix backend run dev\" \"npm --prefix frontend run dev\"",
+    "dev:backend": "npm --prefix backend run dev",
+    "dev:frontend": "npm --prefix frontend run dev",
+    "start": "concurrently -n \"backend,frontend\" -c \"blue,green\" \"npm --prefix backend start\" \"npm --prefix frontend preview\"",
+    "seed": "npm --prefix backend run seed",
+    "test": "npm --prefix backend test",
+    "install:all": "npm --prefix backend install && npm --prefix frontend install"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
